@@ -163,7 +163,7 @@
       </div>
     </section>
 
-    <!-- PRONÓSTICOS -->
+    <!-- PRONÓSTICOS DEL USUARIO -->
     <section id="view-predictions" class="view-section space-y-6">
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-900 p-4 rounded-xl border border-slate-800">
         <div>
@@ -191,6 +191,57 @@
       <div id="pred-tab-history" class="space-y-4 hidden">
         <p class="text-xs text-slate-400">Partidos iniciados o finalizados. Las predicciones en esta sección están cerradas.</p>
         <div id="history-matches-list" class="space-y-4"></div>
+      </div>
+    </section>
+
+    <!-- NUEVA SECCIÓN 1: PRONÓSTICOS EN VIVO DE TODOS LOS USUARIOS -->
+    <section id="view-live-feed" class="view-section space-y-6">
+      <div class="bg-gradient-to-r from-slate-900 via-amber-950/20 to-slate-900 p-6 rounded-2xl border border-amber-500/20 shadow-xl">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">🔥</span>
+          <h2 class="text-2xl font-extrabold text-white">Pronósticos en Vivo</h2>
+        </div>
+        <p class="text-slate-400 text-sm mt-1">Monitorea en tiempo real todas las jugadas enviadas por la comunidad de participantes.</p>
+      </div>
+
+      <div class="card-dark border-slate-800 p-0 overflow-x-auto">
+        <table class="w-full text-left text-xs">
+          <thead>
+            <tr class="bg-slate-900 text-slate-400 border-b border-slate-800">
+              <th class="p-3">Usuario</th>
+              <th class="p-3">Encuentro</th>
+              <th class="p-3 text-center">Pronóstico</th>
+              <th class="p-3 text-right">Fecha Partido</th>
+            </tr>
+          </thead>
+          <tbody id="live-feed-tbody" class="divide-y divide-slate-800"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- NUEVA SECCIÓN 2: DIRECTORIO DE PARTICIPANTES Y DETALLE DE PRONÓSTICOS -->
+    <section id="view-participants" class="view-section space-y-6">
+      <div class="bg-gradient-to-r from-slate-900 via-emerald-950/20 to-slate-900 p-6 rounded-2xl border border-emerald-500/20 shadow-xl">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">👥</span>
+          <h2 class="text-2xl font-extrabold text-white">Explorar Participantes</h2>
+        </div>
+        <p class="text-slate-400 text-sm mt-1">Selecciona cualquier usuario para examinar su historial completo de pronósticos en la polla.</p>
+      </div>
+
+      <!-- LISTA DE TARJETAS DE USUARIOS -->
+      <div id="participants-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
+
+      <!-- PANEL DETALLE DE PRONÓSTICOS DEL USUARIO SELECCIONADO -->
+      <div id="participant-detail-modal" class="card-dark border-emerald-500/30 space-y-4 hidden">
+        <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+          <div>
+            <span class="text-xs text-slate-400">Viendo Pronósticos de:</span>
+            <h3 id="detail-target-username" class="text-lg font-bold text-emerald-400 font-mono">@username</h3>
+          </div>
+          <button onclick="closeParticipantDetail()" class="px-3 py-1 bg-slate-800 text-slate-300 hover:text-white text-xs rounded">Cerrar</button>
+        </div>
+        <div id="participant-predictions-container" class="space-y-3 max-h-96 overflow-y-auto"></div>
       </div>
     </section>
 
@@ -296,13 +347,15 @@
 
   </main>
 
-  <!-- NAV BOTTOM -->
+  <!-- NAV BOTTOM ACTUALIZADO CON LAS NUEVAS VISTAS -->
   <nav class="fixed bottom-0 left-0 right-0 z-40 bg-slate-900/95 border-t border-slate-800 py-2">
-    <div class="max-w-md mx-auto flex justify-around">
-      <button onclick="navigateTo('home')" class="text-emerald-400 p-2 text-xs">Inicio</button>
-      <button onclick="navigateTo('predictions')" class="text-slate-400 p-2 text-xs">Pronósticos</button>
-      <button onclick="navigateTo('leaderboard')" class="text-slate-400 p-2 text-xs">Posiciones</button>
-      <button id="nav-btn-admin" onclick="navigateTo('admin')" class="text-red-400 p-2 text-xs hidden">Admin</button>
+    <div class="max-w-xl mx-auto flex justify-around text-center">
+      <button onclick="navigateTo('home')" class="text-emerald-400 p-2 text-xs font-semibold">Inicio</button>
+      <button onclick="navigateTo('predictions')" class="text-slate-400 p-2 text-xs font-semibold">Mis Pronósticos</button>
+      <button onclick="navigateTo('live-feed')" class="text-slate-400 p-2 text-xs font-semibold">En Vivo</button>
+      <button onclick="navigateTo('participants')" class="text-slate-400 p-2 text-xs font-semibold">Participantes</button>
+      <button onclick="navigateTo('leaderboard')" class="text-slate-400 p-2 text-xs font-semibold">Posiciones</button>
+      <button id="nav-btn-admin" onclick="navigateTo('admin')" class="text-red-400 p-2 text-xs font-semibold hidden">Admin</button>
     </div>
   </nav>
 
@@ -352,6 +405,8 @@
       if (target) target.classList.add('active');
 
       if (viewId === 'predictions' && currentUser) loadUserPredictions();
+      if (viewId === 'live-feed') loadLivePredictionsFeed();
+      if (viewId === 'participants') loadParticipantsDirectory();
       if (viewId === 'admin') {
         loadAdminCodes();
         loadAdminMatches();
@@ -398,6 +453,191 @@
         alert("Error de conexión: " + err.message);
       }
     };
+
+    // 1. CARGA DE PRONÓSTICOS EN VIVO DE TODOS LOS USUARIOS (SÓLO @USERNAME)
+    async function loadLivePredictionsFeed() {
+      const tbody = document.getElementById('live-feed-tbody');
+      if (!tbody) return;
+
+      tbody.innerHTML = "<tr><td colspan='4' class='p-4 text-center text-slate-500'>Cargando pronósticos en vivo...</td></tr>";
+
+      try {
+        const usersSnapshot = await db.collection("users").get();
+        const matchesSnapshot = await db.collection("matches").get();
+        const predsSnapshot = await db.collection("predictions").orderBy("createdAt", "desc").get();
+
+        const userMap = {};
+        usersSnapshot.forEach(doc => { userMap[doc.id] = doc.data().username; });
+
+        const matchMap = {};
+        matchesSnapshot.forEach(doc => { matchMap[doc.id] = doc.data(); });
+
+        tbody.innerHTML = "";
+
+        if (predsSnapshot.empty) {
+          tbody.innerHTML = "<tr><td colspan='4' class='p-4 text-center text-slate-500'>Aún no se han enviado pronósticos.</td></tr>";
+          return;
+        }
+
+        predsSnapshot.forEach(doc => {
+          const pred = doc.data();
+          const username = userMap[pred.userId] || "usuario";
+          const match = matchMap[pred.matchId];
+
+          if (match) {
+            const row = document.createElement('tr');
+            row.className = "hover:bg-slate-900/50 border-b border-slate-800/60";
+            row.innerHTML = `
+              <td class="p-3 font-mono font-bold text-emerald-400">@${username}</td>
+              <td class="p-3 font-medium text-white">${match.homeTeam} vs ${match.awayTeam}</td>
+              <td class="p-3 text-center font-bold text-amber-400 font-mono">${pred.homeScore} - ${pred.awayScore}</td>
+              <td class="p-3 text-right text-slate-400 text-[11px]">${match.matchDate}</td>
+            `;
+            tbody.appendChild(row);
+          }
+        });
+
+      } catch (err) {
+        console.error("Error cargando feed en vivo:", err);
+      }
+    }
+
+    // 2. DIRECTORIO DE PARTICIPANTES (SÓLO @USERNAME)
+    async function loadParticipantsDirectory() {
+      const grid = document.getElementById('participants-grid');
+      if (!grid) return;
+
+      grid.innerHTML = "<p class='text-xs text-slate-500 col-span-full'>Cargando lista de participantes...</p>";
+
+      try {
+        const usersSnapshot = await db.collection("users").get();
+        grid.innerHTML = "";
+
+        usersSnapshot.forEach(doc => {
+          const u = doc.data();
+          if (u.role !== 'superadmin') {
+            const card = document.createElement('div');
+            card.className = "card-dark border-slate-800 p-4 flex flex-col justify-between hover:border-emerald-500/50 transition-all";
+            card.innerHTML = `
+              <div>
+                <span class="text-2xl">👤</span>
+                <h4 class="text-base font-bold text-white font-mono mt-2">@${u.username}</h4>
+                <p class="text-[11px] text-slate-400 mt-0.5">Participante Oficial</p>
+              </div>
+              <button onclick="openParticipantDetail('${doc.id}', '${u.username}')" class="mt-4 w-full btn-emerald text-xs py-2 rounded font-bold">
+                Ver Pronósticos
+              </button>
+            `;
+            grid.appendChild(card);
+          }
+        });
+
+      } catch (err) {
+        console.error("Error cargando directorio de participantes:", err);
+      }
+    }
+
+    // ABRIR Y MOSTRAR PRONÓSTICOS DE UN USUARIO ESPECÍFICO
+    async function openParticipantDetail(userId, username) {
+      const modal = document.getElementById('participant-detail-modal');
+      const container = document.getElementById('participant-predictions-container');
+      const title = document.getElementById('detail-target-username');
+
+      if (!modal || !container) return;
+
+      title.innerText = "@" + username;
+      container.innerHTML = "<p class='text-xs text-slate-500'>Cargando datos...</p>";
+      modal.classList.remove('hidden');
+
+      try {
+        const matchesSnapshot = await db.collection("matches").get();
+        const predsSnapshot = await db.collection("predictions").where("userId", "==", userId).get();
+
+        const matchMap = {};
+        matchesSnapshot.forEach(doc => { matchMap[doc.id] = doc.data(); });
+
+        container.innerHTML = "";
+
+        if (predsSnapshot.empty) {
+          container.innerHTML = "<p class='text-xs text-slate-500'>Este usuario aún no ha realizado ningún pronóstico.</p>";
+          return;
+        }
+
+        predsSnapshot.forEach(doc => {
+          const p = doc.data();
+          const match = matchMap[p.matchId];
+
+          if (match) {
+            const item = document.createElement('div');
+            item.className = "p-3 bg-slate-900 border border-slate-800 rounded flex justify-between items-center text-xs";
+            item.innerHTML = `
+              <div>
+                <span class="text-white font-bold">${match.homeTeam} vs ${match.awayTeam}</span>
+                <span class="text-slate-500 block text-[10px]">📅 ${match.matchDate}</span>
+              </div>
+              <div class="text-right">
+                <span class="text-amber-400 font-mono font-bold text-sm block">${p.homeScore} - ${p.awayScore}</span>
+                <span class="badge-amber text-[10px]">+${p.points || 0} pts</span>
+              </div>
+            `;
+            container.appendChild(item);
+          }
+        });
+
+      } catch (err) {
+        console.error("Error cargando pronósticos del usuario:", err);
+      }
+    }
+
+    function closeParticipantDetail() {
+      const modal = document.getElementById('participant-detail-modal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    // TABLA GENERAL DE POSICIONES (SOLO @USERNAME)
+    async function loadLeaderboard() {
+      const tbody = document.getElementById('leaderboard-tbody');
+      if (!tbody) return;
+
+      tbody.innerHTML = "<tr><td colspan='3' class='p-3 text-center text-slate-500'>Calculando posiciones...</td></tr>";
+
+      try {
+        const usersSnapshot = await db.collection("users").get();
+        const predsSnapshot = await db.collection("predictions").get();
+
+        const userScores = {};
+
+        usersSnapshot.forEach(doc => {
+          const u = doc.data();
+          if (u.role !== 'superadmin') {
+            userScores[doc.id] = { username: u.username, totalPoints: 0 };
+          }
+        });
+
+        predsSnapshot.forEach(doc => {
+          const p = doc.data();
+          if (userScores[p.userId]) {
+            userScores[p.userId].totalPoints += (p.points || 0);
+          }
+        });
+
+        const sortedUsers = Object.values(userScores).sort((a, b) => b.totalPoints - a.totalPoints);
+
+        tbody.innerHTML = "";
+        sortedUsers.forEach((u, index) => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td class="p-3 font-bold ${index === 0 ? 'text-amber-400' : 'text-slate-400'}">${index + 1}</td>
+            <td class="p-3 font-medium text-emerald-400 font-mono">@${u.username}</td>
+            <td class="p-3 text-center font-bold text-amber-400">${u.totalPoints} pts</td>
+          `;
+          tbody.appendChild(row);
+        });
+
+      } catch (err) {
+        console.error("Error cargando tabla de posiciones:", err);
+      }
+    }
 
     // CARGA MASIVA DE FIXTURE CON VALIDACIÓN "CARGAR"
     window.preloadPremierLeagueFixture = async function() {
@@ -557,7 +797,6 @@
           const pred = doc.data();
           let pts = 0;
 
-          // REGLAS DE PUNTUACIÓN
           if (pred.homeScore === hScore && pred.awayScore === aScore) {
             pts = 2; // Marcador Exacto (2 puntos)
           } else {
@@ -812,51 +1051,6 @@
       }
     };
 
-    // TABLA GENERAL DE POSICIONES
-    async function loadLeaderboard() {
-      const tbody = document.getElementById('leaderboard-tbody');
-      if (!tbody) return;
-
-      tbody.innerHTML = "<tr><td colspan='3' class='p-3 text-center text-slate-500'>Calculando posiciones...</td></tr>";
-
-      try {
-        const usersSnapshot = await db.collection("users").get();
-        const predsSnapshot = await db.collection("predictions").get();
-
-        const userScores = {};
-
-        usersSnapshot.forEach(doc => {
-          const u = doc.data();
-          if (u.role !== 'superadmin') {
-            userScores[doc.id] = { name: u.name, username: u.username, totalPoints: 0 };
-          }
-        });
-
-        predsSnapshot.forEach(doc => {
-          const p = doc.data();
-          if (userScores[p.userId]) {
-            userScores[p.userId].totalPoints += (p.points || 0);
-          }
-        });
-
-        const sortedUsers = Object.values(userScores).sort((a, b) => b.totalPoints - a.totalPoints);
-
-        tbody.innerHTML = "";
-        sortedUsers.forEach((u, index) => {
-          const row = document.createElement('tr');
-          row.innerHTML = `
-            <td class="p-3 font-bold ${index === 0 ? 'text-amber-400' : 'text-slate-400'}">${index + 1}</td>
-            <td class="p-3 font-medium text-white">${u.name} <span class="text-xs text-emerald-400 font-mono">@${u.username}</span></td>
-            <td class="p-3 text-center font-bold text-amber-400">${u.totalPoints} pts</td>
-          `;
-          tbody.appendChild(row);
-        });
-
-      } catch (err) {
-        console.error("Error cargando tabla de posiciones:", err);
-      }
-    }
-
     window.switchPredictionTab = function(tabName) {
       document.getElementById('pred-tab-upcoming').classList.add('hidden');
       document.getElementById('pred-tab-history').classList.add('hidden');
@@ -980,8 +1174,7 @@
       if (currentUser) {
         headerBox.innerHTML = `
           <div class="text-right">
-            <span class="block text-xs font-bold text-white">${currentUser.name}</span>
-            <span class="block text-[10px] text-emerald-400 font-mono">@${currentUser.username}</span>
+            <span class="block text-xs font-bold font-mono text-emerald-400">@${currentUser.username}</span>
           </div>
           <button onclick="logout()" class="p-2 bg-slate-800 text-slate-300 rounded text-xs">Salir</button>
         `;
