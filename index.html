@@ -20,7 +20,7 @@
   <!-- Google Fonts Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', system-ui, -apple-system, sans-serif; }
@@ -31,18 +31,18 @@
 
     header, footer, nav { background-color: #0f172a; border-color: #1e293b; }
     input, select, button { border-radius: 0.5rem; font-size: 0.95rem; }
-    input, select { background-color: #0f172a; border: 1px solid #334155; color: #ffffff; padding: 0.65rem 0.85rem; width: 100%; }
-    input:focus, select:focus { border-color: #10b981; outline: none; }
+    input, select { background-color: #0f172a; border: 1px solid #334155; color: #ffffff; padding: 0.65rem 0.85rem; width: 100%; transition: all 0.2s ease; }
+    input:focus, select:focus { border-color: #10b981; outline: none; box-shadow: 0 0 10px rgba(16, 185, 129, 0.2); }
     
-    .btn-emerald { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #ffffff; font-weight: 600; padding: 0.65rem 1.2rem; border: none; cursor: pointer; text-align: center; }
-    .btn-emerald:hover { opacity: 0.9; }
+    .btn-emerald { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #ffffff; font-weight: 700; padding: 0.65rem 1.2rem; border: none; cursor: pointer; text-align: center; shadow: 0 4px 14px rgba(16, 185, 129, 0.3); }
+    .btn-emerald:hover { opacity: 0.95; transform: translateY(-1px); }
     .btn-slate { background-color: #334155; color: #f8fafc; font-weight: 600; padding: 0.65rem 1.2rem; border: none; cursor: pointer; }
     
-    .card-dark { background-color: #0f172a; border: 1px solid #1e293b; border-radius: 0.75rem; padding: 1rem; }
-    .badge-emerald { background-color: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); font-size: 0.75rem; padding: 0.2rem 0.5rem; border-radius: 0.375rem; font-weight: 600; }
-    .badge-slate { background-color: rgba(100, 116, 139, 0.15); color: #94a3b8; border: 1px solid rgba(100, 116, 139, 0.3); font-size: 0.75rem; padding: 0.2rem 0.5rem; border-radius: 0.375rem; font-weight: 600; }
-    .badge-amber { background-color: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); font-size: 0.75rem; padding: 0.2rem 0.5rem; border-radius: 0.375rem; font-weight: 600; }
-    .badge-red { background-color: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); font-size: 0.75rem; padding: 0.2rem 0.5rem; border-radius: 0.375rem; font-weight: 600; }
+    .card-dark { background-color: #0f172a; border: 1px solid #1e293b; border-radius: 0.85rem; padding: 1.25rem; }
+    .badge-emerald { background-color: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); font-size: 0.75rem; padding: 0.2rem 0.6rem; border-radius: 0.375rem; font-weight: 700; }
+    .badge-slate { background-color: rgba(100, 116, 139, 0.15); color: #94a3b8; border: 1px solid rgba(100, 116, 139, 0.3); font-size: 0.75rem; padding: 0.2rem 0.6rem; border-radius: 0.375rem; font-weight: 700; }
+    .badge-amber { background-color: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); font-size: 0.75rem; padding: 0.2rem 0.6rem; border-radius: 0.375rem; font-weight: 700; }
+    .badge-red { background-color: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); font-size: 0.75rem; padding: 0.2rem 0.6rem; border-radius: 0.375rem; font-weight: 700; }
 
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: #020617; }
@@ -59,18 +59,19 @@
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between selection:bg-emerald-500 selection:text-white">
 
-  <!-- HEADER -->
-  <header class="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 px-4 py-3 shadow-md">
+  <!-- HEADER MEJORADO CON NOMBRE REAL DE USUARIO -->
+  <header class="sticky top-0 z-40 bg-slate-900/95 backdrop-blur-md border-b border-slate-800/80 px-4 py-3 shadow-xl">
     <div class="max-w-5xl mx-auto flex items-center justify-between">
-      <div class="flex items-center gap-2 cursor-pointer" onclick="navigateTo('home')">
-        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center text-slate-950 font-black shadow-lg">
-          ⚽
+      <div class="flex items-center gap-3 cursor-pointer" onclick="navigateTo('home')">
+        <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-emerald-500 via-teal-500 to-emerald-400 flex items-center justify-center text-slate-950 shadow-lg shadow-emerald-500/20">
+          <svg class="w-6 h-6 text-slate-950" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 13v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
         </div>
         <div>
-          <h1 class="text-lg font-extrabold tracking-tight text-white">POLLAS FUTBOLERAS</h1>
-          <p class="text-[10px] text-slate-400 font-medium -mt-1 tracking-wider uppercase">Polla Oficial v1.0</p>
+          <h1 class="text-lg font-black tracking-tight text-white flex items-center gap-1.5">POLLAS FUTBOLERAS</h1>
+          <p class="text-[10px] text-emerald-400 font-bold -mt-1 tracking-widest uppercase">Premier League Edition</p>
         </div>
       </div>
+      <!-- AQUÍ SE CARGA EL NOMBRE REAL DEL USUARIO -->
       <div id="header-user-info" class="flex items-center gap-3"></div>
     </div>
   </header>
@@ -80,23 +81,27 @@
 
     <!-- HOME -->
     <section id="view-home" class="view-section active space-y-6">
-      <div class="bg-gradient-to-r from-slate-900 via-emerald-950/30 to-slate-900 p-6 rounded-2xl border border-emerald-500/20 shadow-xl">
-        <h2 class="text-2xl font-extrabold text-white">Selecciona tu Polla Futbolera</h2>
-        <p class="text-slate-400 text-sm mt-1">Ingresa tus pronósticos en cada fecha y compite en la tabla general.</p>
+      <div class="bg-gradient-to-r from-slate-900 via-emerald-950/40 to-slate-900 p-6 md:p-8 rounded-2xl border border-emerald-500/30 shadow-2xl relative overflow-hidden">
+        <div class="relative z-10">
+          <span class="badge-emerald mb-2 inline-block">Temporada Oficial</span>
+          <h2 class="text-2xl md:text-3xl font-black text-white">Polla Deportiva Premier League</h2>
+          <p class="text-slate-300 text-sm mt-2 max-w-xl">Pronostica los marcadores de cada jornada, suma puntos por marcadores exactos o tendencias y compite por el primer lugar de la tabla.</p>
+        </div>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        <div class="card-dark border-emerald-500/40 relative flex flex-col justify-between">
+        <div class="card-dark border-emerald-500/40 relative flex flex-col justify-between hover:border-emerald-500/80 transition-all">
           <div>
             <div class="flex items-center justify-between mb-4">
-              <span class="text-2xl">🦁</span>
-              <span class="badge-emerald">ACTIVA</span>
+              <span class="text-3xl">🦁</span>
+              <span class="badge-emerald">38 JORNADAS</span>
             </div>
-            <h3 class="text-xl font-bold text-white">Premier League 2026</h3>
-            <p class="text-slate-400 text-xs mt-1">Liga de Inglaterra • Temporada Completa</p>
+            <h3 class="text-xl font-extrabold text-white">Premier League 2026</h3>
+            <p class="text-slate-400 text-xs mt-1">Fixture completo sincronizado y puntuación en tiempo real.</p>
           </div>
-          <button onclick="enterPolla('premier')" class="mt-5 w-full btn-emerald rounded-lg py-2.5">
-            Ingresar a Pronósticos
+          <button onclick="enterPolla('premier')" class="mt-6 w-full btn-emerald rounded-xl py-3 text-sm flex items-center justify-center gap-2">
+            <span>Ingresar a Pronósticos</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
           </button>
         </div>
       </div>
@@ -104,211 +109,229 @@
 
     <!-- LOGIN -->
     <section id="view-login" class="view-section max-w-md mx-auto my-8 space-y-6">
-      <div class="card-dark border-slate-800 p-6 md:p-8">
-        <h2 class="text-2xl font-bold text-white text-center mb-6">Iniciar Sesión</h2>
+      <div class="card-dark border-slate-800 p-6 md:p-8 shadow-2xl">
+        <div class="text-center mb-6">
+          <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center mx-auto mb-3 border border-emerald-500/20">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/></svg>
+          </div>
+          <h2 class="text-2xl font-black text-white">Iniciar Sesión</h2>
+          <p class="text-xs text-slate-400 mt-1">Accede con tu usuario registrado</p>
+        </div>
         <form onsubmit="handleLogin(event)" class="space-y-4">
           <div>
-            <label class="block text-xs font-medium text-slate-300 mb-1">Nombre de Usuario (@username)</label>
+            <label class="block text-xs font-semibold text-slate-300 mb-1.5">Nombre de Usuario (@username)</label>
             <input type="text" id="login-username" required placeholder="ej. Carlos_Gol o admin">
           </div>
           <div>
-            <label class="block text-xs font-medium text-slate-300 mb-1">Contraseña</label>
+            <label class="block text-xs font-semibold text-slate-300 mb-1.5">Contraseña</label>
             <input type="password" id="login-password" required placeholder="••••••••">
           </div>
-          <button type="submit" class="w-full btn-emerald py-3 font-bold">Entrar</button>
+          <button type="submit" class="w-full btn-emerald py-3 font-bold rounded-xl mt-2">Entrar a la Polla</button>
         </form>
-        <div class="mt-6 text-center">
-          <button onclick="navigateTo('register')" class="text-xs text-emerald-400 hover:underline">Crear Cuenta con Código</button>
+        <div class="mt-6 text-center border-t border-slate-800/80 pt-4">
+          <button onclick="navigateTo('register')" class="text-xs text-emerald-400 hover:text-emerald-300 font-semibold">¿Tienes un código? Registra tu cuenta aquí</button>
         </div>
       </div>
     </section>
 
     <!-- REGISTRO -->
     <section id="view-register" class="view-section max-w-lg mx-auto my-6 space-y-6">
-      <div class="card-dark border-slate-800 p-6">
-        <h2 class="text-2xl font-bold text-white text-center mb-4">Registro de Participante</h2>
+      <div class="card-dark border-slate-800 p-6 md:p-8 shadow-2xl">
+        <h2 class="text-2xl font-black text-white text-center mb-1">Registro de Participante</h2>
+        <p class="text-xs text-slate-400 text-center mb-6">Completa tus datos con el código de invitación recibido</p>
         <form onsubmit="handleRegister(event)" class="space-y-4">
           <div>
-            <label class="block text-xs font-medium text-emerald-400 mb-1">1. Selecciona la Polla</label>
+            <label class="block text-xs font-semibold text-emerald-400 mb-1.5">1. Polla Seleccionada</label>
             <select id="reg-polla-select" required>
               <option value="premier">Premier League 2026</option>
             </select>
           </div>
           <div>
-            <label class="block text-xs font-medium text-amber-400 mb-1">2. Código de Registro (10 Caracteres)</label>
+            <label class="block text-xs font-semibold text-amber-400 mb-1.5">2. Código de Registro (10 Caracteres)</label>
             <div class="flex gap-2">
-              <input type="text" id="reg-code" maxlength="10" required placeholder="A8X9K2M4P1" class="uppercase font-mono">
-              <button type="button" onclick="verifyRegisterCode()" class="px-3 py-1 bg-amber-500/20 text-amber-400 text-xs font-semibold rounded">Verificar</button>
+              <input type="text" id="reg-code" maxlength="10" required placeholder="A8X9K2M4P1" class="uppercase font-mono tracking-wider">
+              <button type="button" onclick="verifyRegisterCode()" class="px-4 py-2 bg-amber-500/20 hover:bg-amber-500/30 text-amber-400 text-xs font-bold rounded-lg border border-amber-500/30 transition-all">Verificar</button>
             </div>
-            <p id="code-status" class="text-[11px] mt-1 text-slate-400">Verifica tu código antes de continuar.</p>
+            <p id="code-status" class="text-[11px] mt-1 text-slate-400">Ingresa y verifica tu código asignado.</p>
           </div>
           <div>
-            <label class="block text-xs text-slate-300 mb-1">Nombre Asignado</label>
-            <input type="text" id="reg-fullname" readonly class="bg-slate-950 text-slate-500 cursor-not-allowed">
+            <label class="block text-xs text-slate-300 mb-1">Nombre Completo Asignado</label>
+            <input type="text" id="reg-fullname" readonly class="bg-slate-950/80 text-slate-400 cursor-not-allowed font-medium border-slate-800">
           </div>
           <div>
-            <label class="block text-xs text-slate-300 mb-1">Username (@usuario)</label>
-            <input type="text" id="reg-username" required placeholder="Carlos_Gol">
+            <label class="block text-xs text-slate-300 mb-1">Username Único (@usuario)</label>
+            <input type="text" id="reg-username" required placeholder="ej. Carlos_Gol">
           </div>
           <div>
-            <label class="block text-xs text-slate-300 mb-1">Celular / WhatsApp</label>
-            <input type="tel" id="reg-phone" required placeholder="3001234567">
+            <label class="block text-xs text-slate-300 mb-1">Celular / WhatsApp (10 Dígitos)</label>
+            <!-- VALIDACIÓN ESTRICTA DE 10 DÍGITOS -->
+            <input type="tel" id="reg-phone" maxlength="10" minlength="10" pattern="[0-9]{10}" required placeholder="3001234567" title="Ingresa un número de celular válido de 10 dígitos">
           </div>
           <div>
             <label class="block text-xs text-slate-300 mb-1">Contraseña</label>
             <input type="password" id="reg-password" minlength="6" required placeholder="••••••••">
           </div>
-          <button type="submit" id="btn-submit-reg" disabled class="w-full btn-emerald opacity-50 cursor-not-allowed py-3 font-bold">Completar Registro</button>
+          <button type="submit" id="btn-submit-reg" disabled class="w-full btn-emerald opacity-50 cursor-not-allowed py-3 font-bold rounded-xl mt-4">Completar Registro</button>
         </form>
       </div>
     </section>
 
     <!-- PRONÓSTICOS DEL USUARIO -->
     <section id="view-predictions" class="view-section space-y-6">
-      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-900 p-4 rounded-xl border border-slate-800">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-900 p-5 rounded-2xl border border-slate-800 shadow-xl">
         <div>
           <span class="badge-emerald">Premier League 2026</span>
-          <h2 class="text-xl font-bold text-white mt-1">Panel de Pronósticos</h2>
+          <h2 class="text-xl font-black text-white mt-1">Mis Pronósticos</h2>
         </div>
         
-        <div class="flex gap-2 bg-slate-950 p-1 rounded-lg border border-slate-800">
-          <button onclick="switchPredictionTab('upcoming')" id="tab-btn-upcoming" class="px-4 py-2 text-xs font-bold rounded-md bg-emerald-500 text-slate-950">
+        <div class="flex gap-2 bg-slate-950 p-1.5 rounded-xl border border-slate-800">
+          <button onclick="switchPredictionTab('upcoming')" id="tab-btn-upcoming" class="px-4 py-2 text-xs font-bold rounded-lg bg-emerald-500 text-slate-950 transition-all">
             ⏳ Próximos Partidos
           </button>
-          <button onclick="switchPredictionTab('history')" id="tab-btn-history" class="px-4 py-2 text-xs font-bold rounded-md text-slate-400 hover:text-white">
-            📜 Mis Predicciones
+          <button onclick="switchPredictionTab('history')" id="tab-btn-history" class="px-4 py-2 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition-all">
+            📜 Historial / Finalizados
           </button>
         </div>
       </div>
 
       <!-- PRÓXIMOS PARTIDOS -->
       <div id="pred-tab-upcoming" class="space-y-4">
-        <p class="text-xs text-slate-400">Ingresa tu pronóstico. Una vez guardado, el marcador quedará **bloqueado de forma permanente**.</p>
+        <p class="text-xs text-slate-400 bg-slate-900/50 p-3 rounded-lg border border-slate-800">⚽ <strong>Nota:</strong> Ingresa tus marcadores antes de cada partido. Una vez enviado, el marcador queda <strong>bloqueado permanentemente</strong>.</p>
         <div id="upcoming-matches-list" class="space-y-4"></div>
       </div>
 
       <!-- HISTORIAL / PASADOS -->
       <div id="pred-tab-history" class="space-y-4 hidden">
-        <p class="text-xs text-slate-400">Partidos iniciados o finalizados. Las predicciones en esta sección están cerradas.</p>
+        <p class="text-xs text-slate-400 bg-slate-900/50 p-3 rounded-lg border border-slate-800">🏁 Resultados reales y puntos acumulados por partido.</p>
         <div id="history-matches-list" class="space-y-4"></div>
       </div>
     </section>
 
     <!-- SECCIÓN PRONÓSTICOS EN VIVO -->
     <section id="view-live-feed" class="view-section space-y-6">
-      <div class="bg-gradient-to-r from-slate-900 via-amber-950/20 to-slate-900 p-6 rounded-2xl border border-amber-500/20 shadow-xl">
+      <div class="bg-gradient-to-r from-slate-900 via-amber-950/30 to-slate-900 p-6 rounded-2xl border border-amber-500/30 shadow-2xl">
         <div class="flex items-center gap-2">
-          <span class="text-xl">🔥</span>
-          <h2 class="text-2xl font-extrabold text-white">Pronósticos en Vivo</h2>
+          <span class="text-2xl">🔥</span>
+          <h2 class="text-2xl font-black text-white">Pronósticos en Vivo</h2>
         </div>
-        <p class="text-slate-400 text-sm mt-1">Monitorea en tiempo real todas las jugadas enviadas por la comunidad de participantes.</p>
+        <p class="text-slate-400 text-sm mt-1">Consulta en tiempo real los pronósticos registrados por los participantes de la polla.</p>
       </div>
 
-      <div class="card-dark border-slate-800 p-0 overflow-x-auto">
+      <div class="card-dark border-slate-800 p-0 overflow-x-auto shadow-xl">
         <table class="w-full text-left text-xs">
           <thead>
-            <tr class="bg-slate-900 text-slate-400 border-b border-slate-800">
-              <th class="p-3">Usuario (@username)</th>
-              <th class="p-3">Encuentro</th>
-              <th class="p-3 text-center">Pronóstico</th>
-              <th class="p-3 text-right">Fecha Partido</th>
+            <tr class="bg-slate-900/90 text-slate-400 border-b border-slate-800 uppercase tracking-wider font-semibold">
+              <th class="p-3.5">Usuario</th>
+              <th class="p-3.5">Partido</th>
+              <th class="p-3.5 text-center">Pronóstico</th>
+              <th class="p-3.5 text-right">Fecha</th>
             </tr>
           </thead>
-          <tbody id="live-feed-tbody" class="divide-y divide-slate-800"></tbody>
+          <tbody id="live-feed-tbody" class="divide-y divide-slate-800/60"></tbody>
         </table>
       </div>
     </section>
 
     <!-- SECCIÓN PARTICIPANTES Y DETALLE -->
     <section id="view-participants" class="view-section space-y-6">
-      <div class="bg-gradient-to-r from-slate-900 via-emerald-950/20 to-slate-900 p-6 rounded-2xl border border-emerald-500/20 shadow-xl">
+      <div class="bg-gradient-to-r from-slate-900 via-sky-950/30 to-slate-900 p-6 rounded-2xl border border-sky-500/30 shadow-2xl">
         <div class="flex items-center gap-2">
-          <span class="text-xl">👥</span>
-          <h2 class="text-2xl font-extrabold text-white">Explorar Participantes</h2>
+          <span class="text-2xl">👥</span>
+          <h2 class="text-2xl font-black text-white">Participantes de la Polla</h2>
         </div>
-        <p class="text-slate-400 text-sm mt-1">Selecciona cualquier usuario para examinar su historial completo de pronósticos en la polla.</p>
+        <p class="text-slate-400 text-sm mt-1">Selecciona cualquier usuario para explorar sus jugadas y aciertos.</p>
       </div>
 
       <!-- GRID DE CARDS -->
       <div id="participants-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
 
       <!-- DETALLE DE PRONÓSTICOS DEL USUARIO -->
-      <div id="participant-detail-modal" class="card-dark border-emerald-500/30 space-y-4 hidden">
+      <div id="participant-detail-modal" class="card-dark border-emerald-500/40 space-y-4 hidden shadow-2xl bg-slate-900/95 backdrop-blur-md">
         <div class="flex justify-between items-center border-b border-slate-800 pb-3">
           <div>
-            <span class="text-xs text-slate-400">Viendo Pronósticos de:</span>
-            <h3 id="detail-target-username" class="text-lg font-bold text-emerald-400 font-mono">@username</h3>
+            <span class="text-xs text-slate-400">Pronósticos completos de:</span>
+            <h3 id="detail-target-username" class="text-lg font-black text-emerald-400 font-mono">@username</h3>
           </div>
-          <button onclick="closeParticipantDetail()" class="px-3 py-1 bg-slate-800 text-slate-300 hover:text-white text-xs rounded">Cerrar</button>
+          <button onclick="closeParticipantDetail()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold rounded-lg transition-all">Cerrar ✕</button>
         </div>
-        <div id="participant-predictions-container" class="space-y-3 max-h-96 overflow-y-auto"></div>
+        <div id="participant-predictions-container" class="space-y-3 max-h-96 overflow-y-auto pr-1"></div>
       </div>
     </section>
 
     <!-- TABLA DE POSICIONES (ESTRICTAMENTE SOLO USERNAME) -->
     <section id="view-leaderboard" class="view-section space-y-6">
-      <h2 class="text-xl font-bold text-white">Tabla General de Posiciones</h2>
-      <div class="card-dark p-0 overflow-x-auto">
+      <div class="bg-gradient-to-r from-slate-900 via-emerald-950/30 to-slate-900 p-6 rounded-2xl border border-emerald-500/30 shadow-2xl">
+        <div class="flex items-center gap-2">
+          <span class="text-2xl">🏆</span>
+          <h2 class="text-2xl font-black text-white">Tabla General de Posiciones</h2>
+        </div>
+        <p class="text-slate-400 text-sm mt-1">Clasificación en tiempo real. 2 puntos por marcador exacto • 1 punto por acertar el ganador o empate.</p>
+      </div>
+
+      <div class="card-dark p-0 overflow-x-auto shadow-xl">
         <table class="w-full text-left text-xs">
           <thead>
-            <tr class="bg-slate-900 text-slate-400 border-b border-slate-800">
-              <th class="p-3">#</th>
-              <th class="p-3">Usuario (@username)</th>
-              <th class="p-3 text-center">Puntos Totales</th>
+            <tr class="bg-slate-900 text-slate-400 border-b border-slate-800 uppercase tracking-wider font-semibold">
+              <th class="p-4">#</th>
+              <th class="p-4">Usuario (@username)</th>
+              <th class="p-4 text-center">Puntos Totales</th>
             </tr>
           </thead>
-          <tbody id="leaderboard-tbody" class="divide-y divide-slate-800"></tbody>
+          <tbody id="leaderboard-tbody" class="divide-y divide-slate-800/60"></tbody>
         </table>
       </div>
     </section>
 
     <!-- PANEL ADMIN -->
     <section id="view-admin" class="view-section space-y-6">
-      <div class="card-dark border-red-500/30">
-        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
-          <h2 class="text-xl font-bold text-white">Panel Control Super Admin</h2>
+      <div class="card-dark border-red-500/40 shadow-2xl">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4 border-b border-slate-800 pb-4">
+          <div>
+            <span class="badge-red">SUPERADMIN</span>
+            <h2 class="text-xl font-black text-white mt-1">Panel de Control de Administrador</h2>
+          </div>
           <div class="flex flex-wrap gap-2">
-            <button onclick="preloadPremierLeagueFixture()" class="px-3 py-1.5 bg-purple-900/60 hover:bg-purple-800 border border-purple-500/50 text-purple-200 text-xs font-bold rounded shadow-lg">
+            <button onclick="preloadPremierLeagueFixture()" class="px-3 py-2 bg-purple-900/60 hover:bg-purple-800 border border-purple-500/50 text-purple-200 text-xs font-bold rounded-lg shadow-lg transition-all">
               ⚡ Cargar Fixture Completo
             </button>
-            <button onclick="clearAllMatches()" class="px-3 py-1.5 bg-red-900/60 hover:bg-red-800 border border-red-500/50 text-red-200 text-xs font-bold rounded shadow-lg">
+            <button onclick="clearAllMatches()" class="px-3 py-2 bg-red-900/60 hover:bg-red-800 border border-red-500/50 text-red-200 text-xs font-bold rounded-lg shadow-lg transition-all">
               🗑️ Borrar Partidos Actuales
             </button>
           </div>
         </div>
         
         <!-- CREAR / EDITAR PARTIDO -->
-        <div class="mb-6 p-4 bg-slate-900 rounded-lg border border-slate-800">
+        <div class="mb-6 p-4 bg-slate-900/90 rounded-xl border border-slate-800">
           <h3 id="admin-match-form-title" class="text-sm font-bold text-emerald-400 mb-3">⚽ Publicar / Editar Partido</h3>
           <form onsubmit="handleSaveMatch(event)" class="grid grid-cols-1 md:grid-cols-3 gap-3">
             <input type="hidden" id="match-edit-id">
             <input type="text" id="match-home" required placeholder="Equipo Local (ej. Arsenal)">
             <input type="text" id="match-away" required placeholder="Equipo Visitante (ej. Chelsea)">
             <input type="text" id="match-datetime" required placeholder="Fecha y Hora de Inicio">
-            <div class="md:col-span-3 flex gap-2">
-              <button type="submit" class="btn-emerald flex-1 py-2 font-bold text-xs">Guardar Partido</button>
-              <button type="button" onclick="resetMatchForm()" class="btn-slate py-2 text-xs rounded hidden" id="btn-cancel-edit">Cancelar</button>
+            <div class="md:col-span-3 flex gap-2 mt-1">
+              <button type="submit" class="btn-emerald flex-1 py-2.5 font-bold text-xs rounded-lg">Guardar Partido</button>
+              <button type="button" onclick="resetMatchForm()" class="btn-slate py-2.5 text-xs rounded-lg hidden" id="btn-cancel-edit">Cancelar</button>
             </div>
           </form>
         </div>
 
         <!-- GENERAR CÓDIGO -->
-        <div class="p-4 bg-slate-900 rounded-lg border border-slate-800">
+        <div class="p-4 bg-slate-900/90 rounded-xl border border-slate-800">
           <h3 class="text-sm font-bold text-amber-400 mb-3">🔑 Generar Código de Registro</h3>
           <form onsubmit="handleGenerateCode(event)" class="grid grid-cols-1 md:grid-cols-3 gap-3">
-            <input type="text" id="code-person-name" required placeholder="Nombre Completo">
+            <input type="text" id="code-person-name" required placeholder="Nombre Completo del Participante">
             <select id="code-target-polla">
-              <option value="premier">Premier League</option>
+              <option value="premier">Premier League 2026</option>
             </select>
-            <button type="submit" class="btn-emerald py-2 font-bold text-xs">Generar Código</button>
+            <button type="submit" class="btn-emerald py-2.5 font-bold text-xs rounded-lg">Generar Código</button>
           </form>
         </div>
       </div>
 
       <!-- LISTA DE PARTIDOS EN ADMIN SECCIONADOS -->
       <div class="card-dark border-slate-800 p-4 space-y-4">
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-          <h4 class="font-bold text-sm text-white">Partidos Registrados en Premier League</h4>
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-slate-800 pb-3">
+          <h4 class="font-bold text-sm text-white">Partidos Registrados</h4>
           <div class="flex gap-2 bg-slate-950 p-1 rounded-lg border border-slate-800">
             <button onclick="switchAdminMatchTab('upcoming')" id="admin-tab-btn-upcoming" class="px-3 py-1.5 text-xs font-bold rounded-md bg-emerald-500 text-slate-950">
               ⏳ Futuros
@@ -319,8 +342,8 @@
           </div>
         </div>
 
-        <div id="admin-matches-upcoming" class="space-y-3 max-h-96 overflow-y-auto"></div>
-        <div id="admin-matches-history" class="space-y-3 max-h-96 overflow-y-auto hidden"></div>
+        <div id="admin-matches-upcoming" class="space-y-3 max-h-96 overflow-y-auto pr-1"></div>
+        <div id="admin-matches-history" class="space-y-3 max-h-96 overflow-y-auto pr-1 hidden"></div>
       </div>
 
       <!-- CÓDIGOS GENERADOS -->
@@ -344,19 +367,37 @@
 
   </main>
 
-  <!-- NAV BOTTOM COMPLETA Y VISIBLE PARA TODOS -->
-  <nav class="fixed bottom-0 left-0 right-0 z-40 bg-slate-900/95 border-t border-slate-800 py-2">
-    <div class="max-w-2xl mx-auto flex justify-around items-center text-center px-2">
-      <button onclick="navigateTo('home')" class="text-emerald-400 p-1.5 text-[11px] font-bold">Inicio</button>
-      <button onclick="checkAuthAndNavigate('predictions')" class="text-slate-300 p-1.5 text-[11px] font-bold">Mis Pronósticos</button>
-      <button onclick="checkAuthAndNavigate('live-feed')" class="text-amber-400 p-1.5 text-[11px] font-bold">🔥 En Vivo</button>
-      <button onclick="checkAuthAndNavigate('participants')" class="text-sky-400 p-1.5 text-[11px] font-bold">👥 Usuarios</button>
-      <button onclick="checkAuthAndNavigate('leaderboard')" class="text-slate-300 p-1.5 text-[11px] font-bold">Posiciones</button>
-      <button id="nav-btn-admin" onclick="navigateTo('admin')" class="text-red-400 p-1.5 text-[11px] font-bold hidden">Admin</button>
+  <!-- NAV BOTTOM COMPLETA Y VISIBLE PARA TODOS CON ÍCONOS VECTORIALES SVG -->
+  <nav class="fixed bottom-0 left-0 right-0 z-40 bg-slate-900/95 backdrop-blur-md border-t border-slate-800/80 py-2 shadow-2xl">
+    <div class="max-w-2xl mx-auto flex justify-around items-center text-center px-1">
+      <button onclick="navigateTo('home')" class="flex flex-col items-center gap-0.5 text-emerald-400 p-1 text-[10px] font-bold">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+        <span>Inicio</span>
+      </button>
+      <button onclick="checkAuthAndNavigate('predictions')" class="flex flex-col items-center gap-0.5 text-slate-300 p-1 text-[10px] font-bold hover:text-emerald-400">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+        <span>Pronósticos</span>
+      </button>
+      <button onclick="checkAuthAndNavigate('live-feed')" class="flex flex-col items-center gap-0.5 text-amber-400 p-1 text-[10px] font-bold hover:text-amber-300">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        <span>En Vivo</span>
+      </button>
+      <button onclick="checkAuthAndNavigate('participants')" class="flex flex-col items-center gap-0.5 text-sky-400 p-1 text-[10px] font-bold hover:text-sky-300">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+        <span>Usuarios</span>
+      </button>
+      <button onclick="checkAuthAndNavigate('leaderboard')" class="flex flex-col items-center gap-0.5 text-slate-300 p-1 text-[10px] font-bold hover:text-emerald-400">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+        <span>Posiciones</span>
+      </button>
+      <button id="nav-btn-admin" onclick="navigateTo('admin')" class="flex flex-col items-center gap-0.5 text-red-400 p-1 text-[10px] font-bold hidden">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        <span>Admin</span>
+      </button>
     </div>
   </nav>
 
-  <!-- SCRIPT COMPLETO -->
+  <!-- SCRIPT LÓGICA COMPLETA -->
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyD53EG1LMyor9_f5BcNBLz1XcgMQycbj0w",
@@ -374,6 +415,12 @@
 
     let currentUser = null;
     let validatedCodeDoc = null;
+
+    // AXILIAR PARA ICONOS DE EQUIPOS BASADO EN INICIALES Y COLORES
+    function getTeamBadgeUrl(teamName) {
+      const cleanName = encodeURIComponent(teamName.substring(0, 3).toUpperCase());
+      return `https://ui-avatars.com/api/?name=${cleanName}&background=1e293b&color=10b981&font-size=0.45&bold=true&rounded=true`;
+    }
 
     async function ensureSuperAdminExists() {
       try {
@@ -460,7 +507,7 @@
       }
     };
 
-    // PRONÓSTICOS EN VIVO (SOLO @USERNAME)
+    // PRONÓSTICOS EN VIVO
     async function loadLivePredictionsFeed() {
       const tbody = document.getElementById('live-feed-tbody');
       if (!tbody) return;
@@ -494,10 +541,12 @@
             const row = document.createElement('tr');
             row.className = "hover:bg-slate-900/50 border-b border-slate-800/60";
             row.innerHTML = `
-              <td class="p-3 font-mono font-bold text-emerald-400">@${username}</td>
-              <td class="p-3 font-medium text-white">${match.homeTeam} vs ${match.awayTeam}</td>
-              <td class="p-3 text-center font-bold text-amber-400 font-mono">${pred.homeScore} - ${pred.awayScore}</td>
-              <td class="p-3 text-right text-slate-400 text-[11px]">${match.matchDate}</td>
+              <td class="p-3.5 font-mono font-bold text-emerald-400">@${username}</td>
+              <td class="p-3.5 font-medium text-white flex items-center gap-2">
+                <span>${match.homeTeam} vs ${match.awayTeam}</span>
+              </td>
+              <td class="p-3.5 text-center font-bold text-amber-400 font-mono text-sm">${pred.homeScore} - ${pred.awayScore}</td>
+              <td class="p-3.5 text-right text-slate-400 text-[11px] font-mono">${match.matchDate}</td>
             `;
             tbody.appendChild(row);
           }
@@ -508,7 +557,7 @@
       }
     }
 
-    // DIRECTORIO DE PARTICIPANTES (SOLO @USERNAME)
+    // DIRECTORIO DE PARTICIPANTES (OCULTA NOMBRE REAL, MUESTRA @USERNAME)
     async function loadParticipantsDirectory() {
       const grid = document.getElementById('participants-grid');
       if (!grid) return;
@@ -523,15 +572,20 @@
           const u = doc.data();
           if (u.role !== 'superadmin') {
             const card = document.createElement('div');
-            card.className = "card-dark border-slate-800 p-4 flex flex-col justify-between hover:border-emerald-500/50 transition-all";
+            card.className = "card-dark border-slate-800 p-4 flex flex-col justify-between hover:border-emerald-500/50 transition-all shadow-lg";
             card.innerHTML = `
-              <div>
-                <span class="text-2xl">👤</span>
-                <h4 class="text-base font-bold text-white font-mono mt-2">@${u.username}</h4>
-                <p class="text-[11px] text-slate-400 mt-0.5">Participante Oficial</p>
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center font-mono font-black text-emerald-400 text-sm">
+                  @
+                </div>
+                <div>
+                  <h4 class="text-sm font-bold text-white font-mono">@${u.username}</h4>
+                  <p class="text-[11px] text-slate-400">Participante Oficial</p>
+                </div>
               </div>
-              <button onclick="openParticipantDetail('${doc.id}', '${u.username}')" class="mt-4 w-full btn-emerald text-xs py-2 rounded font-bold">
-                Ver Pronósticos
+              <button onclick="openParticipantDetail('${doc.id}', '${u.username}')" class="mt-4 w-full btn-emerald text-xs py-2 rounded-lg font-bold flex items-center justify-center gap-1">
+                <span>Ver Pronósticos</span>
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
               </button>
             `;
             grid.appendChild(card);
@@ -574,14 +628,14 @@
 
           if (match) {
             const item = document.createElement('div');
-            item.className = "p-3 bg-slate-900 border border-slate-800 rounded flex justify-between items-center text-xs";
+            item.className = "p-3 bg-slate-950 border border-slate-800 rounded-xl flex justify-between items-center text-xs";
             item.innerHTML = `
               <div>
                 <span class="text-white font-bold">${match.homeTeam} vs ${match.awayTeam}</span>
                 <span class="text-slate-500 block text-[10px]">📅 ${match.matchDate}</span>
               </div>
               <div class="text-right">
-                <span class="text-amber-400 font-mono font-bold text-sm block">${p.homeScore} - ${p.awayScore}</span>
+                <span class="text-amber-400 font-mono font-black text-sm block">${p.homeScore} - ${p.awayScore}</span>
                 <span class="badge-amber text-[10px]">+${p.points || 0} pts</span>
               </div>
             `;
@@ -631,10 +685,11 @@
         tbody.innerHTML = "";
         sortedUsers.forEach((u, index) => {
           const row = document.createElement('tr');
+          row.className = "hover:bg-slate-900/50";
           row.innerHTML = `
-            <td class="p-3 font-bold ${index === 0 ? 'text-amber-400' : 'text-slate-400'}">${index + 1}</td>
-            <td class="p-3 font-medium text-emerald-400 font-mono">@${u.username}</td>
-            <td class="p-3 text-center font-bold text-amber-400">${u.totalPoints} pts</td>
+            <td class="p-4 font-black ${index === 0 ? 'text-amber-400 text-base' : 'text-slate-400'}">${index === 0 ? '🥇 1' : (index === 1 ? '🥈 2' : (index === 2 ? '🥉 3' : index + 1))}</td>
+            <td class="p-4 font-bold text-emerald-400 font-mono text-sm">@${u.username}</td>
+            <td class="p-4 text-center font-black text-amber-400 text-sm font-mono">${u.totalPoints} pts</td>
           `;
           tbody.appendChild(row);
         });
@@ -840,7 +895,7 @@
           const isPassed = matchTime <= now || m.status === "finished";
 
           const card = document.createElement('div');
-          card.className = "p-3 bg-slate-900 border border-slate-800 rounded flex flex-col md:flex-row justify-between items-center gap-2 text-xs";
+          card.className = "p-3 bg-slate-900 border border-slate-800 rounded-xl flex flex-col md:flex-row justify-between items-center gap-2 text-xs";
 
           if (isPassed) {
             historyCount++;
@@ -851,10 +906,10 @@
                 <span class="text-slate-500 block text-[10px]">📅 ${m.matchDate}</span>
               </div>
               <div class="flex items-center gap-2">
-                <input type="number" min="0" id="final-home-${matchId}" value="${m.homeScore !== null ? m.homeScore : ''}" placeholder="Loc" class="w-10 text-center bg-slate-950 p-1 border border-slate-700 rounded">
+                <input type="number" min="0" id="final-home-${matchId}" value="${m.homeScore !== null ? m.homeScore : ''}" placeholder="Loc" class="w-10 text-center bg-slate-950 p-1 border border-slate-700 rounded-md">
                 <span>-</span>
-                <input type="number" min="0" id="final-away-${matchId}" value="${m.awayScore !== null ? m.awayScore : ''}" placeholder="Vis" class="w-10 text-center bg-slate-950 p-1 border border-slate-700 rounded">
-                <button onclick="finishMatchAndCalculatePoints('${matchId}')" class="px-2 py-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded">Guardar Resultado</button>
+                <input type="number" min="0" id="final-away-${matchId}" value="${m.awayScore !== null ? m.awayScore : ''}" placeholder="Vis" class="w-10 text-center bg-slate-950 p-1 border border-slate-700 rounded-md">
+                <button onclick="finishMatchAndCalculatePoints('${matchId}')" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-md transition-all">Guardar Resultado</button>
               </div>
             `;
             historyContainer.appendChild(card);
@@ -867,11 +922,11 @@
                 <span class="text-slate-500 block text-[10px]">📅 ${m.matchDate}</span>
               </div>
               <div class="flex items-center gap-2">
-                <input type="number" min="0" id="final-home-${matchId}" placeholder="Loc" class="w-10 text-center bg-slate-950 p-1 border border-slate-700 rounded">
+                <input type="number" min="0" id="final-home-${matchId}" placeholder="Loc" class="w-10 text-center bg-slate-950 p-1 border border-slate-700 rounded-md">
                 <span>-</span>
-                <input type="number" min="0" id="final-away-${matchId}" placeholder="Vis" class="w-10 text-center bg-slate-950 p-1 border border-slate-700 rounded">
-                <button onclick="finishMatchAndCalculatePoints('${matchId}')" class="px-2 py-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded">Finalizar</button>
-                <button onclick="prepareEditMatch('${matchId}', '${m.homeTeam}', '${m.awayTeam}', '${m.matchDate}')" class="px-2 py-1 bg-slate-800 text-amber-400 rounded">Editar</button>
+                <input type="number" min="0" id="final-away-${matchId}" placeholder="Vis" class="w-10 text-center bg-slate-950 p-1 border border-slate-700 rounded-md">
+                <button onclick="finishMatchAndCalculatePoints('${matchId}')" class="px-2 py-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-md">Finalizar</button>
+                <button onclick="prepareEditMatch('${matchId}', '${m.homeTeam}', '${m.awayTeam}', '${m.matchDate}')" class="px-2 py-1 bg-slate-800 text-amber-400 rounded-md">Editar</button>
               </div>
             `;
             upcomingContainer.appendChild(card);
@@ -933,8 +988,11 @@
           const existingPred = userPreds[match.id] || null;
           const isAlreadySubmitted = existingPred !== null;
 
+          const homeBadge = getTeamBadgeUrl(match.homeTeam);
+          const awayBadge = getTeamBadgeUrl(match.awayTeam);
+
           const card = document.createElement('div');
-          card.className = "card-dark border-slate-800 p-4 space-y-3";
+          card.className = "card-dark border-slate-800 p-4 space-y-3 shadow-lg";
 
           if (!isTimeClosed) {
             if (isAlreadySubmitted) {
@@ -943,16 +1001,22 @@
                   <span>🗓️ ${match.matchDate}</span>
                   <span class="badge-amber">🔒 Pronóstico Registrado</span>
                 </div>
-                <div class="grid grid-cols-3 items-center gap-2 text-center py-1">
-                  <span class="font-bold text-sm text-white">${match.homeTeam}</span>
-                  <div class="flex items-center justify-center gap-2">
-                    <input type="number" disabled value="${existingPred.homeScore}" class="w-12 text-center font-bold bg-slate-950 border border-slate-800 text-emerald-400 rounded p-1 cursor-not-allowed opacity-90">
-                    <span class="text-slate-600 font-bold">-</span>
-                    <input type="number" disabled value="${existingPred.awayScore}" class="w-12 text-center font-bold bg-slate-950 border border-slate-800 text-emerald-400 rounded p-1 cursor-not-allowed opacity-90">
+                <div class="grid grid-cols-3 items-center gap-2 text-center py-2">
+                  <div class="flex flex-col items-center">
+                    <img src="${homeBadge}" class="w-8 h-8 rounded-full mb-1 border border-slate-700">
+                    <span class="font-bold text-xs text-white">${match.homeTeam}</span>
                   </div>
-                  <span class="font-bold text-sm text-white">${match.awayTeam}</span>
+                  <div class="flex items-center justify-center gap-2">
+                    <input type="number" disabled value="${existingPred.homeScore}" class="w-12 text-center font-black bg-slate-950 border border-slate-800 text-emerald-400 rounded-lg p-1.5 cursor-not-allowed text-base">
+                    <span class="text-slate-600 font-black">-</span>
+                    <input type="number" disabled value="${existingPred.awayScore}" class="w-12 text-center font-black bg-slate-950 border border-slate-800 text-emerald-400 rounded-lg p-1.5 cursor-not-allowed text-base">
+                  </div>
+                  <div class="flex flex-col items-center">
+                    <img src="${awayBadge}" class="w-8 h-8 rounded-full mb-1 border border-slate-700">
+                    <span class="font-bold text-xs text-white">${match.awayTeam}</span>
+                  </div>
                 </div>
-                <p class="text-[11px] text-center text-slate-500 italic">Tu marcador ya fue guardado y bloqueado para este partido.</p>
+                <p class="text-[11px] text-center text-slate-500 italic">Tu pronóstico está guardado y bloqueado para este partido.</p>
               `;
             } else {
               card.innerHTML = `
@@ -960,16 +1024,22 @@
                   <span>🗓️ ${match.matchDate}</span>
                   <span class="badge-emerald">Abierto para Pronóstico</span>
                 </div>
-                <div class="grid grid-cols-3 items-center gap-2 text-center py-1">
-                  <span class="font-bold text-sm text-white">${match.homeTeam}</span>
-                  <div class="flex items-center justify-center gap-2">
-                    <input type="number" min="0" id="pred-home-${match.id}" placeholder="0" class="w-12 text-center font-bold bg-slate-900 border border-slate-700 rounded p-1">
-                    <span class="text-slate-500 font-bold">-</span>
-                    <input type="number" min="0" id="pred-away-${match.id}" placeholder="0" class="w-12 text-center font-bold bg-slate-900 border border-slate-700 rounded p-1">
+                <div class="grid grid-cols-3 items-center gap-2 text-center py-2">
+                  <div class="flex flex-col items-center">
+                    <img src="${homeBadge}" class="w-8 h-8 rounded-full mb-1 border border-slate-700">
+                    <span class="font-bold text-xs text-white">${match.homeTeam}</span>
                   </div>
-                  <span class="font-bold text-sm text-white">${match.awayTeam}</span>
+                  <div class="flex items-center justify-center gap-2">
+                    <input type="number" min="0" id="pred-home-${match.id}" placeholder="0" class="w-12 text-center font-black bg-slate-900 border border-slate-700 rounded-lg p-1.5 text-base text-white">
+                    <span class="text-slate-500 font-bold">-</span>
+                    <input type="number" min="0" id="pred-away-${match.id}" placeholder="0" class="w-12 text-center font-black bg-slate-900 border border-slate-700 rounded-lg p-1.5 text-base text-white">
+                  </div>
+                  <div class="flex flex-col items-center">
+                    <img src="${awayBadge}" class="w-8 h-8 rounded-full mb-1 border border-slate-700">
+                    <span class="font-bold text-xs text-white">${match.awayTeam}</span>
+                  </div>
                 </div>
-                <button onclick="savePrediction('${match.id}')" class="w-full btn-emerald py-2 text-xs font-bold rounded">
+                <button onclick="savePrediction('${match.id}')" class="w-full btn-emerald py-2.5 text-xs font-bold rounded-xl shadow-lg">
                   Enviar Pronóstico
                 </button>
               `;
@@ -984,13 +1054,19 @@
                   <span class="badge-amber">+${existingPred ? (existingPred.points || 0) : 0} pts</span>
                 </div>
               </div>
-              <div class="grid grid-cols-3 items-center gap-2 text-center py-1">
-                <span class="font-bold text-sm text-slate-300">${match.homeTeam}</span>
-                <div class="text-amber-400 font-mono font-bold text-base">
-                  Tu pronóstico: ${existingPred ? existingPred.homeScore : '-'} : ${existingPred ? existingPred.awayScore : '-'}
-                  ${match.status === "finished" ? `<div class="text-xs text-slate-400 font-sans mt-0.5">Resultado Real: ${match.homeScore} - ${match.awayScore}</div>` : ''}
+              <div class="grid grid-cols-3 items-center gap-2 text-center py-2">
+                <div class="flex flex-col items-center">
+                  <img src="${homeBadge}" class="w-7 h-7 rounded-full mb-1 opacity-80">
+                  <span class="font-bold text-xs text-slate-300">${match.homeTeam}</span>
                 </div>
-                <span class="font-bold text-sm text-slate-300">${match.awayTeam}</span>
+                <div class="text-amber-400 font-mono font-bold text-base">
+                  Tu marc: ${existingPred ? existingPred.homeScore : '-'} : ${existingPred ? existingPred.awayScore : '-'}
+                  ${match.status === "finished" ? `<div class="text-xs text-slate-400 font-sans mt-0.5 font-bold">Real: ${match.homeScore} - ${match.awayScore}</div>` : ''}
+                </div>
+                <div class="flex flex-col items-center">
+                  <img src="${awayBadge}" class="w-7 h-7 rounded-full mb-1 opacity-80">
+                  <span class="font-bold text-xs text-slate-300">${match.awayTeam}</span>
+                </div>
               </div>
             `;
             historyContainer.appendChild(card);
@@ -1040,11 +1116,11 @@
       document.getElementById('pred-tab-upcoming').classList.add('hidden');
       document.getElementById('pred-tab-history').classList.add('hidden');
 
-      document.getElementById('tab-btn-upcoming').className = "px-4 py-2 text-xs font-bold rounded-md text-slate-400 hover:text-white";
-      document.getElementById('tab-btn-history').className = "px-4 py-2 text-xs font-bold rounded-md text-slate-400 hover:text-white";
+      document.getElementById('tab-btn-upcoming').className = "px-4 py-2 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition-all";
+      document.getElementById('tab-btn-history').className = "px-4 py-2 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition-all";
 
       document.getElementById('pred-tab-' + tabName).classList.remove('hidden');
-      document.getElementById('tab-btn-' + tabName).className = "px-4 py-2 text-xs font-bold rounded-md bg-emerald-500 text-slate-950";
+      document.getElementById('tab-btn-' + tabName).className = "px-4 py-2 text-xs font-bold rounded-lg bg-emerald-500 text-slate-950 transition-all";
     };
 
     window.verifyRegisterCode = async function() {
@@ -1070,7 +1146,7 @@
         document.getElementById('reg-fullname').value = codeData.targetName;
         document.getElementById('btn-submit-reg').disabled = false;
         document.getElementById('btn-submit-reg').classList.remove('opacity-50', 'cursor-not-allowed');
-        statusText.innerText = "✅ Código válido.";
+        statusText.innerText = "✅ Código válido asignado a: " + codeData.targetName;
       } catch (err) {
         alert("Error: " + err.message);
       }
@@ -1080,13 +1156,19 @@
       e.preventDefault();
       const rawUsername = document.getElementById('reg-username').value.trim();
       const cleanUsername = rawUsername.toLowerCase();
+      const phoneInput = document.getElementById('reg-phone').value.trim();
+
+      if (phoneInput.length !== 10) {
+        alert("El número de celular debe tener exactamente 10 dígitos.");
+        return;
+      }
 
       try {
         await db.collection("users").add({
           name: validatedCodeDoc.targetName,
           username: rawUsername,
           username_clean: cleanUsername,
-          phone: document.getElementById('reg-phone').value.trim(),
+          phone: phoneInput,
           passwordHash: CryptoJS.SHA256(document.getElementById('reg-password').value).toString(),
           role: "user",
           pollas: ["premier"],
@@ -1099,7 +1181,7 @@
           usedByUsername: rawUsername
         });
 
-        alert("Registro completado. Inicia sesión.");
+        alert("Registro completado con éxito. Ahora puedes iniciar sesión.");
         navigateTo('login');
       } catch (err) {
         alert("Error: " + err.message);
@@ -1118,7 +1200,7 @@
           used: false,
           createdAt: new Date().toISOString()
         });
-        alert("Código generado: " + code);
+        alert("Código generado con éxito: " + code);
         document.getElementById('code-person-name').value = "";
         loadAdminCodes();
       } catch (err) {
@@ -1141,7 +1223,7 @@
           <td class="p-3">${data.targetName}</td>
           <td class="p-3">${data.used ? '<span class="badge-slate">Usado</span>' : '<span class="badge-emerald">Disponible</span>'}</td>
           <td class="p-3 text-right">
-            <button onclick="deleteCode('${doc.id}')" class="text-red-400 text-xs">Borrar</button>
+            <button onclick="deleteCode('${doc.id}')" class="text-red-400 text-xs font-semibold">Borrar</button>
           </td>
         `;
         tbody.appendChild(row);
@@ -1154,18 +1236,20 @@
       loadAdminCodes();
     };
 
+    // RESTAURADO: SE MUESTRA EL NOMBRE REAL DEL USUARIO EN LA SESIÓN PRIVADA DEL HEADER
     function updateHeaderUI() {
       const headerBox = document.getElementById('header-user-info');
       if (currentUser) {
         headerBox.innerHTML = `
           <div class="text-right">
-            <span class="block text-xs font-bold font-mono text-emerald-400">@${currentUser.username}</span>
+            <span class="block text-xs font-black text-white">${currentUser.name}</span>
+            <span class="block text-[10px] font-mono text-emerald-400 font-bold">@${currentUser.username}</span>
           </div>
-          <button onclick="logout()" class="p-2 bg-slate-800 text-slate-300 rounded text-xs">Salir</button>
+          <button onclick="logout()" class="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs font-bold transition-all">Salir</button>
         `;
       } else {
         headerBox.innerHTML = `
-          <button onclick="navigateTo('login')" class="btn-emerald text-xs rounded py-1 px-3">Ingresar</button>
+          <button onclick="navigateTo('login')" class="btn-emerald text-xs rounded-lg py-1.5 px-3.5">Ingresar</button>
         `;
       }
     }
