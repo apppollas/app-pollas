@@ -29,8 +29,6 @@
     
     .view-section { display: none !important; }
     .view-section.active { display: block !important; }
-    .view-flex.active { display: flex !important; }
-    .view-grid.active { display: grid !important; }
 
     header, footer, nav { background-color: #0f172a; border-color: #1e293b; }
     input, select, button { border-radius: 0.5rem; font-size: 0.95rem; }
@@ -42,9 +40,9 @@
     .btn-slate { background-color: #334155; color: #f8fafc; font-weight: 600; padding: 0.65rem 1.2rem; border: none; cursor: pointer; }
     
     .card-dark { background-color: #0f172a; border: 1px solid #1e293b; border-radius: 0.75rem; padding: 1rem; }
-    .badge-gold { background-color: rgba(234, 179, 8, 0.15); color: #eab308; border: 1px solid rgba(234, 179, 8, 0.3); font-size: 0.75rem; padding: 0.2rem 0.5rem; border-radius: 0.375rem; font-weight: 600; }
     .badge-emerald { background-color: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); font-size: 0.75rem; padding: 0.2rem 0.5rem; border-radius: 0.375rem; font-weight: 600; }
     .badge-slate { background-color: rgba(100, 116, 139, 0.15); color: #94a3b8; border: 1px solid rgba(100, 116, 139, 0.3); font-size: 0.75rem; padding: 0.2rem 0.5rem; border-radius: 0.375rem; font-weight: 600; }
+    .badge-amber { background-color: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); font-size: 0.75rem; padding: 0.2rem 0.5rem; border-radius: 0.375rem; font-weight: 600; }
 
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: #020617; }
@@ -58,199 +56,198 @@
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between selection:bg-emerald-500 selection:text-white">
 
-  <!-- MAIN HEADER / NAVBAR -->
+  <!-- HEADER -->
   <header class="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 px-4 py-3 shadow-md">
     <div class="max-w-5xl mx-auto flex items-center justify-between">
       <div class="flex items-center gap-2 cursor-pointer" onclick="navigateTo('home')">
-        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center text-slate-950 font-black shadow-lg shadow-emerald-500/20">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="min-width:22px; min-height:22px;">
-            <circle cx="12" cy="12" r="10"></circle>
-            <path d="m4.93 4.93 4.24 4.24"></path>
-            <path d="m14.83 9.17 4.24-4.24"></path>
-            <path d="m14.83 14.83 4.24 4.24"></path>
-            <path d="m9.17 14.83-4.24 4.24"></path>
-            <circle cx="12" cy="12" r="4"></circle>
-          </svg>
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center text-slate-950 font-black shadow-lg">
+          ⚽
         </div>
         <div>
-          <h1 class="text-lg font-extrabold tracking-tight bg-gradient-to-r from-white via-slate-100 to-emerald-400 bg-clip-text text-transparent">POLLAS FUTBOLERAS</h1>
+          <h1 class="text-lg font-extrabold tracking-tight text-white">POLLAS FUTBOLERAS</h1>
           <p class="text-[10px] text-slate-400 font-medium -mt-1 tracking-wider uppercase">Polla Oficial v1.0</p>
         </div>
       </div>
-
       <div id="header-user-info" class="flex items-center gap-3"></div>
     </div>
   </header>
 
-  <!-- MAIN APP CONTAINER -->
+  <!-- CONTENEDOR PRINCIPAL -->
   <main class="flex-grow max-w-5xl w-full mx-auto p-4 md:p-6 mb-20">
 
-    <!-- VIEW 1: HOME -->
+    <!-- INICIO (HOME) -->
     <section id="view-home" class="view-section active space-y-6">
-      <div class="bg-gradient-to-r from-slate-900 via-emerald-950/30 to-slate-900 p-6 rounded-2xl border border-emerald-500/20 shadow-xl relative overflow-hidden">
-        <div class="relative z-10">
-          <span class="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-xs font-semibold uppercase tracking-wider">
-            ⚡ Temporada 2026 - 2030
-          </span>
-          <h2 class="text-2xl md:text-3xl font-extrabold text-white mt-3">Selecciona tu Polla Futbolera</h2>
-          <p class="text-slate-400 text-sm max-w-xl mt-1">
-            Demuestra tus conocimientos deportivos, ingresa tus pronósticos en cada fecha y compite por la cima de la tabla general.
-          </p>
-        </div>
+      <div class="bg-gradient-to-r from-slate-900 via-emerald-950/30 to-slate-900 p-6 rounded-2xl border border-emerald-500/20 shadow-xl">
+        <h2 class="text-2xl font-extrabold text-white">Selecciona tu Polla Futbolera</h2>
+        <p class="text-slate-400 text-sm mt-1">Ingresa tus pronósticos en cada fecha y compite en la tabla general.</p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="pollas-grid">
-        <!-- PREMIER LEAGUE -->
-        <div class="card-dark border-emerald-500/40 relative hover:border-emerald-500 transition-all duration-300 group flex flex-col justify-between">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div class="card-dark border-emerald-500/40 relative flex flex-col justify-between">
           <div>
             <div class="flex items-center justify-between mb-4">
-              <div class="w-12 h-12 rounded-xl bg-purple-900/40 border border-purple-500/30 flex items-center justify-center text-purple-400 text-xl font-bold">🦁</div>
-              <span class="badge-emerald flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> ACTIVA</span>
+              <span class="text-2xl">🦁</span>
+              <span class="badge-emerald">ACTIVA</span>
             </div>
-            <h3 class="text-xl font-bold text-white group-hover:text-emerald-400 transition-colors">Premier League 2026</h3>
-            <p class="text-slate-400 text-xs mt-1">Liga de Inglaterra • Jornada Activa</p>
+            <h3 class="text-xl font-bold text-white">Premier League 2026</h3>
+            <p class="text-slate-400 text-xs mt-1">Liga de Inglaterra</p>
           </div>
-          <button onclick="enterPolla('premier')" class="mt-5 w-full btn-emerald rounded-lg py-2.5 flex items-center justify-center gap-2">
-            <span>Ingresar a Polla</span>
+          <button onclick="enterPolla('premier')" class="mt-5 w-full btn-emerald rounded-lg py-2.5">
+            Ingresar a Pronósticos
           </button>
         </div>
-
-        <div class="card-dark opacity-75 relative flex flex-col justify-between border-slate-800">
-          <div>
-            <div class="flex items-center justify-between mb-4">
-              <div class="w-12 h-12 rounded-xl bg-amber-900/30 border border-amber-500/20 flex items-center justify-center text-amber-400 text-xl font-bold">🇪🇸</div>
-              <span class="badge-slate">PRÓXIMAMENTE</span>
-            </div>
-            <h3 class="text-xl font-bold text-slate-200">LaLiga EA Sports</h3>
-          </div>
-          <button disabled class="mt-5 w-full bg-slate-800 text-slate-500 font-semibold py-2.5 rounded-lg cursor-not-allowed">Próximamente</button>
-        </div>
       </div>
     </section>
 
-    <!-- VIEW 2: LOGIN -->
+    <!-- LOGIN -->
     <section id="view-login" class="view-section max-w-md mx-auto my-8 space-y-6">
-      <div class="card-dark border-slate-800 shadow-2xl p-6 md:p-8">
-        <div class="text-center mb-6">
-          <h2 class="text-2xl font-bold text-white">Iniciar Sesión</h2>
-          <p class="text-xs text-slate-400 mt-1">Ingresa con tu usuario y contraseña</p>
-        </div>
-
-        <form id="form-login" onsubmit="handleLogin(event)" class="space-y-4">
+      <div class="card-dark border-slate-800 p-6 md:p-8">
+        <h2 class="text-2xl font-bold text-white text-center mb-6">Iniciar Sesión</h2>
+        <form onsubmit="handleLogin(event)" class="space-y-4">
           <div>
             <label class="block text-xs font-medium text-slate-300 mb-1">Nombre de Usuario (@username)</label>
-            <input type="text" id="login-username" required placeholder="ej. Carlos_Gol o admin" class="bg-slate-900 border-slate-700">
+            <input type="text" id="login-username" required placeholder="ej. Carlos_Gol o admin">
           </div>
-
           <div>
             <label class="block text-xs font-medium text-slate-300 mb-1">Contraseña</label>
-            <input type="password" id="login-password" required placeholder="••••••••" class="bg-slate-900 border-slate-700">
+            <input type="password" id="login-password" required placeholder="••••••••">
           </div>
-
-          <button type="submit" class="w-full btn-emerald rounded-lg py-3 font-bold">Entrar a la Polla</button>
+          <button type="submit" class="w-full btn-emerald py-3 font-bold">Entrar</button>
         </form>
-
-        <div class="mt-6 pt-5 border-t border-slate-800 text-center">
-          <p class="text-xs text-slate-400">¿Tienes un código de registro del Admin?</p>
-          <button onclick="navigateTo('register')" class="mt-2 text-sm text-emerald-400 font-semibold hover:underline">Crear Nueva Cuenta con Código</button>
+        <div class="mt-6 text-center">
+          <button onclick="navigateTo('register')" class="text-xs text-emerald-400 hover:underline">Crear Cuenta con Código</button>
         </div>
       </div>
     </section>
 
-    <!-- VIEW 3: REGISTRO CON CÓDIGO -->
+    <!-- REGISTRO -->
     <section id="view-register" class="view-section max-w-lg mx-auto my-6 space-y-6">
-      <div class="card-dark border-slate-800 shadow-2xl p-6 md:p-8">
-        <h2 class="text-2xl font-bold text-white text-center mb-2">Registro de Participante</h2>
-        <p class="text-xs text-slate-400 text-center mb-6">Cada código otorga acceso exclusivo a una sola polla futbolera.</p>
-
-        <form id="form-register" onsubmit="handleRegister(event)" class="space-y-4">
-          <!-- SELECCIÓN DE POLLA -->
+      <div class="card-dark border-slate-800 p-6">
+        <h2 class="text-2xl font-bold text-white text-center mb-4">Registro de Participante</h2>
+        <form onsubmit="handleRegister(event)" class="space-y-4">
           <div>
-            <label class="block text-xs font-medium text-emerald-400 mb-1">1. Selecciona la Polla a la que te registrarás</label>
-            <select id="reg-polla-select" required class="bg-slate-900 border-emerald-500/40 text-emerald-300 font-semibold">
-              <option value="premier">Premier League 2026 (Activa)</option>
-              <option value="laliga" disabled>LaLiga EA Sports (Próximamente)</option>
-              <option value="colombiana" disabled>Liga BetPlay Colombiana (Próximamente)</option>
-              <option value="copa2028" disabled>Copa América 2028 (Próximamente)</option>
-              <option value="mundial2030" disabled>Mundial de Fútbol 2030 (Próximamente)</option>
+            <label class="block text-xs font-medium text-emerald-400 mb-1">1. Selecciona la Polla</label>
+            <select id="reg-polla-select" required>
+              <option value="premier">Premier League 2026</option>
             </select>
           </div>
-
-          <!-- CÓDIGO DE REGISTRO -->
           <div>
             <label class="block text-xs font-medium text-amber-400 mb-1">2. Código de Registro (10 Caracteres)</label>
             <div class="flex gap-2">
-              <input type="text" id="reg-code" maxlength="10" required placeholder="Ej. A8X9K2M4P1" class="uppercase font-mono bg-slate-900 border-amber-500/40 text-amber-300 font-bold">
-              <button type="button" onclick="verifyRegisterCode()" class="px-3 py-1 bg-amber-500/20 text-amber-400 text-xs font-semibold rounded border border-amber-500/30">Verificar</button>
+              <input type="text" id="reg-code" maxlength="10" required placeholder="A8X9K2M4P1" class="uppercase font-mono">
+              <button type="button" onclick="verifyRegisterCode()" class="px-3 py-1 bg-amber-500/20 text-amber-400 text-xs font-semibold rounded">Verificar</button>
             </div>
-            <p id="code-status" class="text-[11px] mt-1 text-slate-400">Ingresa tu código y presiona verificar.</p>
+            <p id="code-status" class="text-[11px] mt-1 text-slate-400">Verifica tu código antes de continuar.</p>
           </div>
-
           <div>
-            <label class="block text-xs font-medium text-slate-300 mb-1">Nombre Asignado por Admin</label>
-            <input type="text" id="reg-fullname" readonly class="bg-slate-950 border-slate-800 text-slate-400 cursor-not-allowed">
+            <label class="block text-xs text-slate-300 mb-1">Nombre Asignado</label>
+            <input type="text" id="reg-fullname" readonly class="bg-slate-950 text-slate-500 cursor-not-allowed">
           </div>
-
           <div>
-            <label class="block text-xs font-medium text-slate-300 mb-1">Username (@usuario - Se respetan Mayúsculas)</label>
-            <input type="text" id="reg-username" required placeholder="ej. Carlos_Gol" class="bg-slate-900 border-slate-700">
+            <label class="block text-xs text-slate-300 mb-1">Username (@usuario)</label>
+            <input type="text" id="reg-username" required placeholder="Carlos_Gol">
           </div>
-
           <div>
-            <label class="block text-xs font-medium text-slate-300 mb-1">Número de Celular / WhatsApp</label>
-            <input type="tel" id="reg-phone" required placeholder="3001234567" class="bg-slate-900 border-slate-700">
+            <label class="block text-xs text-slate-300 mb-1">Celular / WhatsApp</label>
+            <input type="tel" id="reg-phone" required placeholder="3001234567">
           </div>
-
           <div>
-            <label class="block text-xs font-medium text-slate-300 mb-1">Contraseña</label>
-            <input type="password" id="reg-password" minlength="6" required placeholder="Mínimo 6 caracteres" class="bg-slate-900 border-slate-700">
+            <label class="block text-xs text-slate-300 mb-1">Contraseña</label>
+            <input type="password" id="reg-password" minlength="6" required placeholder="••••••••">
           </div>
-
-          <button type="submit" id="btn-submit-reg" disabled class="w-full btn-emerald opacity-50 cursor-not-allowed rounded-lg py-3 font-bold">Completar Registro</button>
+          <button type="submit" id="btn-submit-reg" disabled class="w-full btn-emerald opacity-50 cursor-not-allowed py-3 font-bold">Completar Registro</button>
         </form>
       </div>
     </section>
 
-    <!-- VIEW 4: PREDICCIONES -->
+    <!-- MÓDULO DE PRONÓSTICOS Y PREDICCIONES -->
     <section id="view-predictions" class="view-section space-y-6">
-      <h2 class="text-xl font-bold text-white">Mis Pronósticos Deportivos</h2>
-      <div id="matches-container" class="space-y-4"></div>
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-900 p-4 rounded-xl border border-slate-800">
+        <div>
+          <span class="badge-emerald">Premier League 2026</span>
+          <h2 class="text-xl font-bold text-white mt-1">Panel de Pronósticos</h2>
+        </div>
+        
+        <!-- Pestañas de Navegación del Usuario -->
+        <div class="flex gap-2 bg-slate-950 p-1 rounded-lg border border-slate-800">
+          <button onclick="switchPredictionTab('upcoming')" id="tab-btn-upcoming" class="px-4 py-2 text-xs font-bold rounded-md bg-emerald-500 text-slate-950">
+            ⏳ Próximos Partidos
+          </button>
+          <button onclick="switchPredictionTab('history')" id="tab-btn-history" class="px-4 py-2 text-xs font-bold rounded-md text-slate-400 hover:text-white">
+            📜 Mis Predicciones
+          </button>
+        </div>
+      </div>
+
+      <!-- TAB 1: PRÓXIMOS PARTIDOS (ABIERTOS PARA GUARDAR) -->
+      <div id="pred-tab-upcoming" class="space-y-4">
+        <p class="text-xs text-slate-400">Guarda o modifica tus marcadores antes de que inicie cada encuentro.</p>
+        <div id="upcoming-matches-list" class="space-y-4"></div>
+      </div>
+
+      <!-- TAB 2: MIS PREDICCIONES / HISTORIAL (CERRADOS) -->
+      <div id="pred-tab-history" class="space-y-4 hidden">
+        <p class="text-xs text-slate-400">Partidos iniciados o finalizados. Las predicciones en esta sección ya están cerradas.</p>
+        <div id="history-matches-list" class="space-y-4"></div>
+      </div>
     </section>
 
-    <!-- VIEW 5: TABLA DE POSICIONES -->
+    <!-- TABLA DE POSICIONES -->
     <section id="view-leaderboard" class="view-section space-y-6">
-      <h2 class="text-xl font-bold text-white">Tabla de Posiciones General</h2>
-      <div id="leaderboard-container"></div>
+      <h2 class="text-xl font-bold text-white">Tabla General de Posiciones</h2>
+      <div class="card-dark p-0 overflow-x-auto">
+        <table class="w-full text-left text-xs">
+          <thead>
+            <tr class="bg-slate-900 text-slate-400 border-b border-slate-800">
+              <th class="p-3">#</th>
+              <th class="p-3">Participante</th>
+              <th class="p-3 text-center">Puntos</th>
+            </tr>
+          </thead>
+          <tbody id="leaderboard-tbody" class="divide-y divide-slate-800"></tbody>
+        </table>
+      </div>
     </section>
 
-    <!-- VIEW 6: PANEL ADMIN -->
+    <!-- PANEL ADMIN -->
     <section id="view-admin" class="view-section space-y-6">
       <div class="card-dark border-red-500/30">
-        <h2 class="text-xl font-bold text-white">Panel Control Super Admin</h2>
-        <form id="form-generate-code" onsubmit="handleGenerateCode(event)" class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-2">
-          <input type="text" id="code-person-name" required placeholder="Nombre Completo" class="bg-slate-900">
-          <select id="code-target-polla" class="bg-slate-900 border-slate-700">
-            <option value="premier">Para Premier League</option>
-            <option value="laliga">Para LaLiga</option>
-            <option value="colombiana">Para Liga Colombiana</option>
-          </select>
-          <button type="submit" class="btn-emerald">Generar Código</button>
-        </form>
+        <h2 class="text-xl font-bold text-white mb-4">Panel Control Super Admin</h2>
+        
+        <!-- CREAR PARTIDO -->
+        <div class="mb-6 p-4 bg-slate-900 rounded-lg border border-slate-800">
+          <h3 class="text-sm font-bold text-emerald-400 mb-3">⚽ Publicar Nuevo Partido</h3>
+          <form onsubmit="handleCreateMatch(event)" class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <input type="text" id="match-home" required placeholder="Equipo Local (ej. Arsenal)">
+            <input type="text" id="match-away" required placeholder="Equipo Visitante (ej. Chelsea)">
+            <input type="text" id="match-datetime" required placeholder="Fecha y Hora de Inicio">
+            <button type="submit" class="btn-emerald md:col-span-3 py-2 font-bold text-xs">Publicar Partido</button>
+          </form>
+        </div>
+
+        <!-- GENERAR CÓDIGO -->
+        <div class="p-4 bg-slate-900 rounded-lg border border-slate-800">
+          <h3 class="text-sm font-bold text-amber-400 mb-3">🔑 Generar Código de Registro</h3>
+          <form onsubmit="handleGenerateCode(event)" class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <input type="text" id="code-person-name" required placeholder="Nombre Completo">
+            <select id="code-target-polla">
+              <option value="premier">Premier League</option>
+            </select>
+            <button type="submit" class="btn-emerald py-2 font-bold text-xs">Generar Código</button>
+          </form>
+        </div>
       </div>
 
-      <div class="card-dark border-slate-800 p-0 overflow-x-auto">
-        <div class="p-4 border-b border-slate-800 flex justify-between items-center">
-          <h4 class="font-bold text-sm text-white">Códigos Emitidos</h4>
-          <span class="text-xs text-slate-400">Total: <span id="codes-count">0</span></span>
+      <div class="card-dark p-0 overflow-x-auto">
+        <div class="p-4 border-b border-slate-800">
+          <h4 class="font-bold text-sm text-white">Códigos Generados</h4>
         </div>
         <table class="w-full text-left text-xs">
           <thead>
             <tr class="bg-slate-900 text-slate-400 border-b border-slate-800">
               <th class="p-3">Código</th>
               <th class="p-3">Asignado a</th>
-              <th class="p-3">Polla</th>
               <th class="p-3">Estado</th>
-              <th class="p-3">Usuario Vinculado</th>
               <th class="p-3 text-right">Acciones</th>
             </tr>
           </thead>
@@ -261,17 +258,17 @@
 
   </main>
 
-  <!-- NAVIGATION TABS FIJO BOTTOM -->
+  <!-- NAV BOTTOM -->
   <nav class="fixed bottom-0 left-0 right-0 z-40 bg-slate-900/95 border-t border-slate-800 py-2">
     <div class="max-w-md mx-auto flex justify-around">
       <button onclick="navigateTo('home')" class="text-emerald-400 p-2 text-xs">Inicio</button>
-      <button onclick="navigateTo('predictions')" class="text-slate-400 p-2 text-xs">Predicciones</button>
+      <button onclick="navigateTo('predictions')" class="text-slate-400 p-2 text-xs">Pronósticos</button>
       <button onclick="navigateTo('leaderboard')" class="text-slate-400 p-2 text-xs">Posiciones</button>
       <button id="nav-btn-admin" onclick="navigateTo('admin')" class="text-red-400 p-2 text-xs hidden">Admin</button>
     </div>
   </nav>
 
-  <!-- SCRIPT LÓGICA COMPLETA DE FIREBASE -->
+  <!-- SCRIPT LÓGICA GENERAL -->
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyD53EG1LMyor9_f5BcNBLz1XcgMQycbj0w",
@@ -290,12 +287,10 @@
     let currentUser = null;
     let validatedCodeDoc = null;
 
-    // 1. AUTO-CREAR SUPERADMIN 'admin'
     async function ensureSuperAdminExists() {
       try {
         const usersRef = db.collection("users");
         const snapshot = await usersRef.where("username_clean", "==", "admin").get();
-
         if (snapshot.empty) {
           const passHash = CryptoJS.SHA256("Admin1234*").toString();
           await usersRef.doc("admin_root").set({
@@ -303,28 +298,25 @@
             username: "admin",
             username_clean: "admin",
             passwordHash: passHash,
-            phone: "0000000000",
             role: "superadmin",
             pollas: ["premier"],
             createdAt: new Date().toISOString()
           });
-          console.log("✅ SuperAdmin listo.");
         }
       } catch (err) {
-        console.error("Error al verificar SuperAdmin:", err);
+        console.error(err);
       }
     }
 
-    // 2. NAVEGACIÓN
     window.navigateTo = function(viewId) {
       document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
       const target = document.getElementById('view-' + viewId);
       if (target) target.classList.add('active');
 
+      if (viewId === 'predictions' && currentUser) loadUserPredictions();
       if (viewId === 'admin') loadAdminCodes();
     };
 
-    // 3. LOGIN FLEXIBLE (BÚSQUEDA INSENSIBLE A MAYÚSCULAS/MINÚSCULAS)
     window.handleLogin = async function(e) {
       if (e) e.preventDefault();
       const rawUsername = document.getElementById('login-username').value.trim();
@@ -333,17 +325,13 @@
 
       try {
         const passHash = CryptoJS.SHA256(passwordInput).toString();
-        
-        // 1. Buscar primero por username_clean (Insensible a mayúsculas)
         let snapshot = await db.collection("users").where("username_clean", "==", cleanUsername).get();
-
-        // 2. Fallback: Buscar por username directo si el registro fue previo
         if (snapshot.empty) {
           snapshot = await db.collection("users").where("username", "==", rawUsername).get();
         }
 
         if (snapshot.empty) {
-          alert("El usuario @" + rawUsername + " no existe en la base de datos.");
+          alert("El usuario @" + rawUsername + " no existe.");
           return;
         }
 
@@ -353,43 +341,192 @@
         if (userData.passwordHash === passHash) {
           currentUser = { id: userDoc.id, ...userData };
           localStorage.setItem("currentUser", JSON.stringify(currentUser));
-
           updateHeaderUI();
-          alert("¡Bienvenido, " + userData.name + "!");
 
           if (userData.role === 'superadmin') {
             document.getElementById('nav-btn-admin').classList.remove('hidden');
             navigateTo('admin');
           } else {
-            navigateTo('home');
+            navigateTo('predictions');
           }
         } else {
           alert("Contraseña incorrecta.");
         }
       } catch (err) {
-        console.error("Error en login:", err);
         alert("Error de conexión: " + err.message);
       }
     };
 
-    // 4. VERIFICAR CÓDIGO
-    window.verifyRegisterCode = async function() {
-      const codeInput = document.getElementById('reg-code').value.trim().toUpperCase();
-      const pollaSelected = document.getElementById('reg-polla-select').value;
-      const statusText = document.getElementById('code-status');
+    // PUBLICAR PARTIDOS DESDE ADMIN
+    window.handleCreateMatch = async function(e) {
+      e.preventDefault();
+      const home = document.getElementById('match-home').value.trim();
+      const away = document.getElementById('match-away').value.trim();
+      const datetime = document.getElementById('match-datetime').value.trim();
 
-      if (codeInput.length !== 10) {
-        statusText.innerText = "⚠️ El código debe tener exactamente 10 caracteres.";
-        statusText.className = "text-[11px] mt-1 text-red-400 font-semibold";
+      try {
+        await db.collection("matches").add({
+          homeTeam: home,
+          awayTeam: away,
+          matchDate: datetime,
+          pollaId: "premier",
+          status: "scheduled",
+          createdAt: new Date().toISOString()
+        });
+
+        alert("Partido publicado con éxito.");
+        document.getElementById('match-home').value = "";
+        document.getElementById('match-away').value = "";
+      } catch (err) {
+        alert("Error al publicar partido: " + err.message);
+      }
+    };
+
+    // CARGAR PREDICCIONES CON DIVERGENCIA DE FECHAS (FUTUROS Y PASADOS)
+    async function loadUserPredictions() {
+      const upcomingContainer = document.getElementById('upcoming-matches-list');
+      const historyContainer = document.getElementById('history-matches-list');
+      if (!upcomingContainer || !historyContainer) return;
+
+      upcomingContainer.innerHTML = "<p class='text-xs text-slate-500'>Cargando partidos...</p>";
+      historyContainer.innerHTML = "<p class='text-xs text-slate-500'>Cargando historial...</p>";
+
+      try {
+        const matchesSnapshot = await db.collection("matches").where("pollaId", "==", "premier").get();
+        const userPredsSnapshot = await db.collection("predictions").where("userId", "==", currentUser.id).get();
+
+        const userPreds = {};
+        userPredsSnapshot.forEach(doc => {
+          userPreds[doc.data().matchId] = doc.data();
+        });
+
+        upcomingContainer.innerHTML = "";
+        historyContainer.innerHTML = "";
+
+        const now = new Date();
+
+        if (matchesSnapshot.empty) {
+          upcomingContainer.innerHTML = "<p class='text-xs text-slate-500'>No hay partidos programados.</p>";
+          historyContainer.innerHTML = "<p class='text-xs text-slate-500'>Sin historial.</p>";
+          return;
+        }
+
+        matchesSnapshot.forEach(doc => {
+          const match = { id: doc.id, ...doc.data() };
+          const matchTime = new Date(match.matchDate);
+          const isClosed = matchTime <= now;
+
+          const existingPred = userPreds[match.id] || { homeScore: "", awayScore: "" };
+
+          const card = document.createElement('div');
+          card.className = "card-dark border-slate-800 p-4 space-y-3";
+
+          if (!isClosed) {
+            // PARTIDO FUTURO: ABIERTO PARA GUARDAR
+            card.innerHTML = `
+              <div class="flex justify-between items-center text-xs text-slate-400 border-b border-slate-800/80 pb-2">
+                <span>🗓️ ${match.matchDate}</span>
+                <span class="badge-emerald">Abierto</span>
+              </div>
+              <div class="grid grid-cols-3 items-center gap-2 text-center py-1">
+                <span class="font-bold text-sm text-white">${match.homeTeam}</span>
+                <div class="flex items-center justify-center gap-2">
+                  <input type="number" min="0" id="pred-home-${match.id}" value="${existingPred.homeScore}" class="w-12 text-center font-bold bg-slate-900 border border-slate-700 rounded p-1">
+                  <span class="text-slate-500 font-bold">-</span>
+                  <input type="number" min="0" id="pred-away-${match.id}" value="${existingPred.awayScore}" class="w-12 text-center font-bold bg-slate-900 border border-slate-700 rounded p-1">
+                </div>
+                <span class="font-bold text-sm text-white">${match.awayTeam}</span>
+              </div>
+              <button onclick="savePrediction('${match.id}')" class="w-full btn-emerald py-2 text-xs font-bold rounded">
+                Guardar Pronóstico
+              </button>
+            `;
+            upcomingContainer.appendChild(card);
+          } else {
+            // PARTIDO PASADO O EN JUEGO: CERRADO
+            card.innerHTML = `
+              <div class="flex justify-between items-center text-xs text-slate-400 border-b border-slate-800/80 pb-2">
+                <span>🗓️ ${match.matchDate}</span>
+                <span class="badge-slate">Cerrado</span>
+              </div>
+              <div class="grid grid-cols-3 items-center gap-2 text-center py-1">
+                <span class="font-bold text-sm text-slate-300">${match.homeTeam}</span>
+                <div class="text-amber-400 font-mono font-bold text-base">
+                  ${existingPred.homeScore !== "" ? existingPred.homeScore : '-'} : ${existingPred.awayScore !== "" ? existingPred.awayScore : '-'}
+                </div>
+                <span class="font-bold text-sm text-slate-300">${match.awayTeam}</span>
+              </div>
+            `;
+            historyContainer.appendChild(card);
+          }
+        });
+
+      } catch (err) {
+        console.error("Error cargando pronósticos:", err);
+      }
+    }
+
+    // GUARDAR PRONÓSTICO DE UN PARTIDO
+    window.savePrediction = async function(matchId) {
+      const homeScore = document.getElementById(`pred-home-${matchId}`).value;
+      const awayScore = document.getElementById(`pred-away-${matchId}`).value;
+
+      if (homeScore === "" || awayScore === "") {
+        alert("Ingresa ambos marcadores para guardar.");
         return;
       }
 
       try {
-        const snapshot = await db.collection("registration_codes").where("code", "==", codeInput).get();
+        const predQuery = await db.collection("predictions")
+          .where("userId", "==", currentUser.id)
+          .where("matchId", "==", matchId)
+          .get();
 
+        if (!predQuery.empty) {
+          // Actualizar existente
+          const predDocId = predQuery.docs[0].id;
+          await db.collection("predictions").doc(predDocId).update({
+            homeScore: parseInt(homeScore),
+            awayScore: parseInt(awayScore),
+            updatedAt: new Date().toISOString()
+          });
+        } else {
+          // Crear nuevo
+          await db.collection("predictions").add({
+            userId: currentUser.id,
+            matchId: matchId,
+            pollaId: "premier",
+            homeScore: parseInt(homeScore),
+            awayScore: parseInt(awayScore),
+            createdAt: new Date().toISOString()
+          });
+        }
+
+        alert("Pronóstico guardado correctamente.");
+      } catch (err) {
+        alert("Error al guardar pronóstico: " + err.message);
+      }
+    };
+
+    window.switchPredictionTab = function(tabName) {
+      document.getElementById('pred-tab-upcoming').classList.add('hidden');
+      document.getElementById('pred-tab-history').classList.add('hidden');
+
+      document.getElementById('tab-btn-upcoming').className = "px-4 py-2 text-xs font-bold rounded-md text-slate-400 hover:text-white";
+      document.getElementById('tab-btn-history').className = "px-4 py-2 text-xs font-bold rounded-md text-slate-400 hover:text-white";
+
+      document.getElementById('pred-tab-' + tabName).classList.remove('hidden');
+      document.getElementById('tab-btn-' + tabName).className = "px-4 py-2 text-xs font-bold rounded-md bg-emerald-500 text-slate-950";
+    };
+
+    window.verifyRegisterCode = async function() {
+      const codeInput = document.getElementById('reg-code').value.trim().toUpperCase();
+      const statusText = document.getElementById('code-status');
+
+      try {
+        const snapshot = await db.collection("registration_codes").where("code", "==", codeInput).get();
         if (snapshot.empty) {
-          statusText.innerText = "❌ Código inválido o no existente.";
-          statusText.className = "text-[11px] mt-1 text-red-400 font-semibold";
+          statusText.innerText = "❌ Código inválido.";
           return;
         }
 
@@ -397,152 +534,96 @@
         const codeData = codeDoc.data();
 
         if (codeData.used) {
-          statusText.innerText = "❌ Código ya usado por @" + codeData.usedByUsername;
-          statusText.className = "text-[11px] mt-1 text-red-400 font-semibold";
+          statusText.innerText = "❌ Código ya utilizado.";
           return;
         }
 
         validatedCodeDoc = { id: codeDoc.id, ...codeData };
         document.getElementById('reg-fullname').value = codeData.targetName;
-        
-        const btnSubmit = document.getElementById('btn-submit-reg');
-        btnSubmit.disabled = false;
-        btnSubmit.classList.remove('opacity-50', 'cursor-not-allowed');
-
-        statusText.innerText = "✅ Código válido para " + codeData.targetName;
-        statusText.className = "text-[11px] mt-1 text-emerald-400 font-semibold";
-
+        document.getElementById('btn-submit-reg').disabled = false;
+        document.getElementById('btn-submit-reg').classList.remove('opacity-50', 'cursor-not-allowed');
+        statusText.innerText = "✅ Código válido.";
       } catch (err) {
-        alert("Error al verificar el código: " + err.message);
+        alert("Error: " + err.message);
       }
     };
 
-    // 5. REGISTRO RESPETANDO FORMATO DE MAYÚSCULAS
     window.handleRegister = async function(e) {
       e.preventDefault();
-      if (!validatedCodeDoc) {
-        alert("Primero debes verificar un código válido.");
-        return;
-      }
-
-      const selectedPolla = document.getElementById('reg-polla-select').value;
-      const rawUsername = document.getElementById('reg-username').value.trim(); // Se conserva el formato ingresado
-      const cleanUsername = rawUsername.toLowerCase(); // Para búsquedas
-      const phone = document.getElementById('reg-phone').value.trim();
-      const password = document.getElementById('reg-password').value;
+      const rawUsername = document.getElementById('reg-username').value.trim();
+      const cleanUsername = rawUsername.toLowerCase();
 
       try {
-        // Validar duplicado
-        const checkUser = await db.collection("users").where("username_clean", "==", cleanUsername).get();
-        if (!checkUser.empty) {
-          alert("El nombre de usuario @" + rawUsername + " ya está registrado. Por favor elige otro.");
-          return;
-        }
-
-        const passwordHash = CryptoJS.SHA256(password).toString();
-
-        // 1. Guardar con formato original Y campo normalizado
         await db.collection("users").add({
           name: validatedCodeDoc.targetName,
-          username: rawUsername,            // Conserva mayúsculas (ej: Carlos_Gol)
-          username_clean: cleanUsername,    // En minúsculas para búsquedas (ej: carlos_gol)
-          phone: phone,
-          passwordHash: passwordHash,
+          username: rawUsername,
+          username_clean: cleanUsername,
+          phone: document.getElementById('reg-phone').value.trim(),
+          passwordHash: CryptoJS.SHA256(document.getElementById('reg-password').value).toString(),
           role: "user",
-          pollas: [selectedPolla],
+          pollas: ["premier"],
           codeUsed: validatedCodeDoc.code,
           createdAt: new Date().toISOString()
         });
 
-        // 2. Marcar código como usado
         await db.collection("registration_codes").doc(validatedCodeDoc.id).update({
           used: true,
-          usedByUsername: rawUsername,
-          pollaId: selectedPolla,
-          usedAt: new Date().toISOString()
+          usedByUsername: rawUsername
         });
 
-        alert("¡Registro completado! Tu usuario es @" + rawUsername + ". Ahora puedes iniciar sesión.");
+        alert("Registro completado. Inicia sesión.");
         navigateTo('login');
-
       } catch (err) {
-        console.error("Error registrando usuario:", err);
-        alert("Error al guardar registro: " + err.message);
+        alert("Error: " + err.message);
       }
     };
 
-    // 6. ADMINISTRACIÓN DE CÓDIGOS
     window.handleGenerateCode = async function(e) {
       e.preventDefault();
       const personName = document.getElementById('code-person-name').value.trim();
-      const targetPolla = document.getElementById('code-target-polla').value;
-      if (!personName) return;
-
       const code = Math.random().toString(36).substring(2, 12).toUpperCase();
 
       try {
         await db.collection("registration_codes").add({
           code: code,
           targetName: personName,
-          targetPolla: targetPolla,
           used: false,
-          usedByUsername: "",
           createdAt: new Date().toISOString()
         });
-        
-        alert("Código de 10 dígitos generado: " + code);
+        alert("Código generado: " + code);
         document.getElementById('code-person-name').value = "";
         loadAdminCodes();
-
       } catch (err) {
-        alert("Error al generar código: " + err.message);
+        alert("Error: " + err.message);
       }
     };
 
     async function loadAdminCodes() {
       const tbody = document.getElementById('codes-tbody');
-      const countEl = document.getElementById('codes-count');
       if (!tbody) return;
 
-      try {
-        const snapshot = await db.collection("registration_codes").orderBy("createdAt", "desc").get();
-        tbody.innerHTML = "";
-        if (countEl) countEl.innerText = snapshot.size;
+      const snapshot = await db.collection("registration_codes").orderBy("createdAt", "desc").get();
+      tbody.innerHTML = "";
 
-        if (snapshot.empty) {
-          tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-500">No hay códigos generados.</td></tr>`;
-          return;
-        }
-
-        snapshot.forEach(doc => {
-          const data = doc.data();
-          const row = document.createElement('tr');
-          row.className = "hover:bg-slate-900/50 border-b border-slate-800/60";
-          row.innerHTML = `
-            <td class="p-3 font-mono font-bold text-amber-400">${data.code}</td>
-            <td class="p-3 font-medium text-white">${data.targetName}</td>
-            <td class="p-3 text-slate-300 font-semibold uppercase text-[10px]">${data.targetPolla || 'premier'}</td>
-            <td class="p-3">${data.used ? '<span class="badge-slate">Usado</span>' : '<span class="badge-emerald">Disponible</span>'}</td>
-            <td class="p-3 text-slate-300">${data.usedByUsername ? '@' + data.usedByUsername : '-'}</td>
-            <td class="p-3 text-right flex justify-end gap-2">
-              <button onclick="deleteCode('${doc.id}')" class="px-2 py-1 bg-red-950/60 hover:bg-red-900 text-red-400 text-xs rounded border border-red-800/50">Borrar</button>
-            </td>
-          `;
-          tbody.appendChild(row);
-        });
-      } catch (err) {
-        console.error("Error cargando códigos:", err);
-      }
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td class="p-3 font-mono text-amber-400 font-bold">${data.code}</td>
+          <td class="p-3">${data.targetName}</td>
+          <td class="p-3">${data.used ? '<span class="badge-slate">Usado</span>' : '<span class="badge-emerald">Disponible</span>'}</td>
+          <td class="p-3 text-right">
+            <button onclick="deleteCode('${doc.id}')" class="text-red-400 text-xs">Borrar</button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
     }
 
     window.deleteCode = async function(id) {
-      if (!confirm("¿Deseas eliminar este código de registro de Firestore?")) return;
-      try {
-        await db.collection("registration_codes").doc(id).delete();
-        loadAdminCodes();
-      } catch (err) {
-        alert("Error al borrar código: " + err.message);
-      }
+      if (!confirm("¿Eliminar código?")) return;
+      await db.collection("registration_codes").doc(id).delete();
+      loadAdminCodes();
     };
 
     function updateHeaderUI() {
@@ -553,11 +634,11 @@
             <span class="block text-xs font-bold text-white">${currentUser.name}</span>
             <span class="block text-[10px] text-emerald-400 font-mono">@${currentUser.username}</span>
           </div>
-          <button onclick="logout()" class="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs">Salir</button>
+          <button onclick="logout()" class="p-2 bg-slate-800 text-slate-300 rounded text-xs">Salir</button>
         `;
       } else {
         headerBox.innerHTML = `
-          <button onclick="navigateTo('login')" class="btn-emerald text-xs rounded-lg py-1.5 px-3">Ingresar</button>
+          <button onclick="navigateTo('login')" class="btn-emerald text-xs rounded py-1 px-3">Ingresar</button>
         `;
       }
     }
@@ -572,7 +653,7 @@
 
     window.enterPolla = function(pollaId) {
       if (!currentUser) {
-        alert("Debes iniciar sesión para ingresar a la polla.");
+        alert("Inicia sesión para ver tus pronósticos.");
         navigateTo('login');
       } else {
         navigateTo('predictions');
@@ -591,6 +672,15 @@
         }
       } else {
         updateHeaderUI();
+      }
+
+      if (document.getElementById('match-datetime')) {
+        flatpickr("#match-datetime", {
+          enableTime: true,
+          dateFormat: "Y-m-d H:i",
+          locale: "es",
+          theme: "dark"
+        });
       }
     });
   </script>
