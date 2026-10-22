@@ -8,7 +8,7 @@
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- CryptoJS para encriptación -->
+  <!-- CryptoJS para encriptación de contraseñas -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
   
   <!-- Flatpickr CSS & JS -->
@@ -42,6 +42,7 @@
     .badge-emerald { background-color: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); font-size: 0.75rem; padding: 0.2rem 0.5rem; border-radius: 0.375rem; font-weight: 600; }
     .badge-slate { background-color: rgba(100, 116, 139, 0.15); color: #94a3b8; border: 1px solid rgba(100, 116, 139, 0.3); font-size: 0.75rem; padding: 0.2rem 0.5rem; border-radius: 0.375rem; font-weight: 600; }
     .badge-amber { background-color: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); font-size: 0.75rem; padding: 0.2rem 0.5rem; border-radius: 0.375rem; font-weight: 600; }
+    .badge-red { background-color: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); font-size: 0.75rem; padding: 0.2rem 0.5rem; border-radius: 0.375rem; font-weight: 600; }
 
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: #020617; }
@@ -89,7 +90,7 @@
               <span class="badge-emerald">ACTIVA</span>
             </div>
             <h3 class="text-xl font-bold text-white">Premier League 2026</h3>
-            <p class="text-slate-400 text-xs mt-1">Liga de Inglaterra</p>
+            <p class="text-slate-400 text-xs mt-1">Liga de Inglaterra • Temporada Completa</p>
           </div>
           <button onclick="enterPolla('premier')" class="mt-5 w-full btn-emerald rounded-lg py-2.5">
             Ingresar a Pronósticos
@@ -177,15 +178,15 @@
         </div>
       </div>
 
-      <!-- PRÓXIMOS PARTIDOS -->
+      <!-- PRÓXIMOS PARTIDOS (ORDEN CRONOLÓGICO CRECIENTE) -->
       <div id="pred-tab-upcoming" class="space-y-4">
-        <p class="text-xs text-slate-400">Guarda o modifica tus marcadores antes de que inicie cada encuentro.</p>
+        <p class="text-xs text-slate-400">Ingresa tu pronóstico. Una vez guardado, el marcador quedará **bloqueado de forma permanente**.</p>
         <div id="upcoming-matches-list" class="space-y-4"></div>
       </div>
 
       <!-- HISTORIAL / PASADOS -->
       <div id="pred-tab-history" class="space-y-4 hidden">
-        <p class="text-xs text-slate-400">Partidos iniciados o finalizados. Las predicciones en esta sección ya están cerradas.</p>
+        <p class="text-xs text-slate-400">Partidos iniciados o finalizados. Las predicciones en esta sección están cerradas.</p>
         <div id="history-matches-list" class="space-y-4"></div>
       </div>
     </section>
@@ -212,9 +213,8 @@
       <div class="card-dark border-red-500/30">
         <div class="flex items-center justify-between mb-4">
           <h2 class="text-xl font-bold text-white">Panel Control Super Admin</h2>
-          <!-- BOTÓN DE CARGA MASIVA DE FIXTURE -->
           <button onclick="preloadPremierLeagueFixture()" class="px-3 py-1.5 bg-purple-900/60 hover:bg-purple-800 border border-purple-500/50 text-purple-200 text-xs font-bold rounded shadow-lg">
-            ⚡ Cargar Fixture Premier League
+            ⚡ Cargar Fixture Completo Temporada
           </button>
         </div>
         
@@ -248,11 +248,11 @@
 
       <!-- LISTA DE PARTIDOS EN ADMIN -->
       <div class="card-dark border-slate-800 p-4">
-        <h4 class="font-bold text-sm text-white mb-3">Partidos Publicados en Premier League</h4>
-        <div id="admin-matches-list" class="space-y-3"></div>
+        <h4 class="font-bold text-sm text-white mb-3">Partidos Registrados en Premier League</h4>
+        <div id="admin-matches-list" class="space-y-3 max-h-96 overflow-y-auto"></div>
       </div>
 
-      <!-- CÓDIGO GENERADOS -->
+      <!-- CÓDIGOS GENERADOS -->
       <div class="card-dark p-0 overflow-x-auto">
         <div class="p-4 border-b border-slate-800">
           <h4 class="font-bold text-sm text-white">Códigos Generados</h4>
@@ -283,7 +283,7 @@
     </div>
   </nav>
 
-  <!-- SCRIPT COMPLETO -->
+  <!-- SCRIPT LÓGICA COMPLETA -->
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyD53EG1LMyor9_f5BcNBLz1XcgMQycbj0w",
@@ -302,8 +302,8 @@
     let currentUser = null;
     let validatedCodeDoc = null;
 
-    // FIXTURE INICIAL REAL DE PREMIER LEAGUE 2026
-    const initialPremierFixture = [
+    // FIXTURE INICIAL AMPLIO (ORGANIZADO CRONOLÓGICAMENTE)
+    const premierLeagueFullFixture = [
       { homeTeam: "Arsenal", awayTeam: "Chelsea", matchDate: "2026-10-24 11:30" },
       { homeTeam: "Manchester City", awayTeam: "Liverpool", matchDate: "2026-10-24 14:00" },
       { homeTeam: "Aston Villa", awayTeam: "Tottenham", matchDate: "2026-10-25 09:00" },
@@ -311,7 +311,25 @@
       { homeTeam: "Everton", awayTeam: "West Ham", matchDate: "2026-10-31 10:00" },
       { homeTeam: "Brighton", awayTeam: "Arsenal", matchDate: "2026-11-01 11:30" },
       { homeTeam: "Chelsea", awayTeam: "Manchester City", matchDate: "2026-11-07 12:30" },
-      { homeTeam: "Liverpool", awayTeam: "Aston Villa", matchDate: "2026-11-08 11:00" }
+      { homeTeam: "Liverpool", awayTeam: "Aston Villa", matchDate: "2026-11-08 11:00" },
+      { homeTeam: "Tottenham", awayTeam: "Manchester United", matchDate: "2026-11-21 10:00" },
+      { homeTeam: "Newcastle", awayTeam: "Everton", matchDate: "2026-11-22 11:30" },
+      { homeTeam: "West Ham", awayTeam: "Brighton", matchDate: "2026-11-28 10:00" },
+      { homeTeam: "Arsenal", awayTeam: "Manchester City", matchDate: "2026-12-05 12:30" },
+      { homeTeam: "Chelsea", awayTeam: "Liverpool", matchDate: "2026-12-12 11:00" },
+      { homeTeam: "Manchester United", awayTeam: "Aston Villa", matchDate: "2026-12-19 10:00" },
+      { homeTeam: "Liverpool", awayTeam: "Arsenal", matchDate: "2026-12-26 12:30" },
+      { homeTeam: "Manchester City", awayTeam: "Tottenham", matchDate: "2027-01-02 11:00" },
+      { homeTeam: "Aston Villa", awayTeam: "Chelsea", matchDate: "2027-01-16 10:00" },
+      { homeTeam: "Tottenham", awayTeam: "Newcastle", matchDate: "2027-01-23 11:30" },
+      { homeTeam: "Newcastle", awayTeam: "Arsenal", matchDate: "2027-02-06 10:00" },
+      { homeTeam: "Arsenal", awayTeam: "Manchester United", matchDate: "2027-02-20 12:30" },
+      { homeTeam: "Chelsea", awayTeam: "Tottenham", matchDate: "2027-03-06 11:00" },
+      { homeTeam: "Liverpool", awayTeam: "Manchester City", matchDate: "2027-03-20 12:30" },
+      { homeTeam: "Manchester City", awayTeam: "Arsenal", matchDate: "2027-04-10 11:30" },
+      { homeTeam: "Aston Villa", awayTeam: "Liverpool", matchDate: "2027-04-24 10:00" },
+      { homeTeam: "Chelsea", awayTeam: "Arsenal", matchDate: "2027-05-08 11:00" },
+      { homeTeam: "Manchester United", awayTeam: "Manchester City", matchDate: "2027-05-23 10:00" }
     ];
 
     async function ensureSuperAdminExists() {
@@ -388,29 +406,32 @@
       }
     };
 
-    // PRECARGA MASIVA DEL FIXTURE
+    // CARGA MASIVA DE FIXTURE COMPLETO
     window.preloadPremierLeagueFixture = async function() {
-      if (!confirm("¿Deseas cargar el fixture inicial de la Premier League?")) return;
+      if (!confirm("¿Deseas cargar el fixture completo de la temporada para la Premier League?")) return;
 
       try {
-        for (const match of initialPremierFixture) {
-          await db.collection("matches").add({
+        const batch = db.batch();
+        premierLeagueFullFixture.forEach(match => {
+          const docRef = db.collection("matches").doc();
+          batch.set(docRef, {
             ...match,
             pollaId: "premier",
-            status: "scheduled", // scheduled | finished
+            status: "scheduled",
             homeScore: null,
             awayScore: null,
             createdAt: new Date().toISOString()
           });
-        }
-        alert("¡Fixture de la Premier League cargado exitosamente!");
+        });
+
+        await batch.commit();
+        alert("¡Fixture completo cargado exitosamente en Firestore!");
         loadAdminMatches();
       } catch (err) {
         alert("Error al cargar fixture: " + err.message);
       }
     };
 
-    // CREAR / EDITAR PARTIDO DESDE ADMIN
     window.handleSaveMatch = async function(e) {
       e.preventDefault();
       const matchId = document.getElementById('match-edit-id').value;
@@ -420,7 +441,6 @@
 
       try {
         if (matchId) {
-          // Edición
           await db.collection("matches").doc(matchId).update({
             homeTeam: home,
             awayTeam: away,
@@ -428,7 +448,6 @@
           });
           alert("Partido actualizado.");
         } else {
-          // Creación
           await db.collection("matches").add({
             homeTeam: home,
             awayTeam: away,
@@ -466,7 +485,6 @@
       document.getElementById('btn-cancel-edit').classList.add('hidden');
     };
 
-    // FINALIZAR PARTIDO Y CALCULAR PUNTOS
     window.finishMatchAndCalculatePoints = async function(matchId) {
       const homeScore = document.getElementById(`final-home-${matchId}`).value;
       const awayScore = document.getElementById(`final-away-${matchId}`).value;
@@ -480,39 +498,35 @@
       const aScore = parseInt(awayScore);
 
       try {
-        // 1. Marcar partido como finalizado
         await db.collection("matches").doc(matchId).update({
           status: "finished",
           homeScore: hScore,
           awayScore: aScore
         });
 
-        // 2. Obtener todas las predicciones para este partido
         const predsSnapshot = await db.collection("predictions").where("matchId", "==", matchId).get();
 
         for (const doc of predsSnapshot.docs) {
           const pred = doc.data();
           let pts = 0;
 
-          // Cálculo de Puntos
           if (pred.homeScore === hScore && pred.awayScore === aScore) {
-            pts = 3; // Marcador Exacto
+            pts = 3;
           } else {
             const realWinner = hScore > aScore ? "home" : (hScore < aScore ? "away" : "draw");
             const predWinner = pred.homeScore > pred.awayScore ? "home" : (pred.homeScore < pred.awayScore ? "away" : "draw");
             if (realWinner === predWinner) {
-              pts = 1; // Acierto de Ganador/Empate
+              pts = 1;
             }
           }
 
-          // Actualizar puntos en la predicción
           await db.collection("predictions").doc(doc.id).update({
             points: pts,
             calculated: true
           });
         }
 
-        alert("¡Partido finalizado y puntos calculados automáticamente para todos los participantes!");
+        alert("¡Partido finalizado y puntos asignados!");
         loadAdminMatches();
       } catch (err) {
         alert("Error al procesar resultado: " + err.message);
@@ -532,9 +546,12 @@
           return;
         }
 
-        snapshot.forEach(doc => {
-          const m = doc.data();
-          const matchId = doc.id;
+        // Ordenamiento Cronológico
+        const sortedDocs = snapshot.docs.map(d => ({ id: d.id, ...d.data() }))
+          .sort((a, b) => new Date(a.matchDate) - new Date(b.matchDate));
+
+        sortedDocs.forEach(m => {
+          const matchId = m.id;
           const card = document.createElement('div');
           card.className = "p-3 bg-slate-900 border border-slate-800 rounded flex flex-col md:flex-row justify-between items-center gap-2 text-xs";
 
@@ -569,13 +586,13 @@
       }
     }
 
-    // CARGAR PRONÓSTICOS DE USUARIO
+    // CARGAR Y BLOQUEAR PRONÓSTICOS DE USUARIO
     async function loadUserPredictions() {
       const upcomingContainer = document.getElementById('upcoming-matches-list');
       const historyContainer = document.getElementById('history-matches-list');
       if (!upcomingContainer || !historyContainer) return;
 
-      upcomingContainer.innerHTML = "<p class='text-xs text-slate-500'>Cargando partidos...</p>";
+      upcomingContainer.innerHTML = "<p class='text-xs text-slate-500'>Cargando fixture ordenado...</p>";
       historyContainer.innerHTML = "<p class='text-xs text-slate-500'>Cargando historial...</p>";
 
       try {
@@ -593,55 +610,82 @@
         const now = new Date();
 
         if (matchesSnapshot.empty) {
-          upcomingContainer.innerHTML = "<p class='text-xs text-slate-500'>No hay partidos programados.</p>";
+          upcomingContainer.innerHTML = "<p class='text-xs text-slate-500'>No hay partidos en el calendario.</p>";
           historyContainer.innerHTML = "<p class='text-xs text-slate-500'>Sin historial.</p>";
           return;
         }
 
-        matchesSnapshot.forEach(doc => {
-          const match = { id: doc.id, ...doc.data() };
-          const matchTime = new Date(match.matchDate);
-          const isClosed = matchTime <= now || match.status === "finished";
+        // Ordenar cronológicamente del más cercano al más lejano
+        const sortedMatches = matchesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+          .sort((a, b) => new Date(a.matchDate) - new Date(b.matchDate));
 
-          const existingPred = userPreds[match.id] || { homeScore: "", awayScore: "", points: 0 };
+        sortedMatches.forEach(match => {
+          const matchTime = new Date(match.matchDate);
+          const isTimeClosed = matchTime <= now || match.status === "finished";
+
+          const existingPred = userPreds[match.id] || null;
+          const isAlreadySubmitted = existingPred !== null;
 
           const card = document.createElement('div');
           card.className = "card-dark border-slate-800 p-4 space-y-3";
 
-          if (!isClosed) {
-            card.innerHTML = `
-              <div class="flex justify-between items-center text-xs text-slate-400 border-b border-slate-800/80 pb-2">
-                <span>🗓️ ${match.matchDate}</span>
-                <span class="badge-emerald">Abierto</span>
-              </div>
-              <div class="grid grid-cols-3 items-center gap-2 text-center py-1">
-                <span class="font-bold text-sm text-white">${match.homeTeam}</span>
-                <div class="flex items-center justify-center gap-2">
-                  <input type="number" min="0" id="pred-home-${match.id}" value="${existingPred.homeScore}" class="w-12 text-center font-bold bg-slate-900 border border-slate-700 rounded p-1">
-                  <span class="text-slate-500 font-bold">-</span>
-                  <input type="number" min="0" id="pred-away-${match.id}" value="${existingPred.awayScore}" class="w-12 text-center font-bold bg-slate-900 border border-slate-700 rounded p-1">
+          if (!isTimeClosed) {
+            // PARTIDO FUTURO
+            if (isAlreadySubmitted) {
+              // PRONÓSTICO REGISTRADO Y BLOQUEADO (NO EDITABLE)
+              card.innerHTML = `
+                <div class="flex justify-between items-center text-xs text-slate-400 border-b border-slate-800/80 pb-2">
+                  <span>🗓️ ${match.matchDate}</span>
+                  <span class="badge-amber">🔒 Pronóstico Registrado</span>
                 </div>
-                <span class="font-bold text-sm text-white">${match.awayTeam}</span>
-              </div>
-              <button onclick="savePrediction('${match.id}')" class="w-full btn-emerald py-2 text-xs font-bold rounded">
-                Guardar Pronóstico
-              </button>
-            `;
+                <div class="grid grid-cols-3 items-center gap-2 text-center py-1">
+                  <span class="font-bold text-sm text-white">${match.homeTeam}</span>
+                  <div class="flex items-center justify-center gap-2">
+                    <input type="number" disabled value="${existingPred.homeScore}" class="w-12 text-center font-bold bg-slate-950 border border-slate-800 text-emerald-400 rounded p-1 cursor-not-allowed opacity-90">
+                    <span class="text-slate-600 font-bold">-</span>
+                    <input type="number" disabled value="${existingPred.awayScore}" class="w-12 text-center font-bold bg-slate-950 border border-slate-800 text-emerald-400 rounded p-1 cursor-not-allowed opacity-90">
+                  </div>
+                  <span class="font-bold text-sm text-white">${match.awayTeam}</span>
+                </div>
+                <p class="text-[11px] text-center text-slate-500 italic">Tu marcador ya fue guardado y bloqueado para este partido.</p>
+              `;
+            } else {
+              // SIN PRONÓSTICO: HABILITADO PARA INGRESAR
+              card.innerHTML = `
+                <div class="flex justify-between items-center text-xs text-slate-400 border-b border-slate-800/80 pb-2">
+                  <span>🗓️ ${match.matchDate}</span>
+                  <span class="badge-emerald">Abierto para Pronóstico</span>
+                </div>
+                <div class="grid grid-cols-3 items-center gap-2 text-center py-1">
+                  <span class="font-bold text-sm text-white">${match.homeTeam}</span>
+                  <div class="flex items-center justify-center gap-2">
+                    <input type="number" min="0" id="pred-home-${match.id}" placeholder="0" class="w-12 text-center font-bold bg-slate-900 border border-slate-700 rounded p-1">
+                    <span class="text-slate-500 font-bold">-</span>
+                    <input type="number" min="0" id="pred-away-${match.id}" placeholder="0" class="w-12 text-center font-bold bg-slate-900 border border-slate-700 rounded p-1">
+                  </div>
+                  <span class="font-bold text-sm text-white">${match.awayTeam}</span>
+                </div>
+                <button onclick="savePrediction('${match.id}')" class="w-full btn-emerald py-2 text-xs font-bold rounded">
+                  Enviar Pronóstico
+                </button>
+              `;
+            }
             upcomingContainer.appendChild(card);
           } else {
+            // PARTIDO CERRADO O EN CURSO
             card.innerHTML = `
               <div class="flex justify-between items-center text-xs text-slate-400 border-b border-slate-800/80 pb-2">
                 <span>🗓️ ${match.matchDate}</span>
                 <div class="flex items-center gap-2">
-                  <span class="badge-slate">Cerrado</span>
-                  <span class="badge-amber">+${existingPred.points || 0} pts</span>
+                  <span class="badge-red">Cerrado</span>
+                  <span class="badge-amber">+${existingPred ? (existingPred.points || 0) : 0} pts</span>
                 </div>
               </div>
               <div class="grid grid-cols-3 items-center gap-2 text-center py-1">
                 <span class="font-bold text-sm text-slate-300">${match.homeTeam}</span>
                 <div class="text-amber-400 font-mono font-bold text-base">
-                  Tu pronóstico: ${existingPred.homeScore !== "" ? existingPred.homeScore : '-'} : ${existingPred.awayScore !== "" ? existingPred.awayScore : '-'}
-                  ${match.status === "finished" ? `<div class="text-xs text-slate-400 font-sans mt-0.5">Real: ${match.homeScore} - ${match.awayScore}</div>` : ''}
+                  Tu pronóstico: ${existingPred ? existingPred.homeScore : '-'} : ${existingPred ? existingPred.awayScore : '-'}
+                  ${match.status === "finished" ? `<div class="text-xs text-slate-400 font-sans mt-0.5">Resultado Real: ${match.homeScore} - ${match.awayScore}</div>` : ''}
                 </div>
                 <span class="font-bold text-sm text-slate-300">${match.awayTeam}</span>
               </div>
@@ -655,47 +699,42 @@
       }
     }
 
+    // GUARDAR PRONÓSTICO (INMUTABLE TRAS GUARDAR)
     window.savePrediction = async function(matchId) {
-      const homeScore = document.getElementById(`pred-home-${matchId}`).value;
-      const awayScore = document.getElementById(`pred-away-${matchId}`).value;
+      const homeInput = document.getElementById(`pred-home-${matchId}`);
+      const awayInput = document.getElementById(`pred-away-${matchId}`);
+
+      const homeScore = homeInput.value;
+      const awayScore = awayInput.value;
 
       if (homeScore === "" || awayScore === "") {
-        alert("Ingresa ambos marcadores para guardar.");
+        alert("Ingresa ambos marcadores antes de enviar.");
+        return;
+      }
+
+      if (!confirm("¿Confirmas tu pronóstico de " + homeScore + " - " + awayScore + "? Una vez enviado no podrás modificarlo.")) {
         return;
       }
 
       try {
-        const predQuery = await db.collection("predictions")
-          .where("userId", "==", currentUser.id)
-          .where("matchId", "==", matchId)
-          .get();
+        await db.collection("predictions").add({
+          userId: currentUser.id,
+          matchId: matchId,
+          pollaId: "premier",
+          homeScore: parseInt(homeScore),
+          awayScore: parseInt(awayScore),
+          points: 0,
+          createdAt: new Date().toISOString()
+        });
 
-        if (!predQuery.empty) {
-          const predDocId = predQuery.docs[0].id;
-          await db.collection("predictions").doc(predDocId).update({
-            homeScore: parseInt(homeScore),
-            awayScore: parseInt(awayScore),
-            updatedAt: new Date().toISOString()
-          });
-        } else {
-          await db.collection("predictions").add({
-            userId: currentUser.id,
-            matchId: matchId,
-            pollaId: "premier",
-            homeScore: parseInt(homeScore),
-            awayScore: parseInt(awayScore),
-            points: 0,
-            createdAt: new Date().toISOString()
-          });
-        }
-
-        alert("Pronóstico guardado correctamente.");
+        alert("¡Pronóstico registrado con éxito! El marcador ha sido bloqueado.");
+        loadUserPredictions();
       } catch (err) {
         alert("Error al guardar pronóstico: " + err.message);
       }
     };
 
-    // CALCULAR TABLA GENERAL DE POSICIONES
+    // TABLA GENERAL DE POSICIONES
     async function loadLeaderboard() {
       const tbody = document.getElementById('leaderboard-tbody');
       if (!tbody) return;
