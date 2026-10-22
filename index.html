@@ -8,7 +8,7 @@
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- CryptoJS para encriptación de contraseñas -->
+  <!-- CryptoJS para encriptación -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
   
   <!-- Flatpickr CSS & JS -->
@@ -53,6 +53,9 @@
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+  <!-- CARGAR FIXTURE ESTRUCTURADO INDEPENDIENTE -->
+  <script src="fixture.js"></script>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between selection:bg-emerald-500 selection:text-white">
 
@@ -178,7 +181,7 @@
         </div>
       </div>
 
-      <!-- PRÓXIMOS PARTIDOS (ORDEN CRONOLÓGICO CRECIENTE) -->
+      <!-- PRÓXIMOS PARTIDOS -->
       <div id="pred-tab-upcoming" class="space-y-4">
         <p class="text-xs text-slate-400">Ingresa tu pronóstico. Una vez guardado, el marcador quedará **bloqueado de forma permanente**.</p>
         <div id="upcoming-matches-list" class="space-y-4"></div>
@@ -211,11 +214,16 @@
     <!-- PANEL ADMIN -->
     <section id="view-admin" class="view-section space-y-6">
       <div class="card-dark border-red-500/30">
-        <div class="flex items-center justify-between mb-4">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
           <h2 class="text-xl font-bold text-white">Panel Control Super Admin</h2>
-          <button onclick="preloadPremierLeagueFixture()" class="px-3 py-1.5 bg-purple-900/60 hover:bg-purple-800 border border-purple-500/50 text-purple-200 text-xs font-bold rounded shadow-lg">
-            ⚡ Cargar Fixture Completo Temporada
-          </button>
+          <div class="flex flex-wrap gap-2">
+            <button onclick="preloadPremierLeagueFixture()" class="px-3 py-1.5 bg-purple-900/60 hover:bg-purple-800 border border-purple-500/50 text-purple-200 text-xs font-bold rounded shadow-lg">
+              ⚡ Cargar Fixture Completo Temporada
+            </button>
+            <button onclick="clearAllMatches()" class="px-3 py-1.5 bg-red-900/60 hover:bg-red-800 border border-red-500/50 text-red-200 text-xs font-bold rounded shadow-lg">
+              🗑️ Borrar Partidos Actuales
+            </button>
+          </div>
         </div>
         
         <!-- CREAR / EDITAR PARTIDO -->
@@ -302,36 +310,6 @@
     let currentUser = null;
     let validatedCodeDoc = null;
 
-    // FIXTURE INICIAL AMPLIO (ORGANIZADO CRONOLÓGICAMENTE)
-    const premierLeagueFullFixture = [
-      { homeTeam: "Arsenal", awayTeam: "Chelsea", matchDate: "2026-10-24 11:30" },
-      { homeTeam: "Manchester City", awayTeam: "Liverpool", matchDate: "2026-10-24 14:00" },
-      { homeTeam: "Aston Villa", awayTeam: "Tottenham", matchDate: "2026-10-25 09:00" },
-      { homeTeam: "Manchester United", awayTeam: "Newcastle", matchDate: "2026-10-25 11:30" },
-      { homeTeam: "Everton", awayTeam: "West Ham", matchDate: "2026-10-31 10:00" },
-      { homeTeam: "Brighton", awayTeam: "Arsenal", matchDate: "2026-11-01 11:30" },
-      { homeTeam: "Chelsea", awayTeam: "Manchester City", matchDate: "2026-11-07 12:30" },
-      { homeTeam: "Liverpool", awayTeam: "Aston Villa", matchDate: "2026-11-08 11:00" },
-      { homeTeam: "Tottenham", awayTeam: "Manchester United", matchDate: "2026-11-21 10:00" },
-      { homeTeam: "Newcastle", awayTeam: "Everton", matchDate: "2026-11-22 11:30" },
-      { homeTeam: "West Ham", awayTeam: "Brighton", matchDate: "2026-11-28 10:00" },
-      { homeTeam: "Arsenal", awayTeam: "Manchester City", matchDate: "2026-12-05 12:30" },
-      { homeTeam: "Chelsea", awayTeam: "Liverpool", matchDate: "2026-12-12 11:00" },
-      { homeTeam: "Manchester United", awayTeam: "Aston Villa", matchDate: "2026-12-19 10:00" },
-      { homeTeam: "Liverpool", awayTeam: "Arsenal", matchDate: "2026-12-26 12:30" },
-      { homeTeam: "Manchester City", awayTeam: "Tottenham", matchDate: "2027-01-02 11:00" },
-      { homeTeam: "Aston Villa", awayTeam: "Chelsea", matchDate: "2027-01-16 10:00" },
-      { homeTeam: "Tottenham", awayTeam: "Newcastle", matchDate: "2027-01-23 11:30" },
-      { homeTeam: "Newcastle", awayTeam: "Arsenal", matchDate: "2027-02-06 10:00" },
-      { homeTeam: "Arsenal", awayTeam: "Manchester United", matchDate: "2027-02-20 12:30" },
-      { homeTeam: "Chelsea", awayTeam: "Tottenham", matchDate: "2027-03-06 11:00" },
-      { homeTeam: "Liverpool", awayTeam: "Manchester City", matchDate: "2027-03-20 12:30" },
-      { homeTeam: "Manchester City", awayTeam: "Arsenal", matchDate: "2027-04-10 11:30" },
-      { homeTeam: "Aston Villa", awayTeam: "Liverpool", matchDate: "2027-04-24 10:00" },
-      { homeTeam: "Chelsea", awayTeam: "Arsenal", matchDate: "2027-05-08 11:00" },
-      { homeTeam: "Manchester United", awayTeam: "Manchester City", matchDate: "2027-05-23 10:00" }
-    ];
-
     async function ensureSuperAdminExists() {
       try {
         const usersRef = db.collection("users");
@@ -406,13 +384,22 @@
       }
     };
 
-    // CARGA MASIVA DE FIXTURE COMPLETO
+    // CARGA MASIVA DE FIXTURE DESDE FIXTURE.JS (BATCHES)
     window.preloadPremierLeagueFixture = async function() {
-      if (!confirm("¿Deseas cargar el fixture completo de la temporada para la Premier League?")) return;
+      if (!window.PREMIER_LEAGUE_FIXTURE || window.PREMIER_LEAGUE_FIXTURE.length === 0) {
+        alert("Error: No se encontró la variable PREMIER_LEAGUE_FIXTURE en fixture.js");
+        return;
+      }
+
+      if (!confirm(`¿Deseas cargar los ${window.PREMIER_LEAGUE_FIXTURE.length} partidos oficiales de la temporada a Firestore?`)) return;
 
       try {
-        const batch = db.batch();
-        premierLeagueFullFixture.forEach(match => {
+        const fixture = window.PREMIER_LEAGUE_FIXTURE;
+        const batchSize = 400;
+        let batch = db.batch();
+        let count = 0;
+
+        for (const match of fixture) {
           const docRef = db.collection("matches").doc();
           batch.set(docRef, {
             ...match,
@@ -422,13 +409,47 @@
             awayScore: null,
             createdAt: new Date().toISOString()
           });
+
+          count++;
+          if (count % batchSize === 0) {
+            await batch.commit();
+            batch = db.batch();
+          }
+        }
+
+        if (count % batchSize !== 0) {
+          await batch.commit();
+        }
+
+        alert(`¡Se han cargado con éxito los ${count} partidos a Firestore!`);
+        loadAdminMatches();
+      } catch (err) {
+        console.error("Error al procesar el lote:", err);
+        alert("Error al cargar fixture: " + err.message);
+      }
+    };
+
+    // BORRADO MASIVO DE PARTIDOS
+    window.clearAllMatches = async function() {
+      if (!confirm("⚠️ ¿Estás seguro de que deseas eliminar TODOS los partidos de la base de datos? Esto no se puede deshacer.")) return;
+
+      try {
+        const snapshot = await db.collection("matches").where("pollaId", "==", "premier").get();
+        if (snapshot.empty) {
+          alert("No hay partidos para eliminar.");
+          return;
+        }
+
+        const batch = db.batch();
+        snapshot.forEach(doc => {
+          batch.delete(doc.ref);
         });
 
         await batch.commit();
-        alert("¡Fixture completo cargado exitosamente en Firestore!");
+        alert("✅ Todos los partidos de la Premier League han sido eliminados de la base de datos.");
         loadAdminMatches();
       } catch (err) {
-        alert("Error al cargar fixture: " + err.message);
+        alert("Error al eliminar partidos: " + err.message);
       }
     };
 
@@ -546,7 +567,6 @@
           return;
         }
 
-        // Ordenamiento Cronológico
         const sortedDocs = snapshot.docs.map(d => ({ id: d.id, ...d.data() }))
           .sort((a, b) => new Date(a.matchDate) - new Date(b.matchDate));
 
@@ -615,7 +635,6 @@
           return;
         }
 
-        // Ordenar cronológicamente del más cercano al más lejano
         const sortedMatches = matchesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
           .sort((a, b) => new Date(a.matchDate) - new Date(b.matchDate));
 
@@ -630,9 +649,7 @@
           card.className = "card-dark border-slate-800 p-4 space-y-3";
 
           if (!isTimeClosed) {
-            // PARTIDO FUTURO
             if (isAlreadySubmitted) {
-              // PRONÓSTICO REGISTRADO Y BLOQUEADO (NO EDITABLE)
               card.innerHTML = `
                 <div class="flex justify-between items-center text-xs text-slate-400 border-b border-slate-800/80 pb-2">
                   <span>🗓️ ${match.matchDate}</span>
@@ -650,7 +667,6 @@
                 <p class="text-[11px] text-center text-slate-500 italic">Tu marcador ya fue guardado y bloqueado para este partido.</p>
               `;
             } else {
-              // SIN PRONÓSTICO: HABILITADO PARA INGRESAR
               card.innerHTML = `
                 <div class="flex justify-between items-center text-xs text-slate-400 border-b border-slate-800/80 pb-2">
                   <span>🗓️ ${match.matchDate}</span>
@@ -672,7 +688,6 @@
             }
             upcomingContainer.appendChild(card);
           } else {
-            // PARTIDO CERRADO O EN CURSO
             card.innerHTML = `
               <div class="flex justify-between items-center text-xs text-slate-400 border-b border-slate-800/80 pb-2">
                 <span>🗓️ ${match.matchDate}</span>
