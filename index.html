@@ -254,10 +254,25 @@
         </div>
       </div>
 
-      <!-- LISTA DE PARTIDOS EN ADMIN -->
-      <div class="card-dark border-slate-800 p-4">
-        <h4 class="font-bold text-sm text-white mb-3">Partidos Registrados en Premier League</h4>
-        <div id="admin-matches-list" class="space-y-3 max-h-96 overflow-y-auto"></div>
+      <!-- LISTA DE PARTIDOS EN ADMIN SECCIONADOS -->
+      <div class="card-dark border-slate-800 p-4 space-y-4">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+          <h4 class="font-bold text-sm text-white">Partidos Registrados en Premier League</h4>
+          <div class="flex gap-2 bg-slate-950 p-1 rounded-lg border border-slate-800">
+            <button onclick="switchAdminMatchTab('upcoming')" id="admin-tab-btn-upcoming" class="px-3 py-1.5 text-xs font-bold rounded-md bg-emerald-500 text-slate-950">
+              ⏳ Partidos Futuros / Programados
+            </button>
+            <button onclick="switchAdminMatchTab('history')" id="admin-tab-btn-history" class="px-3 py-1.5 text-xs font-bold rounded-md text-slate-400 hover:text-white">
+              📜 Partidos Pasados / Finalizados
+            </button>
+          </div>
+        </div>
+
+        <!-- LISTA FUTUROS/PROGRAMADOS -->
+        <div id="admin-matches-upcoming" class="space-y-3 max-h-96 overflow-y-auto"></div>
+
+        <!-- LISTA PASADOS/FINALIZADOS -->
+        <div id="admin-matches-history" class="space-y-3 max-h-96 overflow-y-auto hidden"></div>
       </div>
 
       <!-- CÓDIGOS GENERADOS -->
@@ -384,14 +399,19 @@
       }
     };
 
-    // CARGA MASIVA DE FIXTURE DESDE FIXTURE.JS (BATCHES)
+    // CARGA MASIVA DE FIXTURE CON VALIDACIÓN "CARGAR"
     window.preloadPremierLeagueFixture = async function() {
       if (!window.PREMIER_LEAGUE_FIXTURE || window.PREMIER_LEAGUE_FIXTURE.length === 0) {
         alert("Error: No se encontró la variable PREMIER_LEAGUE_FIXTURE en fixture.js");
         return;
       }
 
-      if (!confirm(`¿Deseas cargar los ${window.PREMIER_LEAGUE_FIXTURE.length} partidos oficiales de la temporada a Firestore?`)) return;
+      const confirmText = prompt(`⚠️ Para confirmar la carga de los ${window.PREMIER_LEAGUE_FIXTURE.length} partidos oficiales de la temporada, escribe la palabra: CARGAR`);
+      
+      if (!confirmText || confirmText.trim().toUpperCase() !== "CARGAR") {
+        alert("Carga cancelada. La palabra ingresada no coincide.");
+        return;
+      }
 
       try {
         const fixture = window.PREMIER_LEAGUE_FIXTURE;
@@ -429,9 +449,14 @@
       }
     };
 
-    // BORRADO MASIVO DE PARTIDOS
+    // BORRADO MASIVO CON VALIDACIÓN "ELIMINAR"
     window.clearAllMatches = async function() {
-      if (!confirm("⚠️ ¿Estás seguro de que deseas eliminar TODOS los partidos de la base de datos? Esto no se puede deshacer.")) return;
+      const confirmText = prompt("⚠️ Para confirmar la eliminación de TODOS los partidos de la base de datos, escribe la palabra: ELIMINAR");
+
+      if (!confirmText || confirmText.trim().toUpperCase() !== "ELIMINAR") {
+        alert("Eliminación cancelada. La palabra ingresada no coincide.");
+        return;
+      }
 
       try {
         const snapshot = await db.collection("matches").where("pollaId", "==", "premier").get();
@@ -506,6 +531,7 @@
       document.getElementById('btn-cancel-edit').classList.add('hidden');
     };
 
+    // FINALIZAR PARTIDO Y RECALCULAR PUNTOS (2 PTS MARCADOR EXACTO / 1 PT TENDENCIA)
     window.finishMatchAndCalculatePoints = async function(matchId) {
       const homeScore = document.getElementById(`final-home-${matchId}`).value;
       const awayScore = document.getElementById(`final-away-${matchId}`).value;
@@ -531,13 +557,14 @@
           const pred = doc.data();
           let pts = 0;
 
+          // REGLAS DE PUNTUACIÓN
           if (pred.homeScore === hScore && pred.awayScore === aScore) {
-            pts = 3;
+            pts = 2; // Marcador Exacto (2 puntos)
           } else {
             const realWinner = hScore > aScore ? "home" : (hScore < aScore ? "away" : "draw");
             const predWinner = pred.homeScore > pred.awayScore ? "home" : (pred.homeScore < pred.awayScore ? "away" : "draw");
             if (realWinner === predWinner) {
-              pts = 1;
+              pts = 1; // Acierto de Ganador/Empate No Exacto (1 punto)
             }
           }
 
@@ -547,43 +574,64 @@
           });
         }
 
-        alert("¡Partido finalizado y puntos asignados!");
+        alert("¡Resultado guardado! Se han actualizado los puntos en la tabla de posiciones.");
         loadAdminMatches();
+        loadLeaderboard();
       } catch (err) {
         alert("Error al procesar resultado: " + err.message);
       }
     };
 
+    // CARGAR Y SECCIONAR PARTIDOS EN ADMIN
     async function loadAdminMatches() {
-      const container = document.getElementById('admin-matches-list');
-      if (!container) return;
+      const upcomingContainer = document.getElementById('admin-matches-upcoming');
+      const historyContainer = document.getElementById('admin-matches-history');
+      if (!upcomingContainer || !historyContainer) return;
 
       try {
         const snapshot = await db.collection("matches").where("pollaId", "==", "premier").get();
-        container.innerHTML = "";
+        upcomingContainer.innerHTML = "";
+        historyContainer.innerHTML = "";
 
         if (snapshot.empty) {
-          container.innerHTML = "<p class='text-xs text-slate-500'>No hay partidos registrados.</p>";
+          upcomingContainer.innerHTML = "<p class='text-xs text-slate-500'>No hay partidos programados.</p>";
+          historyContainer.innerHTML = "<p class='text-xs text-slate-500'>No hay partidos pasados.</p>";
           return;
         }
 
+        const now = new Date();
         const sortedDocs = snapshot.docs.map(d => ({ id: d.id, ...d.data() }))
           .sort((a, b) => new Date(a.matchDate) - new Date(b.matchDate));
 
+        let upcomingCount = 0;
+        let historyCount = 0;
+
         sortedDocs.forEach(m => {
           const matchId = m.id;
+          const matchTime = new Date(m.matchDate);
+          const isPassed = matchTime <= now || m.status === "finished";
+
           const card = document.createElement('div');
           card.className = "p-3 bg-slate-900 border border-slate-800 rounded flex flex-col md:flex-row justify-between items-center gap-2 text-xs";
 
-          if (m.status === "finished") {
+          if (isPassed) {
+            historyCount++;
             card.innerHTML = `
               <div>
-                <span class="badge-slate">Finalizado</span>
-                <span class="text-white font-bold ml-2">${m.homeTeam} (${m.homeScore}) vs (${m.awayScore}) ${m.awayTeam}</span>
+                <span class="${m.status === 'finished' ? 'badge-slate' : 'badge-red'}">${m.status === 'finished' ? 'Finalizado' : 'En Curso / Cerrado'}</span>
+                <span class="text-white font-bold ml-2">${m.homeTeam} ${m.homeScore !== null ? `(${m.homeScore})` : ''} vs ${m.awayScore !== null ? `(${m.awayScore})` : ''} ${m.awayTeam}</span>
                 <span class="text-slate-500 block text-[10px]">📅 ${m.matchDate}</span>
               </div>
+              <div class="flex items-center gap-2">
+                <input type="number" min="0" id="final-home-${matchId}" value="${m.homeScore !== null ? m.homeScore : ''}" placeholder="Loc" class="w-10 text-center bg-slate-950 p-1 border border-slate-700 rounded">
+                <span>-</span>
+                <input type="number" min="0" id="final-away-${matchId}" value="${m.awayScore !== null ? m.awayScore : ''}" placeholder="Vis" class="w-10 text-center bg-slate-950 p-1 border border-slate-700 rounded">
+                <button onclick="finishMatchAndCalculatePoints('${matchId}')" class="px-2 py-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded">Guardar Resultado</button>
+              </div>
             `;
+            historyContainer.appendChild(card);
           } else {
+            upcomingCount++;
             card.innerHTML = `
               <div>
                 <span class="badge-emerald">Programado</span>
@@ -598,13 +646,28 @@
                 <button onclick="prepareEditMatch('${matchId}', '${m.homeTeam}', '${m.awayTeam}', '${m.matchDate}')" class="px-2 py-1 bg-slate-800 text-amber-400 rounded">Editar</button>
               </div>
             `;
+            upcomingContainer.appendChild(card);
           }
-          container.appendChild(card);
         });
+
+        if (upcomingCount === 0) upcomingContainer.innerHTML = "<p class='text-xs text-slate-500'>No hay partidos futuros.</p>";
+        if (historyCount === 0) historyContainer.innerHTML = "<p class='text-xs text-slate-500'>No hay partidos pasados.</p>";
+
       } catch (err) {
         console.error("Error cargando partidos en admin:", err);
       }
     }
+
+    window.switchAdminMatchTab = function(tabName) {
+      document.getElementById('admin-matches-upcoming').classList.add('hidden');
+      document.getElementById('admin-matches-history').classList.add('hidden');
+
+      document.getElementById('admin-tab-btn-upcoming').className = "px-3 py-1.5 text-xs font-bold rounded-md text-slate-400 hover:text-white";
+      document.getElementById('admin-tab-btn-history').className = "px-3 py-1.5 text-xs font-bold rounded-md text-slate-400 hover:text-white";
+
+      document.getElementById('admin-matches-' + tabName).classList.remove('hidden');
+      document.getElementById('admin-tab-btn-' + tabName).className = "px-3 py-1.5 text-xs font-bold rounded-md bg-emerald-500 text-slate-950";
+    };
 
     // CARGAR Y BLOQUEAR PRONÓSTICOS DE USUARIO
     async function loadUserPredictions() {
