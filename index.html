@@ -139,7 +139,7 @@
         <form id="form-login" onsubmit="handleLogin(event)" class="space-y-4">
           <div>
             <label class="block text-xs font-medium text-slate-300 mb-1">Nombre de Usuario (@username)</label>
-            <input type="text" id="login-username" required placeholder="ej. admin o carlos_gol" class="bg-slate-900 border-slate-700">
+            <input type="text" id="login-username" required placeholder="ej. Carlos_Gol o admin" class="bg-slate-900 border-slate-700">
           </div>
 
           <div>
@@ -157,7 +157,7 @@
       </div>
     </section>
 
-    <!-- VIEW 3: REGISTRO CON CÓDIGO (CON SELECCIÓN DE POLLA) -->
+    <!-- VIEW 3: REGISTRO CON CÓDIGO -->
     <section id="view-register" class="view-section max-w-lg mx-auto my-6 space-y-6">
       <div class="card-dark border-slate-800 shadow-2xl p-6 md:p-8">
         <h2 class="text-2xl font-bold text-white text-center mb-2">Registro de Participante</h2>
@@ -176,7 +176,7 @@
             </select>
           </div>
 
-          <!-- CÓDIGO DE REGISTRO DE 10 DÍGITOS -->
+          <!-- CÓDIGO DE REGISTRO -->
           <div>
             <label class="block text-xs font-medium text-amber-400 mb-1">2. Código de Registro (10 Caracteres)</label>
             <div class="flex gap-2">
@@ -192,8 +192,8 @@
           </div>
 
           <div>
-            <label class="block text-xs font-medium text-slate-300 mb-1">Username (@usuario)</label>
-            <input type="text" id="reg-username" required placeholder="ej. carlos_gol" class="bg-slate-900 border-slate-700">
+            <label class="block text-xs font-medium text-slate-300 mb-1">Username (@usuario - Se respetan Mayúsculas)</label>
+            <input type="text" id="reg-username" required placeholder="ej. Carlos_Gol" class="bg-slate-900 border-slate-700">
           </div>
 
           <div>
@@ -206,7 +206,7 @@
             <input type="password" id="reg-password" minlength="6" required placeholder="Mínimo 6 caracteres" class="bg-slate-900 border-slate-700">
           </div>
 
-          <button type="submit" id="btn-submit-reg" disabled class="w-full btn-emerald opacity-50 cursor-not-allowed rounded-lg py-3 font-bold">Completar Registro para esta Polla</button>
+          <button type="submit" id="btn-submit-reg" disabled class="w-full btn-emerald opacity-50 cursor-not-allowed rounded-lg py-3 font-bold">Completar Registro</button>
         </form>
       </div>
     </section>
@@ -273,7 +273,6 @@
 
   <!-- SCRIPT LÓGICA COMPLETA DE FIREBASE -->
   <script>
-    // 1. CONFIGURACIÓN FIREBASE CON TUS CREDENCIALES
     const firebaseConfig = {
       apiKey: "AIzaSyD53EG1LMyor9_f5BcNBLz1XcgMQycbj0w",
       authDomain: "pollas-futboleras-app.firebaseapp.com",
@@ -291,31 +290,32 @@
     let currentUser = null;
     let validatedCodeDoc = null;
 
-    // 2. AUTO-CREAR SUPERADMIN 'admin'
+    // 1. AUTO-CREAR SUPERADMIN 'admin'
     async function ensureSuperAdminExists() {
       try {
         const usersRef = db.collection("users");
-        const snapshot = await usersRef.where("username", "==", "admin").get();
+        const snapshot = await usersRef.where("username_clean", "==", "admin").get();
 
         if (snapshot.empty) {
           const passHash = CryptoJS.SHA256("Admin1234*").toString();
           await usersRef.doc("admin_root").set({
             name: "Super Administrador",
             username: "admin",
+            username_clean: "admin",
             passwordHash: passHash,
             phone: "0000000000",
             role: "superadmin",
             pollas: ["premier"],
             createdAt: new Date().toISOString()
           });
-          console.log("✅ SuperAdmin creado automáticamente.");
+          console.log("✅ SuperAdmin listo.");
         }
       } catch (err) {
         console.error("Error al verificar SuperAdmin:", err);
       }
     }
 
-    // 3. NAVEGACIÓN
+    // 2. NAVEGACIÓN
     window.navigateTo = function(viewId) {
       document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
       const target = document.getElementById('view-' + viewId);
@@ -324,18 +324,26 @@
       if (viewId === 'admin') loadAdminCodes();
     };
 
-    // 4. LOGIN CON CONTROL SANITIZADO
+    // 3. LOGIN FLEXIBLE (BÚSQUEDA INSENSIBLE A MAYÚSCULAS/MINÚSCULAS)
     window.handleLogin = async function(e) {
       if (e) e.preventDefault();
-      const usernameInput = document.getElementById('login-username').value.trim().toLowerCase();
+      const rawUsername = document.getElementById('login-username').value.trim();
+      const cleanUsername = rawUsername.toLowerCase();
       const passwordInput = document.getElementById('login-password').value;
 
       try {
         const passHash = CryptoJS.SHA256(passwordInput).toString();
-        const snapshot = await db.collection("users").where("username", "==", usernameInput).get();
+        
+        // 1. Buscar primero por username_clean (Insensible a mayúsculas)
+        let snapshot = await db.collection("users").where("username_clean", "==", cleanUsername).get();
+
+        // 2. Fallback: Buscar por username directo si el registro fue previo
+        if (snapshot.empty) {
+          snapshot = await db.collection("users").where("username", "==", rawUsername).get();
+        }
 
         if (snapshot.empty) {
-          alert("El usuario @" + usernameInput + " no existe en la base de datos.");
+          alert("El usuario @" + rawUsername + " no existe en la base de datos.");
           return;
         }
 
@@ -364,7 +372,7 @@
       }
     };
 
-    // 5. VERIFICAR CÓDIGO
+    // 4. VERIFICAR CÓDIGO
     window.verifyRegisterCode = async function() {
       const codeInput = document.getElementById('reg-code').value.trim().toUpperCase();
       const pollaSelected = document.getElementById('reg-polla-select').value;
@@ -389,7 +397,7 @@
         const codeData = codeDoc.data();
 
         if (codeData.used) {
-          statusText.innerText = "❌ Código ya usado por @" + codeData.usedByUsername + " para la polla: " + (codeData.pollaId || "general");
+          statusText.innerText = "❌ Código ya usado por @" + codeData.usedByUsername;
           statusText.className = "text-[11px] mt-1 text-red-400 font-semibold";
           return;
         }
@@ -401,7 +409,7 @@
         btnSubmit.disabled = false;
         btnSubmit.classList.remove('opacity-50', 'cursor-not-allowed');
 
-        statusText.innerText = "✅ Código válido para " + codeData.targetName + " (" + pollaSelected + ")";
+        statusText.innerText = "✅ Código válido para " + codeData.targetName;
         statusText.className = "text-[11px] mt-1 text-emerald-400 font-semibold";
 
       } catch (err) {
@@ -409,7 +417,7 @@
       }
     };
 
-    // 6. REGISTRO DE USUARIO CON ASOCIACIÓN DE POLLA
+    // 5. REGISTRO RESPETANDO FORMATO DE MAYÚSCULAS
     window.handleRegister = async function(e) {
       e.preventDefault();
       if (!validatedCodeDoc) {
@@ -418,17 +426,26 @@
       }
 
       const selectedPolla = document.getElementById('reg-polla-select').value;
-      const username = document.getElementById('reg-username').value.trim().toLowerCase();
+      const rawUsername = document.getElementById('reg-username').value.trim(); // Se conserva el formato ingresado
+      const cleanUsername = rawUsername.toLowerCase(); // Para búsquedas
       const phone = document.getElementById('reg-phone').value.trim();
       const password = document.getElementById('reg-password').value;
 
       try {
+        // Validar duplicado
+        const checkUser = await db.collection("users").where("username_clean", "==", cleanUsername).get();
+        if (!checkUser.empty) {
+          alert("El nombre de usuario @" + rawUsername + " ya está registrado. Por favor elige otro.");
+          return;
+        }
+
         const passwordHash = CryptoJS.SHA256(password).toString();
 
-        // 1. Guardar usuario en la colección 'users'
+        // 1. Guardar con formato original Y campo normalizado
         await db.collection("users").add({
           name: validatedCodeDoc.targetName,
-          username: username,
+          username: rawUsername,            // Conserva mayúsculas (ej: Carlos_Gol)
+          username_clean: cleanUsername,    // En minúsculas para búsquedas (ej: carlos_gol)
           phone: phone,
           passwordHash: passwordHash,
           role: "user",
@@ -437,15 +454,15 @@
           createdAt: new Date().toISOString()
         });
 
-        // 2. Marcar el código de 10 posiciones como USADO para esta polla
+        // 2. Marcar código como usado
         await db.collection("registration_codes").doc(validatedCodeDoc.id).update({
           used: true,
-          usedByUsername: username,
+          usedByUsername: rawUsername,
           pollaId: selectedPolla,
           usedAt: new Date().toISOString()
         });
 
-        alert("¡Registro completado exitosamente para la polla " + selectedPolla + "! Ahora puedes iniciar sesión.");
+        alert("¡Registro completado! Tu usuario es @" + rawUsername + ". Ahora puedes iniciar sesión.");
         navigateTo('login');
 
       } catch (err) {
@@ -454,7 +471,7 @@
       }
     };
 
-    // 7. GENERAR Y CARGAR CÓDIGOS DESDE ADMIN CON BOTÓN DE BORRADO
+    // 6. ADMINISTRACIÓN DE CÓDIGOS
     window.handleGenerateCode = async function(e) {
       e.preventDefault();
       const personName = document.getElementById('code-person-name').value.trim();
