@@ -8,7 +8,7 @@
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- CryptoJS para encriptación de contraseñas -->
+  <!-- CryptoJS para encriptación -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
   
   <!-- Flatpickr CSS & JS -->
@@ -22,7 +22,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- FAILSAFE / NATIVE CSS FALLBACK -->
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', system-ui, -apple-system, sans-serif; }
     body { background-color: #020617; color: #f8fafc; min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
@@ -75,7 +74,7 @@
   <!-- CONTENEDOR PRINCIPAL -->
   <main class="flex-grow max-w-5xl w-full mx-auto p-4 md:p-6 mb-20">
 
-    <!-- INICIO (HOME) -->
+    <!-- HOME -->
     <section id="view-home" class="view-section active space-y-6">
       <div class="bg-gradient-to-r from-slate-900 via-emerald-950/30 to-slate-900 p-6 rounded-2xl border border-emerald-500/20 shadow-xl">
         <h2 class="text-2xl font-extrabold text-white">Selecciona tu Polla Futbolera</h2>
@@ -160,7 +159,7 @@
       </div>
     </section>
 
-    <!-- MÓDULO DE PRONÓSTICOS Y PREDICCIONES -->
+    <!-- PRONÓSTICOS -->
     <section id="view-predictions" class="view-section space-y-6">
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-900 p-4 rounded-xl border border-slate-800">
         <div>
@@ -168,7 +167,6 @@
           <h2 class="text-xl font-bold text-white mt-1">Panel de Pronósticos</h2>
         </div>
         
-        <!-- Pestañas de Navegación del Usuario -->
         <div class="flex gap-2 bg-slate-950 p-1 rounded-lg border border-slate-800">
           <button onclick="switchPredictionTab('upcoming')" id="tab-btn-upcoming" class="px-4 py-2 text-xs font-bold rounded-md bg-emerald-500 text-slate-950">
             ⏳ Próximos Partidos
@@ -179,13 +177,13 @@
         </div>
       </div>
 
-      <!-- TAB 1: PRÓXIMOS PARTIDOS (ABIERTOS PARA GUARDAR) -->
+      <!-- PRÓXIMOS PARTIDOS -->
       <div id="pred-tab-upcoming" class="space-y-4">
         <p class="text-xs text-slate-400">Guarda o modifica tus marcadores antes de que inicie cada encuentro.</p>
         <div id="upcoming-matches-list" class="space-y-4"></div>
       </div>
 
-      <!-- TAB 2: MIS PREDICCIONES / HISTORIAL (CERRADOS) -->
+      <!-- HISTORIAL / PASADOS -->
       <div id="pred-tab-history" class="space-y-4 hidden">
         <p class="text-xs text-slate-400">Partidos iniciados o finalizados. Las predicciones en esta sección ya están cerradas.</p>
         <div id="history-matches-list" class="space-y-4"></div>
@@ -212,16 +210,26 @@
     <!-- PANEL ADMIN -->
     <section id="view-admin" class="view-section space-y-6">
       <div class="card-dark border-red-500/30">
-        <h2 class="text-xl font-bold text-white mb-4">Panel Control Super Admin</h2>
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-xl font-bold text-white">Panel Control Super Admin</h2>
+          <!-- BOTÓN DE CARGA MASIVA DE FIXTURE -->
+          <button onclick="preloadPremierLeagueFixture()" class="px-3 py-1.5 bg-purple-900/60 hover:bg-purple-800 border border-purple-500/50 text-purple-200 text-xs font-bold rounded shadow-lg">
+            ⚡ Cargar Fixture Premier League
+          </button>
+        </div>
         
-        <!-- CREAR PARTIDO -->
+        <!-- CREAR / EDITAR PARTIDO -->
         <div class="mb-6 p-4 bg-slate-900 rounded-lg border border-slate-800">
-          <h3 class="text-sm font-bold text-emerald-400 mb-3">⚽ Publicar Nuevo Partido</h3>
-          <form onsubmit="handleCreateMatch(event)" class="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <h3 id="admin-match-form-title" class="text-sm font-bold text-emerald-400 mb-3">⚽ Publicar / Editar Partido</h3>
+          <form onsubmit="handleSaveMatch(event)" class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <input type="hidden" id="match-edit-id">
             <input type="text" id="match-home" required placeholder="Equipo Local (ej. Arsenal)">
             <input type="text" id="match-away" required placeholder="Equipo Visitante (ej. Chelsea)">
             <input type="text" id="match-datetime" required placeholder="Fecha y Hora de Inicio">
-            <button type="submit" class="btn-emerald md:col-span-3 py-2 font-bold text-xs">Publicar Partido</button>
+            <div class="md:col-span-3 flex gap-2">
+              <button type="submit" class="btn-emerald flex-1 py-2 font-bold text-xs">Guardar Partido</button>
+              <button type="button" onclick="resetMatchForm()" class="btn-slate py-2 text-xs rounded hidden" id="btn-cancel-edit">Cancelar</button>
+            </div>
           </form>
         </div>
 
@@ -238,6 +246,13 @@
         </div>
       </div>
 
+      <!-- LISTA DE PARTIDOS EN ADMIN -->
+      <div class="card-dark border-slate-800 p-4">
+        <h4 class="font-bold text-sm text-white mb-3">Partidos Publicados en Premier League</h4>
+        <div id="admin-matches-list" class="space-y-3"></div>
+      </div>
+
+      <!-- CÓDIGO GENERADOS -->
       <div class="card-dark p-0 overflow-x-auto">
         <div class="p-4 border-b border-slate-800">
           <h4 class="font-bold text-sm text-white">Códigos Generados</h4>
@@ -268,7 +283,7 @@
     </div>
   </nav>
 
-  <!-- SCRIPT LÓGICA GENERAL -->
+  <!-- SCRIPT COMPLETO -->
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyD53EG1LMyor9_f5BcNBLz1XcgMQycbj0w",
@@ -286,6 +301,18 @@
 
     let currentUser = null;
     let validatedCodeDoc = null;
+
+    // FIXTURE INICIAL REAL DE PREMIER LEAGUE 2026
+    const initialPremierFixture = [
+      { homeTeam: "Arsenal", awayTeam: "Chelsea", matchDate: "2026-10-24 11:30" },
+      { homeTeam: "Manchester City", awayTeam: "Liverpool", matchDate: "2026-10-24 14:00" },
+      { homeTeam: "Aston Villa", awayTeam: "Tottenham", matchDate: "2026-10-25 09:00" },
+      { homeTeam: "Manchester United", awayTeam: "Newcastle", matchDate: "2026-10-25 11:30" },
+      { homeTeam: "Everton", awayTeam: "West Ham", matchDate: "2026-10-31 10:00" },
+      { homeTeam: "Brighton", awayTeam: "Arsenal", matchDate: "2026-11-01 11:30" },
+      { homeTeam: "Chelsea", awayTeam: "Manchester City", matchDate: "2026-11-07 12:30" },
+      { homeTeam: "Liverpool", awayTeam: "Aston Villa", matchDate: "2026-11-08 11:00" }
+    ];
 
     async function ensureSuperAdminExists() {
       try {
@@ -314,7 +341,11 @@
       if (target) target.classList.add('active');
 
       if (viewId === 'predictions' && currentUser) loadUserPredictions();
-      if (viewId === 'admin') loadAdminCodes();
+      if (viewId === 'admin') {
+        loadAdminCodes();
+        loadAdminMatches();
+      }
+      if (viewId === 'leaderboard') loadLeaderboard();
     };
 
     window.handleLogin = async function(e) {
@@ -357,32 +388,188 @@
       }
     };
 
-    // PUBLICAR PARTIDOS DESDE ADMIN
-    window.handleCreateMatch = async function(e) {
+    // PRECARGA MASIVA DEL FIXTURE
+    window.preloadPremierLeagueFixture = async function() {
+      if (!confirm("¿Deseas cargar el fixture inicial de la Premier League?")) return;
+
+      try {
+        for (const match of initialPremierFixture) {
+          await db.collection("matches").add({
+            ...match,
+            pollaId: "premier",
+            status: "scheduled", // scheduled | finished
+            homeScore: null,
+            awayScore: null,
+            createdAt: new Date().toISOString()
+          });
+        }
+        alert("¡Fixture de la Premier League cargado exitosamente!");
+        loadAdminMatches();
+      } catch (err) {
+        alert("Error al cargar fixture: " + err.message);
+      }
+    };
+
+    // CREAR / EDITAR PARTIDO DESDE ADMIN
+    window.handleSaveMatch = async function(e) {
       e.preventDefault();
+      const matchId = document.getElementById('match-edit-id').value;
       const home = document.getElementById('match-home').value.trim();
       const away = document.getElementById('match-away').value.trim();
       const datetime = document.getElementById('match-datetime').value.trim();
 
       try {
-        await db.collection("matches").add({
-          homeTeam: home,
-          awayTeam: away,
-          matchDate: datetime,
-          pollaId: "premier",
-          status: "scheduled",
-          createdAt: new Date().toISOString()
-        });
-
-        alert("Partido publicado con éxito.");
-        document.getElementById('match-home').value = "";
-        document.getElementById('match-away').value = "";
+        if (matchId) {
+          // Edición
+          await db.collection("matches").doc(matchId).update({
+            homeTeam: home,
+            awayTeam: away,
+            matchDate: datetime
+          });
+          alert("Partido actualizado.");
+        } else {
+          // Creación
+          await db.collection("matches").add({
+            homeTeam: home,
+            awayTeam: away,
+            matchDate: datetime,
+            pollaId: "premier",
+            status: "scheduled",
+            homeScore: null,
+            awayScore: null,
+            createdAt: new Date().toISOString()
+          });
+          alert("Partido guardado.");
+        }
+        resetMatchForm();
+        loadAdminMatches();
       } catch (err) {
-        alert("Error al publicar partido: " + err.message);
+        alert("Error al guardar partido: " + err.message);
       }
     };
 
-    // CARGAR PREDICCIONES CON DIVERGENCIA DE FECHAS (FUTUROS Y PASADOS)
+    window.prepareEditMatch = function(id, home, away, datetime) {
+      document.getElementById('match-edit-id').value = id;
+      document.getElementById('match-home').value = home;
+      document.getElementById('match-away').value = away;
+      document.getElementById('match-datetime').value = datetime;
+      document.getElementById('admin-match-form-title').innerText = "✏️ Editando Partido";
+      document.getElementById('btn-cancel-edit').classList.remove('hidden');
+    };
+
+    window.resetMatchForm = function() {
+      document.getElementById('match-edit-id').value = "";
+      document.getElementById('match-home').value = "";
+      document.getElementById('match-away').value = "";
+      document.getElementById('match-datetime').value = "";
+      document.getElementById('admin-match-form-title').innerText = "⚽ Publicar / Editar Partido";
+      document.getElementById('btn-cancel-edit').classList.add('hidden');
+    };
+
+    // FINALIZAR PARTIDO Y CALCULAR PUNTOS
+    window.finishMatchAndCalculatePoints = async function(matchId) {
+      const homeScore = document.getElementById(`final-home-${matchId}`).value;
+      const awayScore = document.getElementById(`final-away-${matchId}`).value;
+
+      if (homeScore === "" || awayScore === "") {
+        alert("Ingresa el resultado final de ambos equipos.");
+        return;
+      }
+
+      const hScore = parseInt(homeScore);
+      const aScore = parseInt(awayScore);
+
+      try {
+        // 1. Marcar partido como finalizado
+        await db.collection("matches").doc(matchId).update({
+          status: "finished",
+          homeScore: hScore,
+          awayScore: aScore
+        });
+
+        // 2. Obtener todas las predicciones para este partido
+        const predsSnapshot = await db.collection("predictions").where("matchId", "==", matchId).get();
+
+        for (const doc of predsSnapshot.docs) {
+          const pred = doc.data();
+          let pts = 0;
+
+          // Cálculo de Puntos
+          if (pred.homeScore === hScore && pred.awayScore === aScore) {
+            pts = 3; // Marcador Exacto
+          } else {
+            const realWinner = hScore > aScore ? "home" : (hScore < aScore ? "away" : "draw");
+            const predWinner = pred.homeScore > pred.awayScore ? "home" : (pred.homeScore < pred.awayScore ? "away" : "draw");
+            if (realWinner === predWinner) {
+              pts = 1; // Acierto de Ganador/Empate
+            }
+          }
+
+          // Actualizar puntos en la predicción
+          await db.collection("predictions").doc(doc.id).update({
+            points: pts,
+            calculated: true
+          });
+        }
+
+        alert("¡Partido finalizado y puntos calculados automáticamente para todos los participantes!");
+        loadAdminMatches();
+      } catch (err) {
+        alert("Error al procesar resultado: " + err.message);
+      }
+    };
+
+    async function loadAdminMatches() {
+      const container = document.getElementById('admin-matches-list');
+      if (!container) return;
+
+      try {
+        const snapshot = await db.collection("matches").where("pollaId", "==", "premier").get();
+        container.innerHTML = "";
+
+        if (snapshot.empty) {
+          container.innerHTML = "<p class='text-xs text-slate-500'>No hay partidos registrados.</p>";
+          return;
+        }
+
+        snapshot.forEach(doc => {
+          const m = doc.data();
+          const matchId = doc.id;
+          const card = document.createElement('div');
+          card.className = "p-3 bg-slate-900 border border-slate-800 rounded flex flex-col md:flex-row justify-between items-center gap-2 text-xs";
+
+          if (m.status === "finished") {
+            card.innerHTML = `
+              <div>
+                <span class="badge-slate">Finalizado</span>
+                <span class="text-white font-bold ml-2">${m.homeTeam} (${m.homeScore}) vs (${m.awayScore}) ${m.awayTeam}</span>
+                <span class="text-slate-500 block text-[10px]">📅 ${m.matchDate}</span>
+              </div>
+            `;
+          } else {
+            card.innerHTML = `
+              <div>
+                <span class="badge-emerald">Programado</span>
+                <span class="text-white font-bold ml-2">${m.homeTeam} vs ${m.awayTeam}</span>
+                <span class="text-slate-500 block text-[10px]">📅 ${m.matchDate}</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <input type="number" min="0" id="final-home-${matchId}" placeholder="Loc" class="w-10 text-center bg-slate-950 p-1 border border-slate-700 rounded">
+                <span>-</span>
+                <input type="number" min="0" id="final-away-${matchId}" placeholder="Vis" class="w-10 text-center bg-slate-950 p-1 border border-slate-700 rounded">
+                <button onclick="finishMatchAndCalculatePoints('${matchId}')" class="px-2 py-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded">Finalizar</button>
+                <button onclick="prepareEditMatch('${matchId}', '${m.homeTeam}', '${m.awayTeam}', '${m.matchDate}')" class="px-2 py-1 bg-slate-800 text-amber-400 rounded">Editar</button>
+              </div>
+            `;
+          }
+          container.appendChild(card);
+        });
+      } catch (err) {
+        console.error("Error cargando partidos en admin:", err);
+      }
+    }
+
+    // CARGAR PRONÓSTICOS DE USUARIO
     async function loadUserPredictions() {
       const upcomingContainer = document.getElementById('upcoming-matches-list');
       const historyContainer = document.getElementById('history-matches-list');
@@ -414,15 +601,14 @@
         matchesSnapshot.forEach(doc => {
           const match = { id: doc.id, ...doc.data() };
           const matchTime = new Date(match.matchDate);
-          const isClosed = matchTime <= now;
+          const isClosed = matchTime <= now || match.status === "finished";
 
-          const existingPred = userPreds[match.id] || { homeScore: "", awayScore: "" };
+          const existingPred = userPreds[match.id] || { homeScore: "", awayScore: "", points: 0 };
 
           const card = document.createElement('div');
           card.className = "card-dark border-slate-800 p-4 space-y-3";
 
           if (!isClosed) {
-            // PARTIDO FUTURO: ABIERTO PARA GUARDAR
             card.innerHTML = `
               <div class="flex justify-between items-center text-xs text-slate-400 border-b border-slate-800/80 pb-2">
                 <span>🗓️ ${match.matchDate}</span>
@@ -443,16 +629,19 @@
             `;
             upcomingContainer.appendChild(card);
           } else {
-            // PARTIDO PASADO O EN JUEGO: CERRADO
             card.innerHTML = `
               <div class="flex justify-between items-center text-xs text-slate-400 border-b border-slate-800/80 pb-2">
                 <span>🗓️ ${match.matchDate}</span>
-                <span class="badge-slate">Cerrado</span>
+                <div class="flex items-center gap-2">
+                  <span class="badge-slate">Cerrado</span>
+                  <span class="badge-amber">+${existingPred.points || 0} pts</span>
+                </div>
               </div>
               <div class="grid grid-cols-3 items-center gap-2 text-center py-1">
                 <span class="font-bold text-sm text-slate-300">${match.homeTeam}</span>
                 <div class="text-amber-400 font-mono font-bold text-base">
-                  ${existingPred.homeScore !== "" ? existingPred.homeScore : '-'} : ${existingPred.awayScore !== "" ? existingPred.awayScore : '-'}
+                  Tu pronóstico: ${existingPred.homeScore !== "" ? existingPred.homeScore : '-'} : ${existingPred.awayScore !== "" ? existingPred.awayScore : '-'}
+                  ${match.status === "finished" ? `<div class="text-xs text-slate-400 font-sans mt-0.5">Real: ${match.homeScore} - ${match.awayScore}</div>` : ''}
                 </div>
                 <span class="font-bold text-sm text-slate-300">${match.awayTeam}</span>
               </div>
@@ -466,7 +655,6 @@
       }
     }
 
-    // GUARDAR PRONÓSTICO DE UN PARTIDO
     window.savePrediction = async function(matchId) {
       const homeScore = document.getElementById(`pred-home-${matchId}`).value;
       const awayScore = document.getElementById(`pred-away-${matchId}`).value;
@@ -483,7 +671,6 @@
           .get();
 
         if (!predQuery.empty) {
-          // Actualizar existente
           const predDocId = predQuery.docs[0].id;
           await db.collection("predictions").doc(predDocId).update({
             homeScore: parseInt(homeScore),
@@ -491,13 +678,13 @@
             updatedAt: new Date().toISOString()
           });
         } else {
-          // Crear nuevo
           await db.collection("predictions").add({
             userId: currentUser.id,
             matchId: matchId,
             pollaId: "premier",
             homeScore: parseInt(homeScore),
             awayScore: parseInt(awayScore),
+            points: 0,
             createdAt: new Date().toISOString()
           });
         }
@@ -507,6 +694,51 @@
         alert("Error al guardar pronóstico: " + err.message);
       }
     };
+
+    // CALCULAR TABLA GENERAL DE POSICIONES
+    async function loadLeaderboard() {
+      const tbody = document.getElementById('leaderboard-tbody');
+      if (!tbody) return;
+
+      tbody.innerHTML = "<tr><td colspan='3' class='p-3 text-center text-slate-500'>Calculando posiciones...</td></tr>";
+
+      try {
+        const usersSnapshot = await db.collection("users").get();
+        const predsSnapshot = await db.collection("predictions").get();
+
+        const userScores = {};
+
+        usersSnapshot.forEach(doc => {
+          const u = doc.data();
+          if (u.role !== 'superadmin') {
+            userScores[doc.id] = { name: u.name, username: u.username, totalPoints: 0 };
+          }
+        });
+
+        predsSnapshot.forEach(doc => {
+          const p = doc.data();
+          if (userScores[p.userId]) {
+            userScores[p.userId].totalPoints += (p.points || 0);
+          }
+        });
+
+        const sortedUsers = Object.values(userScores).sort((a, b) => b.totalPoints - a.totalPoints);
+
+        tbody.innerHTML = "";
+        sortedUsers.forEach((u, index) => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td class="p-3 font-bold ${index === 0 ? 'text-amber-400' : 'text-slate-400'}">${index + 1}</td>
+            <td class="p-3 font-medium text-white">${u.name} <span class="text-xs text-emerald-400 font-mono">@${u.username}</span></td>
+            <td class="p-3 text-center font-bold text-amber-400">${u.totalPoints} pts</td>
+          `;
+          tbody.appendChild(row);
+        });
+
+      } catch (err) {
+        console.error("Error cargando tabla de posiciones:", err);
+      }
+    }
 
     window.switchPredictionTab = function(tabName) {
       document.getElementById('pred-tab-upcoming').classList.add('hidden');
