@@ -22,16 +22,20 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- FAILSAFE / NATIVE CSS FALLBACK -->
+  <!-- FAILSAFE / NATIVE CSS FALLBACK
+       Garantiza que la UI funcione y luzca estructurada incluso si Tailwind no carga (ej. ahorro de datos / bloqueo CDN) -->
   <style>
+    /* Reset básico y tipografía */
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', system-ui, -apple-system, sans-serif; }
     body { background-color: #020617; color: #f8fafc; min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
     
+    /* REGLA CRÍTICA DE AISLAMIENTO Y SEGURIDAD */
     .view-section { display: none !important; }
     .view-section.active { display: block !important; }
     .view-flex.active { display: flex !important; }
     .view-grid.active { display: grid !important; }
 
+    /* Failsafe Layout Essentials */
     header, footer, nav { background-color: #0f172a; border-color: #1e293b; }
     input, select, button { border-radius: 0.5rem; font-size: 0.95rem; }
     input, select { background-color: #0f172a; border: 1px solid #334155; color: #ffffff; padding: 0.65rem 0.85rem; width: 100%; }
@@ -46,9 +50,11 @@
     .badge-emerald { background-color: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); font-size: 0.75rem; padding: 0.2rem 0.5rem; border-radius: 0.375rem; font-weight: 600; }
     .badge-slate { background-color: rgba(100, 116, 139, 0.15); color: #94a3b8; border: 1px solid rgba(100, 116, 139, 0.3); font-size: 0.75rem; padding: 0.2rem 0.5rem; border-radius: 0.375rem; font-weight: 600; }
 
+    /* Custom Scrollbars */
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: #020617; }
     ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #334155; }
   </style>
 
   <!-- FIREBASE COMPATIBILITY SDKs (v10.8.0) -->
@@ -64,6 +70,7 @@
   <!-- MAIN HEADER / NAVBAR -->
   <header class="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 px-4 py-3 shadow-md">
     <div class="max-w-5xl mx-auto flex items-center justify-between">
+      <!-- Logo & Title -->
       <div class="flex items-center gap-2 cursor-pointer" onclick="navigateTo('home')">
         <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center text-slate-950 font-black shadow-lg shadow-emerald-500/20">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="min-width:22px; min-height:22px;">
@@ -81,14 +88,19 @@
         </div>
       </div>
 
-      <div id="header-user-info" class="flex items-center gap-3"></div>
+      <!-- Auth State / User Profile Header -->
+      <div id="header-user-info" class="flex items-center gap-3">
+        <!-- Dyn Content JS -->
+      </div>
     </div>
   </header>
 
   <!-- MAIN APP CONTAINER -->
   <main class="flex-grow max-w-5xl w-full mx-auto p-4 md:p-6 mb-20">
 
-    <!-- VIEW 1: HOME -->
+    <!-- ========================================== -->
+    <!-- VIEW 1: HOME - SELECCIÓN DE POLLAS         -->
+    <!-- ========================================== -->
     <section id="view-home" class="view-section active space-y-6">
       <div class="bg-gradient-to-r from-slate-900 via-emerald-950/30 to-slate-900 p-6 rounded-2xl border border-emerald-500/20 shadow-xl relative overflow-hidden">
         <div class="relative z-10">
@@ -100,44 +112,129 @@
             Demuestra tus conocimientos deportivos, ingresa tus pronósticos en cada fecha y compite por la cima de la tabla general.
           </p>
         </div>
+        <div class="absolute -right-10 -bottom-10 opacity-10 pointer-events-none">
+          <svg width="220" height="220" viewBox="0 0 24 24" fill="currentColor" style="min-width:220px; min-height:220px;">
+            <circle cx="12" cy="12" r="10"></circle>
+          </svg>
+        </div>
       </div>
 
+      <!-- GRID DE POLLAS -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="pollas-grid">
-        <!-- PREMIER LEAGUE -->
+        
+        <!-- PREMIER LEAGUE (ACTIVA) -->
         <div class="card-dark border-emerald-500/40 relative hover:border-emerald-500 transition-all duration-300 group flex flex-col justify-between">
           <div>
             <div class="flex items-center justify-between mb-4">
-              <div class="w-12 h-12 rounded-xl bg-purple-900/40 border border-purple-500/30 flex items-center justify-center text-purple-400 text-xl font-bold">🦁</div>
-              <span class="badge-emerald flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> ACTIVA</span>
+              <div class="w-12 h-12 rounded-xl bg-purple-900/40 border border-purple-500/30 flex items-center justify-center text-purple-400 text-xl font-bold">
+                🦁
+              </div>
+              <span class="badge-emerald flex items-center gap-1">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> ACTIVA
+              </span>
             </div>
             <h3 class="text-xl font-bold text-white group-hover:text-emerald-400 transition-colors">Premier League 2026</h3>
             <p class="text-slate-400 text-xs mt-1">Liga de Inglaterra • Jornada Activa</p>
+            <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-300">
+              <span>Participantes: <strong class="text-emerald-400" id="premier-users-count">--</strong></span>
+              <span>Pozo: <strong class="text-amber-400">$250.000 COP</strong></span>
+            </div>
           </div>
-          <button onclick="enterPolla('premier')" class="mt-5 w-full btn-emerald rounded-lg py-2.5 flex items-center justify-center gap-2">
+          <button onclick="enterPolla('premier')" class="mt-5 w-full btn-emerald rounded-lg py-2.5 flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/10">
             <span>Ingresar a Polla</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="min-width:18px; min-height:18px;">
+              <path d="M5 12h14"></path>
+              <path d="m12 5 7 7-7 7"></path>
+            </svg>
           </button>
         </div>
 
-        <!-- OTRAS POLLAS (PRÓXIMAMENTE) -->
+        <!-- LA LIGA (PRÓXIMAMENTE) -->
         <div class="card-dark opacity-75 relative flex flex-col justify-between border-slate-800">
           <div>
             <div class="flex items-center justify-between mb-4">
-              <div class="w-12 h-12 rounded-xl bg-amber-900/30 border border-amber-500/20 flex items-center justify-center text-amber-400 text-xl font-bold">🇪🇸</div>
+              <div class="w-12 h-12 rounded-xl bg-amber-900/30 border border-amber-500/20 flex items-center justify-center text-amber-400 text-xl font-bold">
+                🇪🇸
+              </div>
               <span class="badge-slate">PRÓXIMAMENTE</span>
             </div>
             <h3 class="text-xl font-bold text-slate-200">LaLiga EA Sports</h3>
+            <p class="text-slate-400 text-xs mt-1">Primera División de España</p>
           </div>
-          <button disabled class="mt-5 w-full bg-slate-800 text-slate-500 font-semibold py-2.5 rounded-lg cursor-not-allowed">Próximamente</button>
+          <button disabled class="mt-5 w-full bg-slate-800 text-slate-500 font-semibold py-2.5 rounded-lg cursor-not-allowed">
+            Próximamente
+          </button>
         </div>
+
+        <!-- LIGA BETPLAY (PRÓXIMAMENTE) -->
+        <div class="card-dark opacity-75 relative flex flex-col justify-between border-slate-800">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-12 h-12 rounded-xl bg-blue-900/30 border border-blue-500/20 flex items-center justify-center text-blue-400 text-xl font-bold">
+                🇨🇴
+              </div>
+              <span class="badge-slate">PRÓXIMAMENTE</span>
+            </div>
+            <h3 class="text-xl font-bold text-slate-200">Liga BetPlay Colombiana</h3>
+            <p class="text-slate-400 text-xs mt-1">Fútbol Profesional Colombiano</p>
+          </div>
+          <button disabled class="mt-5 w-full bg-slate-800 text-slate-500 font-semibold py-2.5 rounded-lg cursor-not-allowed">
+            Próximamente
+          </button>
+        </div>
+
+        <!-- COPA AMÉRICA 2028 (PRÓXIMAMENTE) -->
+        <div class="card-dark opacity-75 relative flex flex-col justify-between border-slate-800">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-12 h-12 rounded-xl bg-teal-900/30 border border-teal-500/20 flex items-center justify-center text-teal-400 text-xl font-bold">
+                🏆
+              </div>
+              <span class="badge-slate">2028</span>
+            </div>
+            <h3 class="text-xl font-bold text-slate-200">Copa América 2028</h3>
+            <p class="text-slate-400 text-xs mt-1">Torneo de Selecciones CONMEBOL</p>
+          </div>
+          <button disabled class="mt-5 w-full bg-slate-800 text-slate-500 font-semibold py-2.5 rounded-lg cursor-not-allowed">
+            Próximamente
+          </button>
+        </div>
+
+        <!-- MUNDIAL DE FÚTBOL 2030 (PRÓXIMAMENTE) -->
+        <div class="card-dark opacity-75 relative flex flex-col justify-between border-slate-800">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-12 h-12 rounded-xl bg-amber-900/30 border border-amber-500/30 flex items-center justify-center text-amber-300 text-xl font-bold">
+                🌍
+              </div>
+              <span class="badge-slate">2030</span>
+            </div>
+            <h3 class="text-xl font-bold text-slate-200">Mundial de Fútbol 2030</h3>
+            <p class="text-slate-400 text-xs mt-1">Copa Mundial FIFA Centenario</p>
+          </div>
+          <button disabled class="mt-5 w-full bg-slate-800 text-slate-500 font-semibold py-2.5 rounded-lg cursor-not-allowed">
+            Próximamente
+          </button>
+        </div>
+
       </div>
     </section>
 
-    <!-- VIEW 2: LOGIN -->
+    <!-- ========================================== -->
+    <!-- VIEW 2: LOGIN / AUTENTICACIÓN              -->
+    <!-- ========================================== -->
     <section id="view-login" class="view-section max-w-md mx-auto my-8 space-y-6">
       <div class="card-dark border-slate-800 shadow-2xl p-6 md:p-8">
         <div class="text-center mb-6">
+          <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 flex items-center justify-center mx-auto mb-3">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="min-width:24px; min-height:24px;">
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+              <polyline points="10 17 15 12 10 7"></polyline>
+              <line x1="15" y1="12" x2="3" y2="12"></line>
+            </svg>
+          </div>
           <h2 class="text-2xl font-bold text-white">Iniciar Sesión</h2>
-          <p class="text-xs text-slate-400 mt-1">Ingresa con tu usuario y contraseña</p>
+          <p class="text-xs text-slate-400 mt-1">Ingresa con tu usuario y contraseña para continuar</p>
         </div>
 
         <form id="form-login" onsubmit="handleLogin(event)" class="space-y-4">
@@ -151,112 +248,403 @@
             <input type="password" id="login-password" required placeholder="••••••••" class="bg-slate-900 border-slate-700">
           </div>
 
-          <button type="submit" class="w-full btn-emerald rounded-lg py-3 font-bold">Entrar a la Polla</button>
+          <div class="flex items-center justify-between text-xs">
+            <button type="button" onclick="showRecoverModal()" class="text-emerald-400 hover:underline">¿Olvidaste tu contraseña?</button>
+          </div>
+
+          <button type="submit" class="w-full btn-emerald rounded-lg py-3 shadow-lg shadow-emerald-500/20 font-bold">
+            Entrar a la Polla
+          </button>
         </form>
 
         <div class="mt-6 pt-5 border-t border-slate-800 text-center">
-          <p class="text-xs text-slate-400">¿Tienes un código de registro del Admin?</p>
-          <button onclick="navigateTo('register')" class="mt-2 text-sm text-emerald-400 font-semibold hover:underline">Crear Nueva Cuenta con Código</button>
+          <p class="text-xs text-slate-400">¿Tienes un código de registro suministrado por el Admin?</p>
+          <button onclick="navigateTo('register')" class="mt-2 text-sm text-emerald-400 font-semibold hover:underline">
+            Crear Nueva Cuenta con Código
+          </button>
         </div>
       </div>
     </section>
 
-    <!-- VIEW 3: REGISTRO CON CÓDIGO -->
+    <!-- ========================================== -->
+    <!-- VIEW 3: REGISTRO CON CÓDIGO ALFANUMÉRICO   -->
+    <!-- ========================================== -->
     <section id="view-register" class="view-section max-w-lg mx-auto my-6 space-y-6">
       <div class="card-dark border-slate-800 shadow-2xl p-6 md:p-8">
-        <h2 class="text-2xl font-bold text-white text-center mb-4">Registro con Código</h2>
+        <div class="text-center mb-6">
+          <span class="badge-emerald mb-2">Paso 1 de 1</span>
+          <h2 class="text-2xl font-bold text-white">Registro de Participante</h2>
+          <p class="text-xs text-slate-400 mt-1">Ingresa el código alfanumérico de 10 dígitos asignado por el Admin</p>
+        </div>
+
         <form id="form-register" onsubmit="handleRegister(event)" class="space-y-4">
+          <!-- CÓDIGO DE REGISTRO DE 10 DIGITOS -->
           <div>
-            <label class="block text-xs font-medium text-amber-400 mb-1">Código de Registro (10 Dígitos)</label>
-            <div class="flex gap-2">
-              <input type="text" id="reg-code" maxlength="10" required placeholder="Ej. A8X9K2M4P1" class="uppercase font-mono bg-slate-900 border-amber-500/40 text-amber-300 font-bold">
-              <button type="button" onclick="verifyRegisterCode()" class="px-3 py-1 bg-amber-500/20 text-amber-400 text-xs font-semibold rounded border border-amber-500/30">Verificar</button>
+            <label class="block text-xs font-medium text-amber-400 mb-1">Código de Registro (10 Caracteres)</label>
+            <div class="relative">
+              <input type="text" id="reg-code" maxlength="10" required placeholder="Ej. A8X9K2M4P1" class="uppercase font-mono tracking-widest bg-slate-900 border-amber-500/40 text-amber-300 font-bold focus:border-amber-400">
+              <button type="button" onclick="verifyRegisterCode()" class="absolute right-2 top-1.5 px-3 py-1 bg-amber-500/20 text-amber-400 text-xs font-semibold rounded border border-amber-500/30 hover:bg-amber-500/30">
+                Verificar
+              </button>
             </div>
-            <p id="code-status" class="text-[11px] mt-1 text-slate-400">Presiona verificar para habilitar campos.</p>
+            <p id="code-status" class="text-[11px] mt-1 text-slate-400">Ingresa el código y haz clic en verificar para validar tu nombre.</p>
+          </div>
+
+          <!-- DATOS PERSONALES -->
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1">Nombre Completo Asignado</label>
+            <input type="text" id="reg-fullname" readonly placeholder="Se cargará al validar código..." class="bg-slate-950 border-slate-800 text-slate-400 cursor-not-allowed">
           </div>
 
           <div>
-            <label class="block text-xs font-medium text-slate-300 mb-1">Nombre Asignado</label>
-            <input type="text" id="reg-fullname" readonly class="bg-slate-950 border-slate-800 text-slate-400 cursor-not-allowed">
+            <label class="block text-xs font-medium text-slate-300 mb-1">Nombre de Usuario (@username)</label>
+            <input type="text" id="reg-username" required placeholder="carlos_gol" class="bg-slate-900 border-slate-700">
           </div>
 
           <div>
-            <label class="block text-xs font-medium text-slate-300 mb-1">Username</label>
-            <input type="text" id="reg-username" required class="bg-slate-900 border-slate-700">
-          </div>
-
-          <div>
-            <label class="block text-xs font-medium text-slate-300 mb-1">Teléfono</label>
-            <input type="tel" id="reg-phone" required class="bg-slate-900 border-slate-700">
+            <label class="block text-xs font-medium text-slate-300 mb-1">Número de Celular / WhatsApp</label>
+            <input type="tel" id="reg-phone" required placeholder="3001234567" class="bg-slate-900 border-slate-700">
           </div>
 
           <div>
             <label class="block text-xs font-medium text-slate-300 mb-1">Contraseña</label>
-            <input type="password" id="reg-password" minlength="6" required class="bg-slate-900 border-slate-700">
+            <input type="password" id="reg-password" minlength="6" required placeholder="Mínimo 6 caracteres" class="bg-slate-900 border-slate-700">
           </div>
 
-          <button type="submit" id="btn-submit-reg" disabled class="w-full btn-emerald opacity-50 cursor-not-allowed rounded-lg py-3 font-bold">Completar Registro</button>
+          <!-- SEGURIDAD RESTABLECIMIENTO -->
+          <div class="pt-2 border-t border-slate-800">
+            <label class="block text-xs font-medium text-slate-300 mb-1">Pregunta de Seguridad (Para restablecer)</label>
+            <select id="reg-sec-question" required class="bg-slate-900 border-slate-700">
+              <option value="">-- Selecciona una pregunta --</option>
+              <option value="equipo_favorito">¿Cuál es tu equipo de fútbol favorito?</option>
+              <option value="mascota">¿Nombre de tu primera mascota?</option>
+              <option value="ciudad_nacimiento">¿Ciudad donde naciste?</option>
+              <option value="jugador_idolo">¿Tu ídolo del fútbol histórico?</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1">Respuesta de Seguridad</label>
+            <input type="text" id="reg-sec-answer" required placeholder="Tu respuesta secreta" class="bg-slate-900 border-slate-700">
+          </div>
+
+          <button type="submit" id="btn-submit-reg" disabled class="w-full btn-emerald opacity-50 cursor-not-allowed rounded-lg py-3 font-bold mt-2">
+            Completar Registro
+          </button>
         </form>
+
+        <div class="mt-4 text-center">
+          <button onclick="navigateTo('login')" class="text-xs text-slate-400 hover:text-white">
+            ← Volver a Iniciar Sesión
+          </button>
+        </div>
       </div>
     </section>
 
-    <!-- VIEW 4: PREDICCIONES -->
+    <!-- ========================================== -->
+    <!-- VIEW 4: PREDICCIONES / PRONÓSTICOS        -->
+    <!-- ========================================== -->
     <section id="view-predictions" class="view-section space-y-6">
-      <h2 class="text-xl font-bold text-white">Mis Pronósticos Deportivos</h2>
-      <div id="matches-container" class="space-y-4"></div>
-    </section>
-
-    <!-- VIEW 5: TABLA DE POSICIONES -->
-    <section id="view-leaderboard" class="view-section space-y-6">
-      <h2 class="text-xl font-bold text-white">Tabla de Posiciones General</h2>
-      <div id="leaderboard-container"></div>
-    </section>
-
-    <!-- VIEW 6: PANEL ADMIN -->
-    <section id="view-admin" class="view-section space-y-6">
-      <div class="card-dark border-red-500/30">
-        <h2 class="text-xl font-bold text-white">Panel Control Super Admin</h2>
-        <form id="form-generate-code" onsubmit="handleGenerateCode(event)" class="mt-4 flex gap-2">
-          <input type="text" id="code-person-name" required placeholder="Nombre Completo" class="bg-slate-900">
-          <button type="submit" class="btn-emerald">Generar Código 10 Caracteres</button>
-        </form>
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-900 p-4 rounded-xl border border-slate-800">
+        <div>
+          <span class="badge-emerald">Premier League 2026</span>
+          <h2 class="text-xl font-bold text-white mt-1">Mis Pronósticos Deportivos</h2>
+          <p class="text-xs text-slate-400">Guarda tus marcadores antes del inicio de cada partido.</p>
+        </div>
+        
+        <!-- Contadores de puntos del usuario -->
+        <div class="flex items-center gap-3 bg-slate-950 px-4 py-2 rounded-lg border border-slate-800">
+          <div class="text-center">
+            <span class="block text-[10px] text-slate-400 font-semibold uppercase">Puntos Totales</span>
+            <span id="user-total-pts" class="text-lg font-black text-amber-400">0 pts</span>
+          </div>
+          <div class="h-6 w-px bg-slate-800"></div>
+          <div class="text-center">
+            <span class="block text-[10px] text-slate-400 font-semibold uppercase">Aciertos Exactos</span>
+            <span id="user-exact-pts" class="text-lg font-black text-emerald-400">0</span>
+          </div>
+        </div>
       </div>
-      <div id="codes-table-container"></div>
+
+      <!-- LISTA DE PARTIDOS DE LA FECHA -->
+      <div id="matches-container" class="space-y-4">
+        <!-- Render dinámico desde JS -->
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- VIEW 5: TABLA DE POSICIONES                -->
+    <!-- ========================================== -->
+    <section id="view-leaderboard" class="view-section space-y-6">
+      <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 flex items-center justify-between">
+        <div>
+          <h2 class="text-xl font-bold text-white">Tabla de Posiciones General</h2>
+          <p class="text-xs text-slate-400">Clasificación en tiempo real de la Polla Premier League</p>
+        </div>
+        <button onclick="loadLeaderboard()" class="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs flex items-center gap-1">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="min-width:16px; min-height:16px;">
+            <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+            <path d="M3 3v5h5"></path>
+            <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"></path>
+            <path d="M16 16h5v5"></path>
+          </svg>
+          Actualizar
+        </button>
+      </div>
+
+      <div class="card-dark border-slate-800 overflow-x-auto p-0">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-slate-900/80 text-slate-400 text-xs border-b border-slate-800">
+              <th class="p-3 text-center w-12">#</th>
+              <th class="p-3">Participante</th>
+              <th class="p-3 text-center">PJ</th>
+              <th class="p-3 text-center">Exactos (3p)</th>
+              <th class="p-3 text-center">Ganador (1p)</th>
+              <th class="p-3 text-right pr-4">Puntos Total</th>
+            </tr>
+          </thead>
+          <tbody id="leaderboard-tbody" class="divide-y divide-slate-800/60 text-sm">
+            <!-- Dynamic Users Leaderboard -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- VIEW 6: PANEL ADMINISTRATIVO (SUPER ADMIN)  -->
+    <!-- ========================================== -->
+    <section id="view-admin" class="view-section space-y-6">
+      <div class="bg-gradient-to-r from-red-950/40 via-slate-900 to-slate-900 p-5 rounded-xl border border-red-500/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div>
+          <span class="badge-gold">PANEL CONTROL SUPER ADMIN</span>
+          <h2 class="text-2xl font-black text-white mt-1">Gestión Global de Pollas</h2>
+          <p class="text-xs text-slate-400">Genera códigos de 10 posiciones, administra usuarios y registra marcadores finales.</p>
+        </div>
+        <div class="text-right">
+          <span class="text-[10px] text-slate-400 block">Inactividad de sesión:</span>
+          <span id="admin-timer" class="font-mono text-emerald-400 font-bold text-sm">15:00 min</span>
+        </div>
+      </div>
+
+      <!-- TABS DEL ADMIN -->
+      <div class="flex border-b border-slate-800 gap-2 overflow-x-auto pb-1">
+        <button onclick="switchAdminTab('codes')" id="tab-btn-codes" class="px-4 py-2 text-sm font-semibold text-emerald-400 border-b-2 border-emerald-400">
+          🔑 Códigos de Registro
+        </button>
+        <button onclick="switchAdminTab('matches')" id="tab-btn-matches" class="px-4 py-2 text-sm font-semibold text-slate-400 hover:text-white">
+          ⚽ Gestión de Partidos & Marcadores
+        </button>
+        <button onclick="switchAdminTab('users')" id="tab-btn-users" class="px-4 py-2 text-sm font-semibold text-slate-400 hover:text-white">
+          👥 Usuarios Registrados
+        </button>
+      </div>
+
+      <!-- TAB 1: GESTIÓN DE CÓDIGOS DE REGISTRO -->
+      <div id="admin-tab-codes" class="space-y-6">
+        <div class="card-dark border-slate-800">
+          <h3 class="text-lg font-bold text-white mb-3">Generar Nuevo Código Alfanumérico (10 Caracteres)</h3>
+          <form id="form-generate-code" onsubmit="handleGenerateCode(event)" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="md:col-span-2">
+              <label class="block text-xs text-slate-300 mb-1">Nombre Completo de la Persona Asignada</label>
+              <input type="text" id="code-person-name" required placeholder="Ej. Juan Pablo Montoya" class="bg-slate-900 border-slate-700">
+            </div>
+            <div class="flex items-end">
+              <button type="submit" class="w-full btn-emerald rounded-lg py-2.5 font-bold">
+                Generar Código
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- TABLA DE CÓDIGOS GENERADOS -->
+        <div class="card-dark border-slate-800 p-0 overflow-x-auto">
+          <div class="p-4 border-b border-slate-800 flex justify-between items-center">
+            <h4 class="font-bold text-sm text-white">Códigos Emitidos</h4>
+            <span class="text-xs text-slate-400">Total: <span id="codes-count">0</span></span>
+          </div>
+          <table class="w-full text-left text-xs">
+            <thead>
+              <tr class="bg-slate-900 text-slate-400 border-b border-slate-800">
+                <th class="p-3">Código (10 Dig.)</th>
+                <th class="p-3">Asignado a</th>
+                <th class="p-3">Estado</th>
+                <th class="p-3">Usuario Vinculado</th>
+                <th class="p-3 text-right">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="codes-tbody" class="divide-y divide-slate-800">
+              <!-- Render dinamico -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB 2: PARTIDOS & MARCADORES REALES -->
+      <div id="admin-tab-matches" class="space-y-6 hidden">
+        <div class="card-dark border-slate-800">
+          <h3 class="text-lg font-bold text-white mb-3">Crear Nuevo Partido / Evento</h3>
+          <form id="form-create-match" onsubmit="handleCreateMatch(event)" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-xs text-slate-300 mb-1">Equipo Local</label>
+              <input type="text" id="match-home" required placeholder="Ej. Arsenal" class="bg-slate-900 border-slate-700">
+            </div>
+            <div>
+              <label class="block text-xs text-slate-300 mb-1">Equipo Visitante</label>
+              <input type="text" id="match-away" required placeholder="Ej. Chelsea" class="bg-slate-900 border-slate-700">
+            </div>
+            <div>
+              <label class="block text-xs text-slate-300 mb-1">Fecha y Hora de Inicio</label>
+              <input type="text" id="match-datetime" required placeholder="Seleccionar fecha..." class="bg-slate-900 border-slate-700">
+            </div>
+            <div class="md:col-span-3 text-right">
+              <button type="submit" class="btn-emerald rounded-lg py-2 px-6 font-bold text-sm">
+                Guardar Partido
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div class="space-y-3" id="admin-matches-list">
+          <!-- Render dinámico de partidos creados para ingresar resultados finales y recalcular puntos -->
+        </div>
+      </div>
+
+      <!-- TAB 3: USUARIOS REGISTRADOS -->
+      <div id="admin-tab-users" class="space-y-6 hidden">
+        <div class="card-dark border-slate-800 p-0 overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead>
+              <tr class="bg-slate-900 text-slate-400 border-b border-slate-800">
+                <th class="p-3">Nombre</th>
+                <th class="p-3">Username</th>
+                <th class="p-3">Celular</th>
+                <th class="p-3">Código Usado</th>
+                <th class="p-3 text-right">Rol</th>
+              </tr>
+            </thead>
+            <tbody id="admin-users-tbody" class="divide-y divide-slate-800">
+              <!-- Render usuarios dinámicos -->
+            </tbody>
+          </table>
+        </div>
+      </div>
     </section>
 
   </main>
 
-  <!-- NAVIGATION TABS FIJO BOTTOM -->
-  <nav class="fixed bottom-0 left-0 right-0 z-40 bg-slate-900/95 border-t border-slate-800 py-2">
-    <div class="max-w-md mx-auto flex justify-around">
-      <button onclick="navigateTo('home')" class="text-emerald-400 p-2 text-xs">Inicio</button>
-      <button onclick="navigateTo('predictions')" class="text-slate-400 p-2 text-xs">Predicciones</button>
-      <button onclick="navigateTo('leaderboard')" class="text-slate-400 p-2 text-xs">Posiciones</button>
-      <button id="nav-btn-admin" onclick="navigateTo('admin')" class="text-red-400 p-2 text-xs hidden">Admin</button>
+  <!-- MODAL DE RECUPERACIÓN DE CONTRASEÑA -->
+  <div id="modal-recover" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="card-dark border-slate-800 max-w-md w-full p-6 relative">
+      <button onclick="closeRecoverModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white">✕</button>
+      <h3 class="text-lg font-bold text-white mb-2">Restablecer Contraseña</h3>
+      <p class="text-xs text-slate-400 mb-4">Ingresa tu nombre de usuario para responder tu pregunta de seguridad.</p>
+
+      <form id="form-recover" onsubmit="handleRecoverPassword(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-medium text-slate-300 mb-1">Username registrado</label>
+          <div class="flex gap-2">
+            <input type="text" id="rec-username" required placeholder="carlos_gol" class="bg-slate-900 border-slate-700">
+            <button type="button" onclick="fetchSecurityQuestion()" class="btn-slate text-xs rounded">Buscar</button>
+          </div>
+        </div>
+
+        <div id="rec-question-box" class="hidden space-y-3 pt-2 border-t border-slate-800">
+          <p class="text-xs text-emerald-400 font-semibold" id="rec-question-text"></p>
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1">Tu Respuesta</label>
+            <input type="text" id="rec-answer" placeholder="Respuesta de seguridad" class="bg-slate-900 border-slate-700">
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1">Nueva Contraseña</label>
+            <input type="password" id="rec-new-pass" minlength="6" placeholder="Mínimo 6 caracteres" class="bg-slate-900 border-slate-700">
+          </div>
+          <button type="submit" class="w-full btn-emerald rounded-lg py-2.5 font-bold text-sm">
+            Actualizar Contraseña
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- NAVIGATION TABS (FOOTER FIJO PARA MÓVILES Y PWA) -->
+  <nav class="fixed bottom-0 left-0 right-0 z-40 bg-slate-900/95 backdrop-blur-md border-t border-slate-800 px-2 py-2">
+    <div class="max-w-md mx-auto flex items-center justify-around">
+      <button onclick="navigateTo('home')" id="nav-btn-home" class="flex flex-col items-center gap-1 text-emerald-400 p-2">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="min-width:20px; min-height:20px;">
+          <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+        <span class="text-[10px] font-medium">Inicio</span>
+      </button>
+
+      <button onclick="navigateTo('predictions')" id="nav-btn-predictions" class="flex flex-col items-center gap-1 text-slate-400 p-2 hover:text-white">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="min-width:20px; min-height:20px;">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="m4.93 4.93 4.24 4.24"></path>
+          <path d="m14.83 9.17 4.24-4.24"></path>
+          <circle cx="12" cy="12" r="4"></circle>
+        </svg>
+        <span class="text-[10px] font-medium">Pronósticos</span>
+      </button>
+
+      <button onclick="navigateTo('leaderboard')" id="nav-btn-leaderboard" class="flex flex-col items-center gap-1 text-slate-400 p-2 hover:text-white">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="min-width:20px; min-height:20px;">
+          <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+          <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+          <path d="M4 22h16"></path>
+          <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path>
+          <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path>
+          <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path>
+        </svg>
+        <span class="text-[10px] font-medium">Posiciones</span>
+      </button>
+
+      <button id="nav-btn-admin" onclick="navigateTo('admin')" class="flex flex-col items-center gap-1 text-red-400 p-2 hover:text-red-300 hidden">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="min-width:20px; min-height:20px;">
+          <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+        <span class="text-[10px] font-medium">Admin</span>
+      </button>
     </div>
   </nav>
 
-  <!-- SCRIPT LÓGICA COMPLETA DE FIREBASE -->
+  <!-- SCRIPT LOGICA JAVASCRIPT / FIREBASE / FAILSAFE -->
   <script>
-    // 1. CONFIGURACIÓN FIREBASE (Tus credenciales de Firebase)
+    // 1. CONFIGURACIÓN FIREBASE (Compat Mode SDK v10.8.0)
     const firebaseConfig = {
-      apiKey: "AIzaSyD53EG1LMyor9_f5BcNBLz1XcgMQycbj0w",
-      authDomain: "pollas-futboleras-app.firebaseapp.com",
-      projectId: "pollas-futboleras-app",
-      storageBucket: "pollas-futboleras-app.firebasestorage.app",
-      messagingSenderId: "177341315748",
-      appId: "1:177341315748:web:443e8527bee8b73a370431"
+      apiKey: "AIzaSy_REEMPLAZAR_POR_TU_API_KEY",
+      authDomain: "tu-proyecto.firebaseapp.com",
+      projectId: "tu-proyecto",
+      storageBucket: "tu-proyecto.appspot.com",
+      messagingSenderId: "123456789",
+      appId: "1:123456789:web:abcdef..."
     };
 
-    // Inicializar Firebase Compat Mode
+    // Inicialización
     if (!firebase.apps.length) {
       firebase.initializeApp(firebaseConfig);
     }
     const db = firebase.firestore();
 
     let currentUser = null;
+    let validatedCodeDoc = null;
+    let adminInactivityTimer = null;
+    let remainingAdminTime = 15 * 60; // 15 Minutos
 
-    // 2. FUNCIÓN FAILSAFE: Auto-crear SuperAdmin 'admin' con clave 'Admin1234*'
+    // AUXILIARES FAILSAFE
+    function showElement(id) {
+      const el = document.getElementById(id);
+      if (el) el.classList.add('active');
+    }
+
+    function hideElement(id) {
+      const el = document.getElementById(id);
+      if (el) el.classList.remove('active');
+    }
+
+    // 2. AUTO-CREACIÓN DE SUPER ADMIN 'admin'
     async function ensureSuperAdminExists() {
       try {
         const usersRef = db.collection("users");
@@ -275,7 +663,7 @@
             pollas: ["premier_league"],
             createdAt: new Date().toISOString()
           });
-          console.log("✅ Super Admin 'admin' creado automáticamente.");
+          console.log("✅ Super Admin 'admin' inicializado automáticamente.");
         }
       } catch (err) {
         console.error("Error al autoconfigurar SuperAdmin:", err);
@@ -286,35 +674,52 @@
     window.navigateTo = function(viewId) {
       document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
       const target = document.getElementById('view-' + viewId);
-      if (target) target.classList.add('active');
+      if (target) {
+        target.classList.add('active');
+      }
+
+      // Renderizados al navegar
+      if (viewId === 'predictions' && currentUser) loadMatches();
+      if (viewId === 'leaderboard') loadLeaderboard();
+      if (viewId === 'admin' && currentUser?.role === 'superadmin') loadAdminData();
     };
 
-    // 4. MANEJADOR DE LOGIN GLOBAL
+    // 4. MANEJADOR DE LOGIN GLOBAL FAILSAFE
     window.handleLogin = async function(e) {
-      e.preventDefault();
+      if (e) e.preventDefault();
+      
       const usernameInput = document.getElementById('login-username').value.trim().toLowerCase();
       const passwordInput = document.getElementById('login-password').value;
 
+      if (!usernameInput || !passwordInput) {
+        alert("Por favor completa todos los campos.");
+        return;
+      }
+
       try {
-        const passHash = CryptoJS.SHA256(passwordInput).toString();
+        const inputHash = CryptoJS.SHA256(passwordInput).toString();
+        console.log("Intentando ingresar con:", usernameInput);
+
         const snapshot = await db.collection("users").where("username", "==", usernameInput).get();
 
         if (snapshot.empty) {
-          alert("Usuario no registrado en el sistema.");
+          alert("El usuario no existe en la base de datos.");
           return;
         }
 
         const userDoc = snapshot.docs[0];
         const userData = userDoc.data();
 
-        if (userData.passwordHash === passHash) {
+        if (userData.passwordHash === inputHash) {
           currentUser = { id: userDoc.id, ...userData };
           localStorage.setItem("currentUser", JSON.stringify(currentUser));
 
+          updateHeaderUI();
           alert("¡Bienvenido, " + userData.name + "!");
 
           if (userData.role === 'superadmin') {
             document.getElementById('nav-btn-admin').classList.remove('hidden');
+            startAdminTimer();
             navigateTo('admin');
           } else {
             navigateTo('home');
@@ -323,12 +728,109 @@
           alert("Contraseña incorrecta.");
         }
       } catch (err) {
-        console.error("Error en login:", err);
-        alert("Error de conexión con Firebase: " + err.message);
+        console.error("Error completo durante el login:", err);
+        alert("Error de conexión al intentar ingresar: " + err.message);
       }
     };
 
-    // 5. GENERAR CÓDIGO DE 10 CARACTERES (ADMIN)
+    // 5. REGISTRO DE USUARIO CON CÓDIGO DE 10 DÍGITOS
+    window.verifyRegisterCode = async function() {
+      const codeInput = document.getElementById('reg-code').value.trim().toUpperCase();
+      const statusText = document.getElementById('code-status');
+
+      if (codeInput.length !== 10) {
+        statusText.innerText = "⚠️ El código debe tener exactamente 10 caracteres.";
+        statusText.className = "text-[11px] mt-1 text-red-400 font-semibold";
+        return;
+      }
+
+      try {
+        const snapshot = await db.collection("registration_codes").where("code", "==", codeInput).get();
+
+        if (snapshot.empty) {
+          statusText.innerText = "❌ Código inválido o no existe.";
+          statusText.className = "text-[11px] mt-1 text-red-400 font-semibold";
+          return;
+        }
+
+        const codeDoc = snapshot.docs[0];
+        const codeData = codeDoc.data();
+
+        if (codeData.used) {
+          statusText.innerText = "❌ Este código ya fue utilizado por el usuario @" + codeData.usedByUsername;
+          statusText.className = "text-[11px] mt-1 text-red-400 font-semibold";
+          return;
+        }
+
+        validatedCodeDoc = { id: codeDoc.id, ...codeData };
+        document.getElementById('reg-fullname').value = codeData.targetName;
+        
+        const btnSubmit = document.getElementById('btn-submit-reg');
+        btnSubmit.disabled = false;
+        btnSubmit.classList.remove('opacity-50', 'cursor-not-allowed');
+
+        statusText.innerText = "✅ Código válido para " + codeData.targetName;
+        statusText.className = "text-[11px] mt-1 text-emerald-400 font-semibold";
+
+      } catch (err) {
+        alert("Error validando código: " + err.message);
+      }
+    };
+
+    window.handleRegister = async function(e) {
+      e.preventDefault();
+      if (!validatedCodeDoc) {
+        alert("Primero verifica un código válido.");
+        return;
+      }
+
+      const username = document.getElementById('reg-username').value.trim().toLowerCase();
+      const phone = document.getElementById('reg-phone').value.trim();
+      const password = document.getElementById('reg-password').value;
+      const question = document.getElementById('reg-sec-question').value;
+      const answer = document.getElementById('reg-sec-answer').value.trim().toLowerCase();
+
+      try {
+        // Verificar si username ya existe
+        const checkUser = await db.collection("users").where("username", "==", username).get();
+        if (!checkUser.empty) {
+          alert("El nombre de usuario ya está tomado. Elige otro.");
+          return;
+        }
+
+        const passwordHash = CryptoJS.SHA256(password).toString();
+        const secAnswerHash = CryptoJS.SHA256(answer).toString();
+
+        // Crear usuario
+        const newUserRef = await db.collection("users").add({
+          name: validatedCodeDoc.targetName,
+          username: username,
+          phone: phone,
+          passwordHash: passwordHash,
+          securityQuestion: question,
+          securityAnswerHash: secAnswerHash,
+          codeUsed: validatedCodeDoc.code,
+          role: "user",
+          pollas: ["premier_league"],
+          createdAt: new Date().toISOString()
+        });
+
+        // Marcar código como usado
+        await db.collection("registration_codes").doc(validatedCodeDoc.id).update({
+          used: true,
+          usedByUsername: username,
+          usedAt: new Date().toISOString()
+        });
+
+        alert("¡Registro exitoso! Ya puedes iniciar sesión con tu usuario.");
+        navigateTo('login');
+
+      } catch (err) {
+        alert("Error al registrar usuario: " + err.message);
+      }
+    };
+
+    // 6. GENERAR CÓDIGOS DESDE PANEL ADMIN
     window.handleGenerateCode = async function(e) {
       e.preventDefault();
       const personName = document.getElementById('code-person-name').value.trim();
@@ -344,16 +846,216 @@
           usedByUsername: "",
           createdAt: new Date().toISOString()
         });
-        alert("Código generado con éxito: " + code);
+        
+        alert("Código generado exitosamente: " + code);
         document.getElementById('code-person-name').value = "";
+        loadAdminData();
+
       } catch (err) {
         alert("Error al generar código: " + err.message);
       }
     };
 
-    // Inicializar al cargar la página
+    window.switchAdminTab = function(tabName) {
+      document.getElementById('admin-tab-codes').classList.add('hidden');
+      document.getElementById('admin-tab-matches').classList.add('hidden');
+      document.getElementById('admin-tab-users').classList.add('hidden');
+      
+      document.getElementById('tab-btn-codes').className = "px-4 py-2 text-sm font-semibold text-slate-400 hover:text-white";
+      document.getElementById('tab-btn-matches').className = "px-4 py-2 text-sm font-semibold text-slate-400 hover:text-white";
+      document.getElementById('tab-btn-users').className = "px-4 py-2 text-sm font-semibold text-slate-400 hover:text-white";
+
+      document.getElementById('admin-tab-' + tabName).classList.remove('hidden');
+      const activeBtn = document.getElementById('tab-btn-' + tabName);
+      activeBtn.className = "px-4 py-2 text-sm font-semibold text-emerald-400 border-b-2 border-emerald-400";
+    };
+
+    // 7. RECUPERACIÓN DE CONTRASEÑA MODAL
+    window.showRecoverModal = function() {
+      document.getElementById('modal-recover').classList.remove('hidden');
+      document.getElementById('modal-recover').classList.add('flex');
+    };
+
+    window.closeRecoverModal = function() {
+      document.getElementById('modal-recover').classList.add('hidden');
+      document.getElementById('modal-recover').classList.remove('flex');
+    };
+
+    window.fetchSecurityQuestion = async function() {
+      const username = document.getElementById('rec-username').value.trim().toLowerCase();
+      if (!username) return;
+
+      const snapshot = await db.collection("users").where("username", "==", username).get();
+      if (snapshot.empty) {
+        alert("Usuario no encontrado.");
+        return;
+      }
+
+      const user = snapshot.docs[0].data();
+      const questionsMap = {
+        "equipo_favorito": "¿Cuál es tu equipo de fútbol favorito?",
+        "mascota": "¿Nombre de tu primera mascota?",
+        "ciudad_nacimiento": "¿Ciudad donde naciste?",
+        "jugador_idolo": "¿Tu ídolo del fútbol histórico?"
+      };
+
+      document.getElementById('rec-question-text').innerText = questionsMap[user.securityQuestion] || "Pregunta de seguridad registrada";
+      document.getElementById('rec-question-box').classList.remove('hidden');
+    };
+
+    window.handleRecoverPassword = async function(e) {
+      e.preventDefault();
+      const username = document.getElementById('rec-username').value.trim().toLowerCase();
+      const answer = document.getElementById('rec-answer').value.trim().toLowerCase();
+      const newPass = document.getElementById('rec-new-pass').value;
+
+      const snapshot = await db.collection("users").where("username", "==", username).get();
+      if (snapshot.empty) return;
+
+      const docId = snapshot.docs[0].id;
+      const user = snapshot.docs[0].data();
+      const answerHash = CryptoJS.SHA256(answer).toString();
+
+      if (user.securityAnswerHash === answerHash) {
+        const newPasswordHash = CryptoJS.SHA256(newPass).toString();
+        await db.collection("users").doc(docId).update({
+          passwordHash: newPasswordHash
+        });
+        alert("Contraseña actualizada con éxito. Inicia sesión.");
+        closeRecoverModal();
+      } else {
+        alert("Respuesta de seguridad incorrecta.");
+      }
+    };
+
+    // Cargar datos admin
+    async function loadAdminData() {
+      // Cargar Códigos
+      const codesSnapshot = await db.collection("registration_codes").orderBy("createdAt", "desc").get();
+      const codesTbody = document.getElementById('codes-tbody');
+      document.getElementById('codes-count').innerText = codesSnapshot.size;
+      codesTbody.innerHTML = "";
+
+      codesSnapshot.forEach(doc => {
+        const data = doc.data();
+        const row = document.createElement('tr');
+        row.className = "hover:bg-slate-900/50";
+        row.innerHTML = `
+          <td class="p-3 font-mono font-bold text-amber-400">${data.code}</td>
+          <td class="p-3 font-medium text-white">${data.targetName}</td>
+          <td class="p-3">${data.used ? '<span class="badge-slate">Usado</span>' : '<span class="badge-emerald">Disponible</span>'}</td>
+          <td class="p-3 text-slate-300">${data.usedByUsername ? '@' + data.usedByUsername : '-'}</td>
+          <td class="p-3 text-right">
+            <button onclick="copyToClipboard('${data.code}')" class="text-xs text-emerald-400 hover:underline">Copiar</button>
+          </td>
+        `;
+        codesTbody.appendChild(row);
+      });
+
+      // Cargar Usuarios
+      const usersSnapshot = await db.collection("users").get();
+      const usersTbody = document.getElementById('admin-users-tbody');
+      usersTbody.innerHTML = "";
+
+      usersSnapshot.forEach(doc => {
+        const u = doc.data();
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td class="p-3 font-medium text-white">${u.name}</td>
+          <td class="p-3 text-emerald-400">@${u.username}</td>
+          <td class="p-3 text-slate-300">${u.phone || '-'}</td>
+          <td class="p-3 font-mono text-amber-300">${u.codeUsed || 'ADMIN'}</td>
+          <td class="p-3 text-right"><span class="${u.role === 'superadmin' ? 'badge-gold' : 'badge-slate'}">${u.role}</span></td>
+        `;
+        usersTbody.appendChild(row);
+      });
+    }
+
+    window.copyToClipboard = function(text) {
+      navigator.clipboard.writeText(text);
+      alert("Código copiado al portapapeles: " + text);
+    };
+
+    function startAdminTimer() {
+      if (adminInactivityTimer) clearInterval(adminInactivityTimer);
+      remainingAdminTime = 15 * 60;
+
+      adminInactivityTimer = setInterval(() => {
+        remainingAdminTime--;
+        const mins = Math.floor(remainingAdminTime / 60);
+        const secs = remainingAdminTime % 60;
+        const timerDisplay = document.getElementById('admin-timer');
+        if (timerDisplay) {
+          timerDisplay.innerText = `${mins}:${secs < 10 ? '0' : ''}${secs} min`;
+        }
+
+        if (remainingAdminTime <= 0) {
+          clearInterval(adminInactivityTimer);
+          alert("Sesión de administración expirada por inactividad.");
+          logout();
+        }
+      }, 1000);
+    }
+
+    function updateHeaderUI() {
+      const headerBox = document.getElementById('header-user-info');
+      if (currentUser) {
+        headerBox.innerHTML = `
+          <div class="text-right">
+            <span class="block text-xs font-bold text-white">${currentUser.name}</span>
+            <span class="block text-[10px] text-emerald-400 font-mono">@${currentUser.username}</span>
+          </div>
+          <button onclick="logout()" class="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs">Salir</button>
+        `;
+      } else {
+        headerBox.innerHTML = `
+          <button onclick="navigateTo('login')" class="btn-emerald text-xs rounded-lg py-1.5 px-3">Ingresar</button>
+        `;
+      }
+    }
+
+    window.logout = function() {
+      currentUser = null;
+      localStorage.removeItem("currentUser");
+      document.getElementById('nav-btn-admin').classList.add('hidden');
+      updateHeaderUI();
+      navigateTo('home');
+    };
+
+    window.enterPolla = function(pollaId) {
+      if (!currentUser) {
+        alert("Debes iniciar sesión para ingresar a la polla.");
+        navigateTo('login');
+      } else {
+        navigateTo('predictions');
+      }
+    };
+
+    // Inicialización al cargar el DOM
     document.addEventListener("DOMContentLoaded", () => {
       ensureSuperAdminExists();
+
+      // Recuperar sesión guardada
+      const savedUser = localStorage.getItem("currentUser");
+      if (savedUser) {
+        currentUser = JSON.parse(savedUser);
+        updateHeaderUI();
+        if (currentUser.role === 'superadmin') {
+          document.getElementById('nav-btn-admin').classList.remove('hidden');
+        }
+      } else {
+        updateHeaderUI();
+      }
+
+      // Inicializar Flatpickr en fechas
+      if (document.getElementById('match-datetime')) {
+        flatpickr("#match-datetime", {
+          enableTime: true,
+          dateFormat: "Y-m-d H:i",
+          locale: "es",
+          theme: "dark"
+        });
+      }
     });
   </script>
 </body>
