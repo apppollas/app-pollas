@@ -194,7 +194,7 @@
       </div>
     </section>
 
-    <!-- NUEVA SECCIÓN 1: PRONÓSTICOS EN VIVO DE TODOS LOS USUARIOS -->
+    <!-- SECCIÓN 1: PRONÓSTICOS EN VIVO (ACCESIBLE PARA TODOS) -->
     <section id="view-live-feed" class="view-section space-y-6">
       <div class="bg-gradient-to-r from-slate-900 via-amber-950/20 to-slate-900 p-6 rounded-2xl border border-amber-500/20 shadow-xl">
         <div class="flex items-center gap-2">
@@ -219,7 +219,7 @@
       </div>
     </section>
 
-    <!-- NUEVA SECCIÓN 2: DIRECTORIO DE PARTICIPANTES Y DETALLE DE PRONÓSTICOS -->
+    <!-- SECCIÓN 2: PARTICIPANTES Y DETALLE (ACCESIBLE PARA TODOS, SOLO USERNAMES) -->
     <section id="view-participants" class="view-section space-y-6">
       <div class="bg-gradient-to-r from-slate-900 via-emerald-950/20 to-slate-900 p-6 rounded-2xl border border-emerald-500/20 shadow-xl">
         <div class="flex items-center gap-2">
@@ -229,10 +229,10 @@
         <p class="text-slate-400 text-sm mt-1">Selecciona cualquier usuario para examinar su historial completo de pronósticos en la polla.</p>
       </div>
 
-      <!-- LISTA DE TARJETAS DE USUARIOS -->
+      <!-- GRID DE CARDS DE USERNAMES -->
       <div id="participants-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
 
-      <!-- PANEL DETALLE DE PRONÓSTICOS DEL USUARIO SELECCIONADO -->
+      <!-- DETALLE DE PRONÓSTICOS DE UN USUARIO -->
       <div id="participant-detail-modal" class="card-dark border-emerald-500/30 space-y-4 hidden">
         <div class="flex justify-between items-center border-b border-slate-800 pb-3">
           <div>
@@ -245,7 +245,7 @@
       </div>
     </section>
 
-    <!-- TABLA DE POSICIONES -->
+    <!-- TABLA DE POSICIONES (ESTRICTAMENTE USERNAME UNICAMENTE) -->
     <section id="view-leaderboard" class="view-section space-y-6">
       <h2 class="text-xl font-bold text-white">Tabla General de Posiciones</h2>
       <div class="card-dark p-0 overflow-x-auto">
@@ -253,8 +253,8 @@
           <thead>
             <tr class="bg-slate-900 text-slate-400 border-b border-slate-800">
               <th class="p-3">#</th>
-              <th class="p-3">Participante</th>
-              <th class="p-3 text-center">Puntos</th>
+              <th class="p-3">Usuario (@username)</th>
+              <th class="p-3 text-center">Puntos Totales</th>
             </tr>
           </thead>
           <tbody id="leaderboard-tbody" class="divide-y divide-slate-800"></tbody>
@@ -347,14 +347,14 @@
 
   </main>
 
-  <!-- NAV BOTTOM ACTUALIZADO CON LAS NUEVAS VISTAS -->
+  <!-- NAV BOTTOM ACCESIBLE PARA TODOS LOS USUARIOS -->
   <nav class="fixed bottom-0 left-0 right-0 z-40 bg-slate-900/95 border-t border-slate-800 py-2">
     <div class="max-w-xl mx-auto flex justify-around text-center">
       <button onclick="navigateTo('home')" class="text-emerald-400 p-2 text-xs font-semibold">Inicio</button>
-      <button onclick="navigateTo('predictions')" class="text-slate-400 p-2 text-xs font-semibold">Mis Pronósticos</button>
-      <button onclick="navigateTo('live-feed')" class="text-slate-400 p-2 text-xs font-semibold">En Vivo</button>
-      <button onclick="navigateTo('participants')" class="text-slate-400 p-2 text-xs font-semibold">Participantes</button>
-      <button onclick="navigateTo('leaderboard')" class="text-slate-400 p-2 text-xs font-semibold">Posiciones</button>
+      <button onclick="checkAuthAndNavigate('predictions')" class="text-slate-400 p-2 text-xs font-semibold">Mis Pronósticos</button>
+      <button onclick="checkAuthAndNavigate('live-feed')" class="text-slate-400 p-2 text-xs font-semibold">En Vivo</button>
+      <button onclick="checkAuthAndNavigate('participants')" class="text-slate-400 p-2 text-xs font-semibold">Participantes</button>
+      <button onclick="checkAuthAndNavigate('leaderboard')" class="text-slate-400 p-2 text-xs font-semibold">Posiciones</button>
       <button id="nav-btn-admin" onclick="navigateTo('admin')" class="text-red-400 p-2 text-xs font-semibold hidden">Admin</button>
     </div>
   </nav>
@@ -398,6 +398,15 @@
         console.error(err);
       }
     }
+
+    window.checkAuthAndNavigate = function(viewId) {
+      if (!currentUser) {
+        alert("Debes iniciar sesión para acceder a esta sección.");
+        navigateTo('login');
+      } else {
+        navigateTo(viewId);
+      }
+    };
 
     window.navigateTo = function(viewId) {
       document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
@@ -454,7 +463,7 @@
       }
     };
 
-    // 1. CARGA DE PRONÓSTICOS EN VIVO DE TODOS LOS USUARIOS (SÓLO @USERNAME)
+    // 1. CARGA DE PRONÓSTICOS EN VIVO (MUESTRA EXCLUSIVAMENTE @USERNAME)
     async function loadLivePredictionsFeed() {
       const tbody = document.getElementById('live-feed-tbody');
       if (!tbody) return;
@@ -502,7 +511,7 @@
       }
     }
 
-    // 2. DIRECTORIO DE PARTICIPANTES (SÓLO @USERNAME)
+    // 2. DIRECTORIO DE PARTICIPANTES (OCULTA NOMBRE REAL, MUESTRA @USERNAME)
     async function loadParticipantsDirectory() {
       const grid = document.getElementById('participants-grid');
       if (!grid) return;
@@ -537,7 +546,6 @@
       }
     }
 
-    // ABRIR Y MOSTRAR PRONÓSTICOS DE UN USUARIO ESPECÍFICO
     async function openParticipantDetail(userId, username) {
       const modal = document.getElementById('participant-detail-modal');
       const container = document.getElementById('participant-predictions-container');
@@ -546,7 +554,7 @@
       if (!modal || !container) return;
 
       title.innerText = "@" + username;
-      container.innerHTML = "<p class='text-xs text-slate-500'>Cargando datos...</p>";
+      container.innerHTML = "<p class='text-xs text-slate-500'>Cargando pronósticos...</p>";
       modal.classList.remove('hidden');
 
       try {
@@ -594,7 +602,7 @@
       if (modal) modal.classList.add('hidden');
     }
 
-    // TABLA GENERAL DE POSICIONES (SOLO @USERNAME)
+    // 3. TABLA GENERAL DE POSICIONES (SOLO MUESTRA @USERNAME, PRIVACIDAD TOTAL)
     async function loadLeaderboard() {
       const tbody = document.getElementById('leaderboard-tbody');
       if (!tbody) return;
