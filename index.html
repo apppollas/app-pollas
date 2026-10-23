@@ -34,8 +34,9 @@
     input, select { background-color: #0f172a; border: 1px solid #334155; color: #ffffff; padding: 0.65rem 0.85rem; width: 100%; transition: all 0.2s ease; }
     input:focus, select:focus { border-color: #10b981; outline: none; box-shadow: 0 0 10px rgba(16, 185, 129, 0.2); }
     
-    .btn-emerald { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #ffffff; font-weight: 700; padding: 0.65rem 1.2rem; border: none; cursor: pointer; text-align: center; shadow: 0 4px 14px rgba(16, 185, 129, 0.3); }
-    .btn-emerald:hover { opacity: 0.95; transform: translateY(-1px); }
+    .btn-emerald { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #ffffff; font-weight: 700; padding: 0.65rem 1.2rem; border: none; cursor: pointer; text-align: center; }
+    .btn-emerald:hover:not(:disabled) { opacity: 0.95; transform: translateY(-1px); }
+    .btn-emerald:disabled { opacity: 0.5; cursor: not-allowed; }
     .btn-slate { background-color: #334155; color: #f8fafc; font-weight: 600; padding: 0.65rem 1.2rem; border: none; cursor: pointer; }
     
     .card-dark { background-color: #0f172a; border: 1px solid #1e293b; border-radius: 0.85rem; padding: 1.25rem; }
@@ -59,7 +60,7 @@
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between selection:bg-emerald-500 selection:text-white">
 
-  <!-- HEADER MEJORADO CON NOMBRE REAL DE USUARIO -->
+  <!-- HEADER -->
   <header class="sticky top-0 z-40 bg-slate-900/95 backdrop-blur-md border-b border-slate-800/80 px-4 py-3 shadow-xl">
     <div class="max-w-5xl mx-auto flex items-center justify-between">
       <div class="flex items-center gap-3 cursor-pointer" onclick="navigateTo('home')">
@@ -71,7 +72,6 @@
           <p class="text-[10px] text-emerald-400 font-bold -mt-1 tracking-widest uppercase">Premier League Edition</p>
         </div>
       </div>
-      <!-- AQUÍ SE CARGA EL NOMBRE REAL DEL USUARIO -->
       <div id="header-user-info" class="flex items-center gap-3"></div>
     </div>
   </header>
@@ -126,7 +126,7 @@
             <label class="block text-xs font-semibold text-slate-300 mb-1.5">Contraseña</label>
             <input type="password" id="login-password" required placeholder="••••••••">
           </div>
-          <button type="submit" class="w-full btn-emerald py-3 font-bold rounded-xl mt-2">Entrar a la Polla</button>
+          <button type="submit" id="btn-login-submit" class="w-full btn-emerald py-3 font-bold rounded-xl mt-2">Entrar a la Polla</button>
         </form>
         <div class="mt-6 text-center border-t border-slate-800/80 pt-4">
           <button onclick="navigateTo('register')" class="text-xs text-emerald-400 hover:text-emerald-300 font-semibold">¿Tienes un código? Registra tu cuenta aquí</button>
@@ -159,12 +159,12 @@
             <input type="text" id="reg-fullname" readonly class="bg-slate-950/80 text-slate-400 cursor-not-allowed font-medium border-slate-800">
           </div>
           <div>
-            <label class="block text-xs text-slate-300 mb-1">Username Único (@usuario)</label>
-            <input type="text" id="reg-username" required placeholder="ej. Carlos_Gol">
+            <label class="block text-xs text-slate-300 mb-1">Username Único (Máximo 12 caracteres)</label>
+            <!-- RESTRICCIÓN MÁXIMO 12 CARACTERES -->
+            <input type="text" id="reg-username" maxlength="12" required placeholder="ej. Carlos_Gol">
           </div>
           <div>
             <label class="block text-xs text-slate-300 mb-1">Celular / WhatsApp (10 Dígitos)</label>
-            <!-- VALIDACIÓN ESTRICTA DE 10 DÍGITOS -->
             <input type="tel" id="reg-phone" maxlength="10" minlength="10" pattern="[0-9]{10}" required placeholder="3001234567" title="Ingresa un número de celular válido de 10 dígitos">
           </div>
           <div>
@@ -258,7 +258,7 @@
       </div>
     </section>
 
-    <!-- TABLA DE POSICIONES (ESTRICTAMENTE SOLO USERNAME) -->
+    <!-- TABLA DE POSICIONES -->
     <section id="view-leaderboard" class="view-section space-y-6">
       <div class="bg-gradient-to-r from-slate-900 via-emerald-950/30 to-slate-900 p-6 rounded-2xl border border-emerald-500/30 shadow-2xl">
         <div class="flex items-center gap-2">
@@ -291,10 +291,10 @@
             <h2 class="text-xl font-black text-white mt-1">Panel de Control de Administrador</h2>
           </div>
           <div class="flex flex-wrap gap-2">
-            <button onclick="preloadPremierLeagueFixture()" class="px-3 py-2 bg-purple-900/60 hover:bg-purple-800 border border-purple-500/50 text-purple-200 text-xs font-bold rounded-lg shadow-lg transition-all">
+            <button id="btn-preload-fixture" onclick="preloadPremierLeagueFixture()" class="px-3 py-2 bg-purple-900/60 hover:bg-purple-800 border border-purple-500/50 text-purple-200 text-xs font-bold rounded-lg shadow-lg transition-all">
               ⚡ Cargar Fixture Completo
             </button>
-            <button onclick="clearAllMatches()" class="px-3 py-2 bg-red-900/60 hover:bg-red-800 border border-red-500/50 text-red-200 text-xs font-bold rounded-lg shadow-lg transition-all">
+            <button id="btn-clear-matches" onclick="clearAllMatches()" class="px-3 py-2 bg-red-900/60 hover:bg-red-800 border border-red-500/50 text-red-200 text-xs font-bold rounded-lg shadow-lg transition-all">
               🗑️ Borrar Partidos Actuales
             </button>
           </div>
@@ -309,7 +309,7 @@
             <input type="text" id="match-away" required placeholder="Equipo Visitante (ej. Chelsea)">
             <input type="text" id="match-datetime" required placeholder="Fecha y Hora de Inicio">
             <div class="md:col-span-3 flex gap-2 mt-1">
-              <button type="submit" class="btn-emerald flex-1 py-2.5 font-bold text-xs rounded-lg">Guardar Partido</button>
+              <button type="submit" id="btn-save-match" class="btn-emerald flex-1 py-2.5 font-bold text-xs rounded-lg">Guardar Partido</button>
               <button type="button" onclick="resetMatchForm()" class="btn-slate py-2.5 text-xs rounded-lg hidden" id="btn-cancel-edit">Cancelar</button>
             </div>
           </form>
@@ -323,7 +323,7 @@
             <select id="code-target-polla">
               <option value="premier">Premier League 2026</option>
             </select>
-            <button type="submit" class="btn-emerald py-2.5 font-bold text-xs rounded-lg">Generar Código</button>
+            <button type="submit" id="btn-generate-code" class="btn-emerald py-2.5 font-bold text-xs rounded-lg">Generar Código</button>
           </form>
         </div>
       </div>
@@ -367,7 +367,7 @@
 
   </main>
 
-  <!-- NAV BOTTOM COMPLETA Y VISIBLE PARA TODOS CON ÍCONOS VECTORIALES SVG -->
+  <!-- NAV BOTTOM -->
   <nav class="fixed bottom-0 left-0 right-0 z-40 bg-slate-900/95 backdrop-blur-md border-t border-slate-800/80 py-2 shadow-2xl">
     <div class="max-w-2xl mx-auto flex justify-around items-center text-center px-1">
       <button onclick="navigateTo('home')" class="flex flex-col items-center gap-0.5 text-emerald-400 p-1 text-[10px] font-bold">
@@ -416,7 +416,6 @@
     let currentUser = null;
     let validatedCodeDoc = null;
 
-    // AXILIAR PARA ICONOS DE EQUIPOS BASADO EN INICIALES Y COLORES
     function getTeamBadgeUrl(teamName) {
       const cleanName = encodeURIComponent(teamName.substring(0, 3).toUpperCase());
       return `https://ui-avatars.com/api/?name=${cleanName}&background=1e293b&color=10b981&font-size=0.45&bold=true&rounded=true`;
@@ -467,8 +466,14 @@
       if (viewId === 'leaderboard') loadLeaderboard();
     };
 
+    // LOGIN CON BLOQUEO "PROCESANDO..."
     window.handleLogin = async function(e) {
       if (e) e.preventDefault();
+      const btn = document.getElementById('btn-login-submit');
+      const originalText = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerText = "⏳ Procesando...";
+
       const rawUsername = document.getElementById('login-username').value.trim();
       const cleanUsername = rawUsername.toLowerCase();
       const passwordInput = document.getElementById('login-password').value;
@@ -482,6 +487,8 @@
 
         if (snapshot.empty) {
           alert("El usuario @" + rawUsername + " no existe.");
+          btn.disabled = false;
+          btn.innerHTML = originalText;
           return;
         }
 
@@ -501,9 +508,13 @@
           }
         } else {
           alert("Contraseña incorrecta.");
+          btn.disabled = false;
+          btn.innerHTML = originalText;
         }
       } catch (err) {
         alert("Error de conexión: " + err.message);
+        btn.disabled = false;
+        btn.innerHTML = originalText;
       }
     };
 
@@ -557,7 +568,7 @@
       }
     }
 
-    // DIRECTORIO DE PARTICIPANTES (OCULTA NOMBRE REAL, MUESTRA @USERNAME)
+    // DIRECTORIO DE PARTICIPANTES
     async function loadParticipantsDirectory() {
       const grid = document.getElementById('participants-grid');
       if (!grid) return;
@@ -653,7 +664,7 @@
       if (modal) modal.classList.add('hidden');
     }
 
-    // TABLA GENERAL DE POSICIONES (EXCLUSIVAMENTE @USERNAME)
+    // TABLA GENERAL DE POSICIONES
     async function loadLeaderboard() {
       const tbody = document.getElementById('leaderboard-tbody');
       if (!tbody) return;
@@ -699,7 +710,7 @@
       }
     }
 
-    // CARGA MASIVA DE FIXTURE
+    // CARGA MASIVA CON BLOQUEO "PROCESANDO..." Y VALIDACIÓN "CARGAR"
     window.preloadPremierLeagueFixture = async function() {
       if (!window.PREMIER_LEAGUE_FIXTURE || window.PREMIER_LEAGUE_FIXTURE.length === 0) {
         alert("Error: No se encontró la variable PREMIER_LEAGUE_FIXTURE en fixture.js");
@@ -712,6 +723,11 @@
         alert("Carga cancelada.");
         return;
       }
+
+      const btn = document.getElementById('btn-preload-fixture');
+      const originalText = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerText = "⏳ Procesando...";
 
       try {
         const fixture = window.PREMIER_LEAGUE_FIXTURE;
@@ -746,10 +762,13 @@
       } catch (err) {
         console.error("Error al procesar el lote:", err);
         alert("Error al cargar fixture: " + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = originalText;
       }
     };
 
-    // BORRADO MASIVO
+    // BORRADO MASIVO CON BLOQUEO "PROCESANDO..."
     window.clearAllMatches = async function() {
       const confirmText = prompt("⚠️ Escribe la palabra ELIMINAR para borrar todos los partidos:");
 
@@ -758,10 +777,17 @@
         return;
       }
 
+      const btn = document.getElementById('btn-clear-matches');
+      const originalText = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerText = "⏳ Procesando...";
+
       try {
         const snapshot = await db.collection("matches").where("pollaId", "==", "premier").get();
         if (snapshot.empty) {
           alert("No hay partidos para eliminar.");
+          btn.disabled = false;
+          btn.innerHTML = originalText;
           return;
         }
 
@@ -773,11 +799,20 @@
         loadAdminMatches();
       } catch (err) {
         alert("Error al eliminar partidos: " + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = originalText;
       }
     };
 
+    // GUARDAR PARTIDO CON BLOQUEO "PROCESANDO..."
     window.handleSaveMatch = async function(e) {
       e.preventDefault();
+      const btn = document.getElementById('btn-save-match');
+      const originalText = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerText = "⏳ Procesando...";
+
       const matchId = document.getElementById('match-edit-id').value;
       const home = document.getElementById('match-home').value.trim();
       const away = document.getElementById('match-away').value.trim();
@@ -799,6 +834,9 @@
         loadAdminMatches();
       } catch (err) {
         alert("Error al guardar partido: " + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = originalText;
       }
     };
 
@@ -1039,7 +1077,7 @@
                     <span class="font-bold text-xs text-white">${match.awayTeam}</span>
                   </div>
                 </div>
-                <button onclick="savePrediction('${match.id}')" class="w-full btn-emerald py-2.5 text-xs font-bold rounded-xl shadow-lg">
+                <button id="btn-pred-${match.id}" onclick="savePrediction('${match.id}')" class="w-full btn-emerald py-2.5 text-xs font-bold rounded-xl shadow-lg">
                   Enviar Pronóstico
                 </button>
               `;
@@ -1078,7 +1116,15 @@
       }
     }
 
+    // GUARDAR PRONÓSTICO CON BLOQUEO "PROCESANDO..."
     window.savePrediction = async function(matchId) {
+      const btn = document.getElementById(`btn-pred-${matchId}`);
+      const originalText = btn ? btn.innerHTML : "";
+      if (btn) {
+        btn.disabled = true;
+        btn.innerText = "⏳ Procesando...";
+      }
+
       const homeInput = document.getElementById(`pred-home-${matchId}`);
       const awayInput = document.getElementById(`pred-away-${matchId}`);
 
@@ -1087,10 +1133,18 @@
 
       if (homeScore === "" || awayScore === "") {
         alert("Ingresa ambos marcadores antes de enviar.");
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = originalText;
+        }
         return;
       }
 
       if (!confirm("¿Confirmas tu pronóstico de " + homeScore + " - " + awayScore + "? Una vez enviado no podrás modificarlo.")) {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = originalText;
+        }
         return;
       }
 
@@ -1109,6 +1163,10 @@
         loadUserPredictions();
       } catch (err) {
         alert("Error al guardar pronóstico: " + err.message);
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = originalText;
+        }
       }
     };
 
@@ -1152,18 +1210,42 @@
       }
     };
 
+    // REGISTRO CON VALIDACIÓN DE USERNAME ÚNICO, MÁX 12 CARACTERES Y BLOQUEO "PROCESANDO..."
     window.handleRegister = async function(e) {
       e.preventDefault();
+      const btn = document.getElementById('btn-submit-reg');
+      const originalText = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerText = "⏳ Procesando...";
+
       const rawUsername = document.getElementById('reg-username').value.trim();
+      if (rawUsername.length > 12) {
+        alert("El nombre de usuario no puede superar los 12 caracteres.");
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+        return;
+      }
+
       const cleanUsername = rawUsername.toLowerCase();
       const phoneInput = document.getElementById('reg-phone').value.trim();
 
       if (phoneInput.length !== 10) {
         alert("El número de celular debe tener exactamente 10 dígitos.");
+        btn.disabled = false;
+        btn.innerHTML = originalText;
         return;
       }
 
       try {
+        // VALIDAR QUE NO EXISTA UN USERNAME DUPLICADO
+        const existingUser = await db.collection("users").where("username_clean", "==", cleanUsername).get();
+        if (!existingUser.empty) {
+          alert(`El username @${rawUsername} ya está registrado en la polla. Por favor elige otro.`);
+          btn.disabled = false;
+          btn.innerHTML = originalText;
+          return;
+        }
+
         await db.collection("users").add({
           name: validatedCodeDoc.targetName,
           username: rawUsername,
@@ -1185,11 +1267,19 @@
         navigateTo('login');
       } catch (err) {
         alert("Error: " + err.message);
+        btn.disabled = false;
+        btn.innerHTML = originalText;
       }
     };
 
+    // GENERAR CÓDIGO CON BLOQUEO "PROCESANDO..."
     window.handleGenerateCode = async function(e) {
       e.preventDefault();
+      const btn = document.getElementById('btn-generate-code');
+      const originalText = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerText = "⏳ Procesando...";
+
       const personName = document.getElementById('code-person-name').value.trim();
       const code = Math.random().toString(36).substring(2, 12).toUpperCase();
 
@@ -1205,6 +1295,9 @@
         loadAdminCodes();
       } catch (err) {
         alert("Error: " + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = originalText;
       }
     };
 
@@ -1236,7 +1329,6 @@
       loadAdminCodes();
     };
 
-    // RESTAURADO: SE MUESTRA EL NOMBRE REAL DEL USUARIO EN LA SESIÓN PRIVADA DEL HEADER
     function updateHeaderUI() {
       const headerBox = document.getElementById('header-user-info');
       if (currentUser) {
